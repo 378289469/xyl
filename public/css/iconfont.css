@@ -1,0 +1,84 @@
+@font-face {font-family: "iconfont";
+  src: url('iconfont.ttf?t=1588397183445') format('truetype')/* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-up:before {
+  content: "\e669";
+}
+
+.icon-right:before {
+  content: "\e601";
+}
+
+.icon-left:before {
+  content: "\e606";
+}
+
+.icon-home:before {
+  content: "\e619";
+}
+
+.icon-down:before {
+  content: "\e668";
+}
+
+.icon-my:before {
+  content: "\e678";
+}
+
+.icon-phone:before {
+  content: "\e631";
+}
+
+.icon-activity:before {
+  content: "\e687";
+}
+
+.icon-question:before {
+  content: "\e600";
+}
+
+.icon-date:before {
+  content: "\e60e";
+}
+
+.icon-userpw:before {
+  content: "\e65d";
+}
+
+.icon-school:before {
+  content: "\e626";
+}
+
+.icon-face:before {
+  content: "\e6d0";
+}
+
+.icon-search:before {
+  content: "\e62d";
+}
+
+.icon-study:before {
+  content: "\e60f";
+}
+
+.icon-username:before {
+  content: "\e607";
+}
+
+.icon-face:before {
+  content: "\e60b";
+}
+
+.icon-chat:before {
+  content: "\e72a";
+}
+
