@@ -1,25 +1,25 @@
 <template>
   <div id="activity">
     <slot name="top" class="top"></slot>
-    <ul class="list">
+    <ul class="list" v-for="(activity ,index) in activityOnly" :key="index">
       <li>
-          <h3 class="ellipsis">由陈淼洋、刘晗带来朗诵《海上船夫歌》诵读马克思</h3>
+          <h3 class="ellipsis">{{activity.activityName}}</h3>
           <span class="iconfont icon-date btn icon3"></span>
-          <span class="time">2020.04.07 10:00-10:05</span>
-      </li>
-      <li>
-          <h3 class="ellipsis">由陈淼洋、刘晗带来朗诵《海上船夫歌》诵读马克思</h3>
-          <span class="iconfont icon-date btn icon3"></span>
-          <span class="time">2020.04.07 10:00-10:05</span>
+          <span class="time">{{activity.activityStart}}---{{activity.activityEnd}}</span>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
-  props: {
-    title: String
+  computed: {
+    ...mapState(['activitys']),
+    activityOnly () {
+      const activityOnly = this.activitys.slice(0, 3)
+      return activityOnly
+    }
   }
 }
 </script>
