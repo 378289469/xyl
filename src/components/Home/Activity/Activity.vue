@@ -1,24 +1,28 @@
 <template>
   <div id="activity">
     <slot name="top" class="top"></slot>
-    <ul class="list" v-for="(activity ,index) in activityOnly" :key="index">
-      <li>
+    <div class="activitys">
+      <ul class="list" >
+        <li v-for="(activity ,index) in activitys" :key="index">
           <h3 class="ellipsis">{{activity.activityName}}</h3>
           <span class="iconfont icon-date btn icon3"></span>
           <span class="time">{{activity.activityStart}}---{{activity.activityEnd}}</span>
-      </li>
-    </ul>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
 <script>
+import BScroll from 'better-scroll'
 import { mapState } from 'vuex'
 export default {
   computed: {
-    ...mapState(['activitys']),
-    activityOnly () {
-      const activityOnly = this.activitys.slice(0, 3)
-      return activityOnly
+    ...mapState(['activitys'])
+  },
+  watch: {
+    activitys () {
+      new BScroll('.activitys') // eslint-disable-line
     }
   }
 }
@@ -66,23 +70,25 @@ export default {
       color #828282
     .btn
       margin-left 6px
-  ul
-    margin-left 16px
-    height 63px
-    line-height 30px
-    text-align left
-    color #828282
-    li
-      width 315px
-      border-bottom 1px solid #EAEAEA
-    li:last-child
-      border-bottom none
-    h3
-      width 315px
-      font-size 14px
-    .icon3
-      margin-left 0
-    .time
-      margin-left 6px
-      font-size 12px
+  .activitys
+    height 100%
+    overflow hidden
+    ul
+      margin-left 16px
+      line-height 30px
+      text-align left
+      color #828282
+      li
+        width 315px
+        border-bottom 1px solid #EAEAEA
+      li:last-child
+        border-bottom none
+      h3
+        width 315px
+        font-size 14px
+      .icon3
+        margin-left 0
+      .time
+        margin-left 6px
+        font-size 12px
 </style>

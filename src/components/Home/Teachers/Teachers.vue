@@ -5,27 +5,38 @@
       <span class="icon2"></span>
       <h2>教学团队</h2>
     </div>
-    <ul class="list">
-      <li>
-          <div class="avatar">
-             <img src="./imgs/person.png" alt="teacher" >
-          </div>
-          <span>杨璐</span>
-      </li>
-      <li>
-          <div class="avatar">
-             <img src="./imgs/person.png" alt="teacher" >
-          </div>
-          <span>杨璐</span>
-      </li>
-    </ul>
+    <div class="teachers">
+      <UL>
+        <li v-for="(teacher, index) in teachers" :key="index">
+            <div class="avatar">
+              <img :src="teacher.avatar" alt="teacher" :onerror="errorurl" >
+            </div>
+            <span class="ellipsis">{{teacher.realname}}</span>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
 <script>
+import BScroll from 'better-scroll'
+import { mapState } from 'vuex'
+
 export default {
-  props: {
-    title: String
+  data () {
+    return {
+      errorurl: 'this.src="' + require('./imgs/person.png') + '"'
+    }
+  },
+  computed: {
+    ...mapState(['teachers'])
+  },
+  watch: {
+    teachers () {
+      new BScroll('.teachers' , { // eslint-disable-line
+        scrollX: true
+      })
+    }
   }
 }
 </script>
@@ -66,23 +77,30 @@ export default {
       font-size 15px
       font-weight  bolder
       color #802529
-  ul
-    display flex
-    justify-content space-around
-    align-items center
-    height 85px
-    li
-      width 43px
-      .avatar
+  .teachers
+    height 100%
+    width 315px
+    overflow hidden
+    border none
+    ul
+      display flex
+      align-items center
+      li
         width 43px
-        height 43px
-        margin-left 0
-        border-radius 43px
-        overflow hidden
-      img
-        width 43px
-        height 43px
-      span
-        color #272828
-        font-size 14px
+        margin-right 25px
+        .avatar
+          width 43px
+          height 43px
+          margin-left 0
+          border-radius 43px
+          overflow hidden
+        img
+          width 43px
+          height 43px
+        span
+          display block
+          width 43px
+          margin-top 10px
+          color #272828
+          font-size 14px
 </style>

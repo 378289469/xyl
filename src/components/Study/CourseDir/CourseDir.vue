@@ -1,36 +1,46 @@
 <template>
   <div id="course">
     <h2>课程目录</h2>
-    <div  class="dir one-dir show">
-      <slot name="icon" class="icon"></slot>
-      <span class="title ellipsis">第一卷 资本的生产过程第一卷 资本的生产过程第一卷 资本的生产过程第一卷 资本的生产过程</span>
-      <span class="iconfont icon-up icon"></span>
-    </div>
-
-    <div  class="dir two-dir show">
-      <slot name="icon" class="icon"></slot>
-      <span class="title ellipsis">第一卷 资本的生产过程</span>
-      <span class="iconfont icon-up icon"></span>
-    </div>
-
-    <div  class="dir three-dir show">
-      <slot name="icon" class="icon"></slot>
-      <span class="title ellipsis">第一卷 资本的生产过程</span>
-      <span class="iconfont icon-down icon"></span>
-    </div>
-
-    <div  class="dir resource-dir show">
-      <slot name="icon" class="icon"></slot>
-      <span class="title ellipsis">第一卷 资本的生产过程</span>
-      <span class="iconfont icon-down icon"></span>
-    </div>
+    <ul >
+      <li v-for="(chapters,index) in chapters" :key="index">
+        <div  class="dir" :class="dirClass[chapters.chapterLevel]" @click="show(index)">
+          <slot name="icon" ></slot>
+          <span class="title ellipsis">{{chapters.chapterName}}</span>
+          <span class="iconfont icon"></span>
+        </div>
+      </li>
+    </ul>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
-  props: {
-    title: String
+  data () {
+    return {
+      id: -1,
+      dirClass: ['', 'one=dir', 'two-dir', 'three-dir']
+    }
+  },
+  computed: {
+    ...mapState(['CourseChapter']),
+    chapters () {
+      const { CourseChapter, id } = this
+      let chapters = []
+      chapters = id === -1 ? chapters = CourseChapter.filter(cc => cc.chapterLevel === 1) : CourseChapter.filter(cc => cc.chapterLevel === 1 || cc.id === id || cc.parentId === id)
+      return chapters
+    }
+  },
+  mounted () {
+
+  },
+  methods: {
+    show (index) {
+      this.id = this.chapters[index].id
+    }
+  },
+  watch: {
+
   }
 }
 </script>

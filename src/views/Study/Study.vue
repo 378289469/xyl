@@ -15,6 +15,10 @@ export default {
   components: {
     Header,
     CourseDir
+  },
+  mounted () {
+    this.$store.dispatch('getCourseChapter')
   }
+
 }
 </script>

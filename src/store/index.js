@@ -5,7 +5,8 @@ import {
   reqCourseIntroduce,
   reqCourseLearners,
   reqActivitys,
-  reqTeachers
+  reqTeachers,
+  reqCourseChapter
 } from '../api/index'
 
 Vue.use(Vuex)
@@ -14,13 +15,16 @@ const RECEIVE_COURSE_INTRODUCE = 'receive_course_introduce'
 const RECEIVE_COURSE_LEARNERS = 'receive_course_learners'
 const RECEIVE_ACTIVITYS = 'receive_activitys'
 const RECEIVE_TEACHERS = 'receive_teachers'
+const RECEIVE_COURSE_CHAPTER = 'receive_course_chapter'
 
 export default new Vuex.Store({
   state: {
     courseintroduce: {},
     courselearners: 0,
     activitys: [],
-    teachers: []
+    teachers: [],
+    usertype: [1, 2],
+    CourseChapter: []
   },
   mutations: {
     [RECEIVE_COURSE_INTRODUCE] (state, { courseintroduce }) {
@@ -34,6 +38,9 @@ export default new Vuex.Store({
     },
     [RECEIVE_TEACHERS] (state, { teachers }) {
       state.teachers = teachers
+    },
+    [RECEIVE_COURSE_CHAPTER] (state, { CourseChapter }) {
+      state.CourseChapter = CourseChapter
     }
   },
   actions: {
@@ -41,10 +48,7 @@ export default new Vuex.Store({
       const result = await reqCourseIntroduce()
       if (result.code === 200) {
         // console.log(result)
-        let courseintroduce = result.result.courseIntroduce
-        courseintroduce = courseintroduce.replace(/<\/?.+?>/g, '')// 去掉所有html标签
-        courseintroduce = courseintroduce.replace(/&\/?.+?;/g, '')// 去掉转义符
-        courseintroduce = courseintroduce.slice(0, 65)// 提取前65字符
+        const courseintroduce = result.result.courseIntroduce
         commit(RECEIVE_COURSE_INTRODUCE, { courseintroduce })
       }
     },
@@ -64,8 +68,39 @@ export default new Vuex.Store({
         commit(RECEIVE_ACTIVITYS, { activitys })
       }
     },
-    getTeachers ({ commit }) {
-      reqTeachers()
+    async getTeachers ({ commit, state }) {
+      const result = await reqTeachers(state.usertype[0])
+      if (result.code === 200) {
+        // console.log(result)
+        const teachers = result.result.records
+        commit(RECEIVE_TEACHERS, { teachers })
+      }
+    },
+    async getCourseChapter ({ commit, state }) {
+      const result = await reqCourseChapter()
+      if (result.code === 200) {
+        // console.log(result)
+        let CourseChapter = result.result.records
+        const oneChapter = CourseChapter.filter(cc => cc.chapterLevel === 1)
+        const twoChapter = CourseChapter.filter(cc => cc.chapterLevel === 2)
+        const threeChapter = CourseChapter.filter(cc => cc.chapterLevel === 3)
+        const temp = []
+        oneChapter.forEach(one => {
+          temp.push(one)
+          twoChapter.forEach(two => {
+            if (two.parentId === one.id) {
+              temp.push(two)
+              threeChapter.forEach(three => {
+                if (three.parentId === two.id) {
+                  temp.push(three)
+                }
+              })
+            }
+          })
+        })
+        CourseChapter = temp
+        commit(RECEIVE_COURSE_CHAPTER, { CourseChapter })
+      }
     }
   },
   modules: {

@@ -7,9 +7,6 @@
 
 <script>
 export default {
-  props: {
-    title: String
-  }
 }
 </script>
 
@@ -22,6 +19,13 @@ export default {
   width 100%
   height 220px
   background-image url(./imgs/header.png)
+  .back
+    width 10px
+    height 18px
+    color #F0FBD4
+    position absolute
+    top 50px
+    left 15px
   .title
     display block
     position absolute

@@ -12,9 +12,10 @@ export const reqActivitys = () => ajax('activity/zblActivity/list', { pageNo: 1,
 // 4获取活动章节
 
 // 5、获取教师列表
-export const reqTeachers = () => ajax('back/zblUser/list')
+export const reqTeachers = (roleItemId) => ajax('back/zblUser/list', { roleItemId, pageNo: 1, pageSize: 10 })
 
 // 6获取课程目录
+export const reqCourseChapter = () => ajax('chapter/zblChapter/list', { pageNo: 1, pageSize: 0 })
 
 // 7获取一级目录
 

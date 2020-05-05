@@ -3,8 +3,8 @@
 		<h2>课程介绍</h2>
 		<img src="./imgs/person.png" alt="person" />
 		<p>
-			{{courseintroduce}}
-			<span>全文</span>
+			{{introduce}}
+			<span @click="to('/CourseIntroduce')">全文</span>
 		</p>
 		<div>
 			<h3>{{courselearners}}</h3>
@@ -15,11 +15,28 @@
 <script>
 import { mapState } from 'vuex'
 export default {
+  data () {
+    return {
+      introduce: ''
+    }
+  },
   computed: {
     ...mapState(['courseintroduce', 'courselearners'])
   },
-  mounted () {
-
+  watch: {
+    courseintroduce (value) {
+      this.$nextTick(() => {
+        value = value.replace(/<\/?.+?>/g, '')// 去掉所有html标签
+        value = value.replace(/&\/?.+?;/g, '')// 去掉转义符
+        value = value.slice(0, 65)// 提取前65字符
+        this.introduce = value
+      })
+    }
+  },
+  methods: {
+    to (path) {
+      this.$router.push(path)
+    }
   }
 }
 </script>

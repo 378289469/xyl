@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <router-view />
-    <FooterGuide />
+    <FooterGuide v-if="tabType"/>
   </div>
 </template>
 
@@ -12,14 +12,25 @@ export default {
   components: {
     FooterGuide
   },
+  data () {
+    return {
+      tabType: true
+    }
+  },
   mounted () {
     // this.$store.dispatch('getCourseIntroduce')
     this.getCourseIntroduce()
     this.getCourseLearners()
     this.reqActivitys()
+    this.getTeachers()
   },
   methods: {
-    ...mapActions(['getCourseIntroduce', 'getCourseLearners', 'reqActivitys'])
+    ...mapActions(['getCourseIntroduce', 'getCourseLearners', 'reqActivitys', 'getTeachers'])
+  },
+  watch: {
+    $route (e) {
+      this.tabType = !(e.name === 'CourseIntroduce')
+    }
   }
 }
 </script>
@@ -31,6 +42,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
