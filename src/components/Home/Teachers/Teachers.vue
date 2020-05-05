@@ -31,12 +31,8 @@ export default {
   computed: {
     ...mapState(['teachers'])
   },
-  watch: {
-    teachers () {
-      new BScroll('.teachers' , { // eslint-disable-line
-        scrollX: true
-      })
-    }
+  mounted () {
+    new BScroll('.teachers', { scrollX: true }) // eslint-disable-line
   }
 }
 </script>

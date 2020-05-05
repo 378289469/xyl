@@ -5,7 +5,7 @@
     </Header>
     <Course/>
     <Activity>
-      <div class="top" slot="top">
+      <div class="top" slot="top" @click="go('/activity')">
         <span class="icon1"></span>
         <span class="icon2"></span>
         <h2>活动内容</h2>
@@ -30,6 +30,11 @@ export default {
     Course,
     Activity,
     Teachers
+  },
+  methods: {
+    go (path) {
+      this.$router.replace(path)
+    }
   }
 }
 </script>

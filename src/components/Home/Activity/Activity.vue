@@ -20,10 +20,8 @@ export default {
   computed: {
     ...mapState(['activitys'])
   },
-  watch: {
-    activitys () {
-      new BScroll('.activitys') // eslint-disable-line
-    }
+  mounted () {
+    new BScroll('.activitys') // eslint-disable-line
   }
 }
 </script>

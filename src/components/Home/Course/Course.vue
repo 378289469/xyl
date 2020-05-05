@@ -6,7 +6,7 @@
 			{{introduce}}
 			<span @click="to('/CourseIntroduce')">全文</span>
 		</p>
-		<div>
+		<div @click="go('/study')">
 			<h3>{{courselearners}}</h3>
 		</div>
 	</div>
@@ -17,25 +17,27 @@ import { mapState } from 'vuex'
 export default {
   data () {
     return {
-      introduce: ''
     }
   },
   computed: {
-    ...mapState(['courseintroduce', 'courselearners'])
-  },
-  watch: {
-    courseintroduce (value) {
-      this.$nextTick(() => {
-        value = value.replace(/<\/?.+?>/g, '')// 去掉所有html标签
-        value = value.replace(/&\/?.+?;/g, '')// 去掉转义符
-        value = value.slice(0, 65)// 提取前65字符
-        this.introduce = value
-      })
+    ...mapState(['courseintroduce', 'courselearners']),
+    introduce () {
+      const { courseintroduce } = this
+      let introduce = ''
+      try {
+        introduce = courseintroduce.replace(/<\/?.+?>/g, '')// 去掉所有html标签
+        introduce = introduce.replace(/&\/?.+?;/g, '')// 去掉转义符
+        introduce = introduce.slice(0, 65)// 提取前65字符
+      } catch (error) {}
+      return introduce
     }
   },
   methods: {
     to (path) {
       this.$router.push(path)
+    },
+    go (path) {
+      this.$router.replace(path)
     }
   }
 }
