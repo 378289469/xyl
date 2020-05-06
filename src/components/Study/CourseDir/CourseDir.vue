@@ -2,11 +2,11 @@
   <div id="course">
     <h2>课程目录</h2>
     <ul >
-      <li v-for="(chapters,index) in chapters" :key="index">
+      <li v-for="(chapters,index) in chapter " :key="index">
         <div  class="dir" :class="dirClass[chapters.chapterLevel]" @click="show(index)">
           <slot name="icon" ></slot>
           <span class="title ellipsis">{{chapters.chapterName}}</span>
-          <span class="iconfont icon"></span>
+          <span class="iconfont" :class="chapters.isShow? 'icon-up' : 'icon-down'"></span>
         </div>
       </li>
     </ul>
@@ -18,29 +18,33 @@ import { mapState } from 'vuex'
 export default {
   data () {
     return {
-      id: -1,
-      dirClass: ['', 'one=dir', 'two-dir', 'three-dir']
+      dirClass: ['', 'one=dir', 'two-dir', 'three-dir'],
+      id: '0',
+      index: 0
     }
   },
   computed: {
     ...mapState(['CourseChapter']),
-    chapters () {
-      const { CourseChapter, id } = this
-      let chapters = []
-      chapters = id === -1 ? chapters = CourseChapter.filter(cc => cc.chapterLevel === 1) : CourseChapter.filter(cc => cc.chapterLevel === 1 || cc.id === id || cc.parentId === id)
-      return chapters
+    chapter () {
+      const { CourseChapter, id, index } = this
+      let chapter = []
+      try {
+        if (CourseChapter[index].isShow) {
+          chapter = CourseChapter.filter(cc => cc.parentId === '0' || cc.id === id || cc.parentId === id)
+        } else {
+          chapter = CourseChapter.filter(cc => cc.parentId === '0' || cc.id === id)
+        }
+      } catch (error) {}
+      return chapter
     }
-  },
-  mounted () {
-
   },
   methods: {
     show (index) {
-      this.id = this.chapters[index].id
+      this.id = this.CourseChapter[index].id
+      this.index = index
+      this.CourseChapter[index].isShow = !this.CourseChapter[index].isShow
+      this.CourseChapter.splice(index, 1, this.CourseChapter[index])
     }
-  },
-  watch: {
-
   }
 }
 </script>
@@ -101,12 +105,20 @@ export default {
     background-color: #FFF2E3;
     color: #333333;
     border-radius: 0!important
+    text-indent : 1em
+    .iconfont{
+      margin-left -1em
+    }
   }
 
   .three-dir {
     background-color: #FFFAF3;
     color: #333333;
     border-radius: 0!important
+    text-indent : 2em
+    .iconfont{
+      margin-left -2em
+    }
   }
 
   .resource-dir {
