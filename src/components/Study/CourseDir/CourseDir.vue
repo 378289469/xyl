@@ -30,8 +30,10 @@ export default {
       let chapter = []
       try {
         if (CourseChapter[index].isShow) {
+          console.log(true)
           chapter = CourseChapter.filter(cc => cc.parentId === '0' || cc.id === id || cc.parentId === id)
         } else {
+          console.log(false)
           chapter = CourseChapter.filter(cc => cc.parentId === '0' || cc.id === id)
         }
       } catch (error) {}
@@ -40,10 +42,17 @@ export default {
   },
   methods: {
     show (index) {
-      this.id = this.CourseChapter[index].id
-      this.index = index
-      this.CourseChapter[index].isShow = !this.CourseChapter[index].isShow
-      this.CourseChapter.splice(index, 1, this.CourseChapter[index])
+      console.log('点击一次')
+      this.id = this.chapter[index].id
+      let CourseChapterId = 0
+      this.CourseChapter.forEach((cc, key) => {
+        if (cc.id === this.chapter[index].id) {
+          cc.isShow = !cc.isShow
+          CourseChapterId = key
+        }
+      })
+      this.index = CourseChapterId
+      this.CourseChapter.splice(0, 1, this.CourseChapter[0])
     }
   }
 }
