@@ -15,8 +15,10 @@ export const reqTeachers = (roleItemId) => ajax('back/zblUser/list', { roleItemI
 // 5、获取课程目录
 export const reqCourseChapter = () => ajax('chapter/zblChapter/list', { pageNo: 1, pageSize: 0 })
 
-// 6、获取一级目录
+// 6、获取pdf
 export const reqGetPdfFile = (mainId) => ajax(`wordPdf/getPdfFile/${mainId}/1`, { pageNo: 1, pageSize: 1 })
+
+// 7、获取pdf地址
 
 // 8获取目录注释
 

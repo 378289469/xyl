@@ -3,7 +3,7 @@
     <h2>课程目录</h2>
     <ul >
       <li v-for="(chapters,index) in chapter " :key="index">
-        <div  class="dir" :class="chapters.chapterLevel? dirClass[chapters.chapterLevel] : dirClass[4]" @click="show(index, './')">
+        <div  class="dir" :class="chapters.chapterLevel? dirClass[chapters.chapterLevel] : dirClass[4]" @click="show(index)">
           <span v-show="chapters.oldName" class="iconfont" :class="{'icon-pdf':chapters.oldName}" ></span>
           <span v-show="chapters.chapterName" class="title ellipsis">{{chapters.chapterName}}</span>
           <span v-show="chapters.oldName" class="title ellipsis">{{chapters.oldName}}</span>
@@ -43,7 +43,7 @@ export default {
     }
   },
   methods: {
-    show (index, path) {
+    show (index) {
       const id = this.id = this.chapter[index].id
       let CourseChapterId = 0
       this.CourseChapter.forEach((cc, key) => {
@@ -56,7 +56,7 @@ export default {
         this.$store.dispatch('getPdfFile', id)
       }
       if (this.chapter[index].oldName) {
-        this.$router.replace(path)
+        this.$router.push({ name: 'PDF', params: { url: this.chapter[index].path } })
       }
       this.index = CourseChapterId
       this.CourseChapter.splice(0, 1, this.CourseChapter[0])

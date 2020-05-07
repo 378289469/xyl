@@ -34,6 +34,11 @@ const routes = [
     path: '/CourseIntroduce',
     name: 'CourseIntroduce',
     component: () => import('../views/CourseIntroduce/CourseIntroduce.vue')
+  },
+  {
+    path: '/PDF',
+    name: 'PDF',
+    component: () => import('../views/PDF/PDF.vue')
   }
 ]
 
