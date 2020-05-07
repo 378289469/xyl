@@ -1,5 +1,5 @@
 @font-face {font-family: "iconfont";
-  src: url('iconfont.ttf?t=1588397183445') format('truetype')/* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
+  src: url('iconfont.ttf?t=1588826153321') format('truetype')/* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
 }
 
 .iconfont {
@@ -80,5 +80,9 @@
 
 .icon-chat:before {
   content: "\e72a";
+}
+
+.icon-pdf:before {
+  content: "\e602";
 }
 

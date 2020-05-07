@@ -3,10 +3,11 @@
     <h2>课程目录</h2>
     <ul >
       <li v-for="(chapters,index) in chapter " :key="index">
-        <div  class="dir" :class="dirClass[chapters.chapterLevel]" @click="show(index)">
-          <slot name="icon" ></slot>
-          <span class="title ellipsis">{{chapters.chapterName}}</span>
-          <span class="iconfont" :class="chapters.isShow? 'icon-up' : 'icon-down'"></span>
+        <div  class="dir" :class="chapters.chapterLevel? dirClass[chapters.chapterLevel] : dirClass[4]" @click="show(index, './')">
+          <span v-show="chapters.oldName" class="iconfont" :class="{'icon-pdf':chapters.oldName}" ></span>
+          <span v-show="chapters.chapterName" class="title ellipsis">{{chapters.chapterName}}</span>
+          <span v-show="chapters.oldName" class="title ellipsis">{{chapters.oldName}}</span>
+          <span v-show="chapters.chapterName" class="iconfont" :class="chapters.isShow? 'icon-up' : 'icon-down'"></span>
         </div>
       </li>
     </ul>
@@ -18,22 +19,23 @@ import { mapState } from 'vuex'
 export default {
   data () {
     return {
-      dirClass: ['', 'one=dir', 'two-dir', 'three-dir'],
+      dirClass: ['', 'one=dir', 'two-dir', 'three-dir', 'resource-dir'],
       id: '0',
       index: 0
     }
   },
   computed: {
-    ...mapState(['CourseChapter']),
+    ...mapState(['CourseChapter', 'PdfFile']),
     chapter () {
       const { CourseChapter, id, index } = this
       let chapter = []
       try {
         if (CourseChapter[index].isShow) {
-          console.log(true)
           chapter = CourseChapter.filter(cc => cc.parentId === '0' || cc.id === id || cc.parentId === id)
+          if (CourseChapter[index].chapterLevel === 3) {
+            chapter.splice(index, 0, this.PdfFile)
+          }
         } else {
-          console.log(false)
           chapter = CourseChapter.filter(cc => cc.parentId === '0' || cc.id === id)
         }
       } catch (error) {}
@@ -41,16 +43,21 @@ export default {
     }
   },
   methods: {
-    show (index) {
-      console.log('点击一次')
-      this.id = this.chapter[index].id
+    show (index, path) {
+      const id = this.id = this.chapter[index].id
       let CourseChapterId = 0
       this.CourseChapter.forEach((cc, key) => {
-        if (cc.id === this.chapter[index].id) {
+        if (cc.id === id) {
           cc.isShow = !cc.isShow
           CourseChapterId = key
         }
       })
+      if (this.CourseChapter[CourseChapterId].chapterLevel === 3) {
+        this.$store.dispatch('getPdfFile', id)
+      }
+      if (this.chapter[index].oldName) {
+        this.$router.replace(path)
+      }
       this.index = CourseChapterId
       this.CourseChapter.splice(0, 1, this.CourseChapter[0])
     }
@@ -126,7 +133,7 @@ export default {
     border-radius: 0!important
     text-indent : 2em
     .iconfont{
-      margin-left -2em
+      margin-left -1.8em
     }
   }
 
@@ -134,6 +141,11 @@ export default {
     background-color: #FFFFFF;
     color: #925F25;
     border-radius: 0!important
+    text-indent : 1em
+    .iconfont{
+      margin-right -1.5em
+      margin-left 2em
+    }
   }
 
   .show {

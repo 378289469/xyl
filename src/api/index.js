@@ -9,15 +9,14 @@ export const reqCourseLearners = () => ajax('evaluate/zblEvaluate/listCount', { 
 // 3、获取活动列表
 export const reqActivitys = () => ajax('activity/zblActivity/list', { pageNo: 1, pageSize: 0 })
 
-// 4获取活动章节
-
-// 5、获取教师列表
+// 4、获取教师列表
 export const reqTeachers = (roleItemId) => ajax('back/zblUser/list', { roleItemId, pageNo: 1, pageSize: 10 })
 
-// 6获取课程目录
+// 5、获取课程目录
 export const reqCourseChapter = () => ajax('chapter/zblChapter/list', { pageNo: 1, pageSize: 0 })
 
-// 7获取一级目录
+// 6、获取一级目录
+export const reqGetPdfFile = (mainId) => ajax(`wordPdf/getPdfFile/${mainId}/1`, { pageNo: 1, pageSize: 1 })
 
 // 8获取目录注释
 
