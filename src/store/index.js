@@ -7,7 +7,8 @@ import {
   reqActivitys,
   reqTeachers,
   reqCourseChapter,
-  reqGetPdfFile
+  reqGetPdfFile,
+  reqGetNote
 } from '../api/index'
 
 Vue.use(Vuex)
@@ -18,6 +19,7 @@ const RECEIVE_ACTIVITYS = 'receive_activitys'
 const RECEIVE_TEACHERS = 'receive_teachers'
 const RECEIVE_COURSE_CHAPTER = 'receive_course_chapter'
 const RECEIVE_GET_PDF_FILE = 'receive_get_pdf_file'
+const RECEIVE_GET_NOTE = 'receive_get_note'
 
 export default new Vuex.Store({
   state: {
@@ -28,7 +30,8 @@ export default new Vuex.Store({
     usertype: [1, 2],
     CourseChapter: [],
     mainId: '',
-    PdfFile: {}
+    PdfFile: {},
+    notes: ''
   },
   mutations: {
     [RECEIVE_COURSE_INTRODUCE] (state, { courseintroduce }) {
@@ -48,6 +51,9 @@ export default new Vuex.Store({
     },
     [RECEIVE_GET_PDF_FILE] (state, { PdfFile }) {
       state.PdfFile = PdfFile
+    },
+    [RECEIVE_GET_NOTE] (state, { notes }) {
+      state.notes = notes
     }
   },
   actions: {
@@ -114,6 +120,13 @@ export default new Vuex.Store({
       if (result.code === 200) {
         const PdfFile = result.result.records[0]
         commit(RECEIVE_GET_PDF_FILE, { PdfFile })
+      }
+    },
+    async getNote ({ commit, state }, mainId) {
+      const result = await reqGetNote(mainId)
+      if (result.code === 200) {
+        const notes = result.result.records
+        commit(RECEIVE_GET_NOTE, { notes })
       }
     }
   },

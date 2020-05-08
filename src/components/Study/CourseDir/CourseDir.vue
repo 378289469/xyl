@@ -21,7 +21,8 @@ export default {
     return {
       dirClass: ['', 'one=dir', 'two-dir', 'three-dir', 'resource-dir'],
       id: '0',
-      index: 0
+      index: 0,
+      noteId: 0
     }
   },
   computed: {
@@ -54,9 +55,10 @@ export default {
       })
       if (this.CourseChapter[CourseChapterId].chapterLevel === 3) {
         this.$store.dispatch('getPdfFile', id)
+        this.noteId = id
       }
       if (this.chapter[index].oldName) {
-        this.$router.push({ name: 'PDF', params: { url: this.chapter[index].path } })
+        this.$router.push({ name: 'PDF', params: { url: this.chapter[index].path, id: this.noteId } })
       }
       this.index = CourseChapterId
       this.CourseChapter.splice(0, 1, this.CourseChapter[0])

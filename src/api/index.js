@@ -18,7 +18,8 @@ export const reqCourseChapter = () => ajax('chapter/zblChapter/list', { pageNo: 
 // 6、获取pdf
 export const reqGetPdfFile = (mainId) => ajax(`wordPdf/getPdfFile/${mainId}/1`, { pageNo: 1, pageSize: 1 })
 
-// 7、获取pdf地址
+// 7、获取章节注释
+export const reqGetNote = (mainId) => ajax('notes/zblNotes/list', { pageNo: 1, pageSize: 1, chapterId: mainId })
 
 // 8获取目录注释
 
