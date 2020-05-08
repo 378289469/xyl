@@ -14,13 +14,17 @@
 <script>
 import BScroll from 'better-scroll'
 export default {
+  data () {
+    return {
+      bs: ''
+    }
+  },
   mounted () {
-    const bs = new BScroll('#wheel')// eslint-disable-line
+    this.bs = new BScroll('#wheel')// eslint-disable-line
   },
   methods: {
     wheel () {
-      console.log(this.bs)
-      // this.bs.scrollBy(x, y)
+      this.bs.scrollBy(0, -630, 500)
     }
   }
 }
@@ -30,7 +34,7 @@ export default {
 <style scoped lang="stylus">
 #wheel
   position fixed
-  bottom 230px
+  bottom -230px
   left 0
   width 100%
   height 0px
