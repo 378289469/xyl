@@ -19,16 +19,18 @@
       </div>
     </div>
     <div class="btns">
-      <span class="btn on"  @click="wheel">提问</span>
-      <span class="btn">打卡</span>
+      <span class="btn"  :class="{on:isOn}" @click="wheel('提问')">提问</span>
+      <span class="btn" :class="{on:!isOn}" @click="wheel('打卡')">打卡</span>
     </div>
     <wheel ref="wheel"/>
+    <tip/>
   </div>
 </template>
 
 <script>
 import Header from '../../components/Header/Header'
-import wheel from '../../components/wheel/wheel'
+import wheel from '../../components/Wheel/wheel'
+import tip from '../../components/Tip/tip'
 import { mapState } from 'vuex'
 import BScroll from 'better-scroll'
 import pdf from 'vue-pdf'
@@ -37,13 +39,15 @@ export default {
     return {
       url: 'http://storage.xuetangx.com/public_assets/xuetangx/PDF/PlayerAPI_v1.0.6.pdf',
       // url: this.$route.params.url,
-      Pages: 2
+      Pages: 2,
+      isOn: true
     }
   },
   components: {
     Header,
     pdf,
-    wheel
+    wheel,
+    tip
   },
   computed: {
     ...mapState(['notes'])
@@ -59,8 +63,9 @@ export default {
         this.Pages = pdf.numPages
       }).catch(() => {})
     },
-    wheel () {
-      this.$refs.wheel.wheel()
+    wheel (title) {
+      this.isOn = !this.isOn
+      this.$refs.wheel.wheel(title, this.$route.params.id)
     }
   },
   mounted () {
@@ -98,9 +103,7 @@ export default {
       padding 10px
       .pages,.tips
         height 690px
-      .pdf
-        width 50%
-      .tip
+      .pdf,tip
         width 50%
   .btns
     display flex

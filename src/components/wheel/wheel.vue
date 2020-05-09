@@ -1,30 +1,61 @@
 <template>
-  <div id="wheel" class="wheel">
+  <div id="wheel" class="wheel" v-show="isShow">
     <div class="whellItme">
       <div class="icons">
-        <span>取消</span>
-        <h2>提问</h2>
-        <span class="on">确定</span>
+        <span @click="cancel">取消</span>
+        <h2>{{title}}</h2>
+        <span class="on" @click="done">确定</span>
       </div>
-      <textarea placeholder='请输入您要提问的内容'></textarea>
+      <textarea v-model="content" placeholder='请输入您要提问的内容'></textarea>
     </div>
   </div>
 </template>
 
 <script>
-import BScroll from 'better-scroll'
+import { mapState } from 'vuex'
 export default {
   data () {
     return {
-      bs: ''
+      title: '',
+      isShow: false,
+      content: '',
+      topicId: 0
     }
   },
-  mounted () {
-    this.bs = new BScroll('#wheel')// eslint-disable-line
+  computed: {
+    ...mapState(['msg'])
   },
   methods: {
-    wheel () {
-      this.bs.scrollBy(0, -630, 500)
+    wheel (title, id) {
+      this.title = title
+      this.isShow = true
+      this.topicId = id
+    },
+    done () {
+      const { title, content, topicId, msg } = this
+      if (content.trim().length === 0) {
+        this.$store.dispatch('tipMsg', 4) // type 1加载中  2成功  3失败 4不能为空
+        return
+      }
+      const topicType = title === '打卡' ? 1 : 2
+      const evaluate = {
+        context: content, // 内容
+        isActiorchapter: 1, //
+        topicId: topicId, // 章节id
+        topicType: topicType, // 1打卡 2提问 3笔记
+        parentId: 0 // 父id
+        // targetUserId: 0 // 目标用户
+      }
+      this.$store.dispatch('addEvaluate', evaluate)
+      if (msg.trim().length !== 0) {
+        this.isShow = false
+        this.$store.dispatch('tipMsg', 2)
+      } else {
+        this.$store.dispatch('tipMsg', 1)
+      }
+    },
+    cancel () {
+      this.isShow = false
     }
   }
 }
@@ -34,15 +65,20 @@ export default {
 <style scoped lang="stylus">
 #wheel
   position fixed
-  bottom -230px
+  top 0
   left 0
   width 100%
-  height 0px
-  background white
-  border-radius 10px 10px 0 0
-  box-shadow 0 0 8px #050505
+  height 100%
+  background rgba(0 0 0 .5)
   .whellItme
+    position fixed
+    bottom 0
+    left 0
+    width 100%
     height 230px
+    background white
+    border-radius 10px 10px 0 0
+    box-shadow 0 0 8px #050505
     .icons
       display flex
       justify-content space-around

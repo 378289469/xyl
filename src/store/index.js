@@ -8,8 +8,11 @@ import {
   reqTeachers,
   reqCourseChapter,
   reqGetPdfFile,
-  reqGetNote
+  reqGetNote,
+  reqEvaluate
 } from '../api/index'
+
+import modules from './modules'
 
 Vue.use(Vuex)
 
@@ -20,6 +23,7 @@ const RECEIVE_TEACHERS = 'receive_teachers'
 const RECEIVE_COURSE_CHAPTER = 'receive_course_chapter'
 const RECEIVE_GET_PDF_FILE = 'receive_get_pdf_file'
 const RECEIVE_GET_NOTE = 'receive_get_note'
+const RECEIVE_ADD_EVALUATE = 'receive_add_evaluate'
 
 export default new Vuex.Store({
   state: {
@@ -31,7 +35,8 @@ export default new Vuex.Store({
     CourseChapter: [],
     mainId: '',
     PdfFile: {},
-    notes: ''
+    notes: '',
+    msg: ''
   },
   mutations: {
     [RECEIVE_COURSE_INTRODUCE] (state, { courseintroduce }) {
@@ -54,6 +59,9 @@ export default new Vuex.Store({
     },
     [RECEIVE_GET_NOTE] (state, { notes }) {
       state.notes = notes
+    },
+    [RECEIVE_ADD_EVALUATE] (state, { msg }) {
+      state.msg = msg
     }
   },
   actions: {
@@ -128,8 +136,16 @@ export default new Vuex.Store({
         const notes = result.result.records
         commit(RECEIVE_GET_NOTE, { notes })
       }
+    },
+    async addEvaluate ({ commit, state }, Evaluate) {
+      const result = await reqEvaluate(Evaluate)
+      if (result.code === 200) {
+        const msg = result.result.message
+        commit(RECEIVE_ADD_EVALUATE, { msg })
+      }
     }
   },
   modules: {
+    modules
   }
 })

@@ -1,5 +1,5 @@
 @font-face {font-family: "iconfont";
-  src: url('iconfont.ttf?t=1588826153321') format('truetype')/* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
+  src: url('iconfont.ttf?t=1589014993333') format('truetype')/* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
 }
 
 .iconfont {
@@ -84,5 +84,17 @@
 
 .icon-pdf:before {
   content: "\e602";
+}
+
+.icon-success:before {
+  content: "\e6ad";
+}
+
+.icon-fail:before {
+  content: "\e608";
+}
+
+.icon-load:before {
+  content: "\e6b9";
 }
 

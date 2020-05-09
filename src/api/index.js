@@ -21,7 +21,8 @@ export const reqGetPdfFile = (mainId) => ajax(`wordPdf/getPdfFile/${mainId}/1`, 
 // 7、获取章节注释
 export const reqGetNote = (mainId) => ajax('notes/zblNotes/list', { pageNo: 1, pageSize: 1, chapterId: mainId })
 
-// 8获取目录注释
+// 8打卡/提问 提交
+export const reqEvaluate = (evaluate) => ajax('evaluate/zblEvaluate/add', { evaluate }, 'post')
 
 // 9获取目录资源
 
