@@ -103,8 +103,9 @@ export default {
       padding 10px
       .pages,.tips
         height 690px
-      .pdf,tip
         width 50%
+      .pdf,tip
+        width 100%
   .btns
     display flex
     justify-content space-around

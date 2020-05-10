@@ -1,12 +1,33 @@
 <template>
   <div id="search">
     <span class="iconfont icon-search icon"></span>
-    <input type="text" placeholder="请输入关键字进行搜索">
+    <input @click="onSearch" v-model="text" type="text" placeholder="请输入关键字进行搜索">
   </div>
 </template>
 
 <script>
 export default {
+  data () {
+    return {
+      text: ''
+    }
+  },
+  watch: {
+    text (value) {
+      let activitys = this.$store.state.activitys
+      if (value.trim().length === 0) {
+        this.$store.state.searchActivitys = activitys
+        return
+      }
+      activitys = activitys.filter(at => at.activityContext.indexOf(value) !== -1 || at.activityName.indexOf(value) !== -1)
+      this.$store.state.searchActivitys = activitys
+    }
+  },
+  methods: {
+    onSearch () {
+      this.text = ''
+    }
+  }
 }
 </script>
 
@@ -31,6 +52,7 @@ export default {
     border 0
     font-size 13px
     margin-left 4px
+    width 85%
   }
 }
 </style>

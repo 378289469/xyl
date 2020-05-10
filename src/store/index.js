@@ -30,6 +30,7 @@ export default new Vuex.Store({
     courseintroduce: {},
     courselearners: 0,
     activitys: [],
+    searchActivitys: [],
     teachers: [],
     usertype: [1, 2],
     CourseChapter: [],
@@ -47,6 +48,7 @@ export default new Vuex.Store({
     },
     [RECEIVE_ACTIVITYS] (state, { activitys }) {
       state.activitys = activitys
+      state.searchActivitys = activitys
     },
     [RECEIVE_TEACHERS] (state, { teachers }) {
       state.teachers = teachers

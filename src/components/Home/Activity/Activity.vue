@@ -3,7 +3,7 @@
     <slot name="top" class="top"></slot>
     <div class="activitys">
       <ul class="list" >
-        <li v-for="(activity ,index) in activitys" :key="index">
+        <li v-for="(activity ,index) in searchActivitys" :key="index" @click="to(activity)">
           <h3 class="ellipsis">{{activity.activityName}}</h3>
           <span class="iconfont icon-date btn icon3"></span>
           <span class="time">{{activity.activityStart}}---{{activity.activityEnd}}</span>
@@ -18,10 +18,15 @@ import BScroll from 'better-scroll'
 import { mapState } from 'vuex'
 export default {
   computed: {
-    ...mapState(['activitys'])
+    ...mapState(['searchActivitys'])
   },
   mounted () {
     new BScroll('.activitys') // eslint-disable-line
+  },
+  methods: {
+    to (activity) {
+      this.$router.push({ name: 'ActivityDetail', params: { activity: activity } })
+    }
   }
 }
 </script>

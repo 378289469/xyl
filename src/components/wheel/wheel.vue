@@ -4,7 +4,7 @@
       <div class="icons">
         <span @click="cancel">取消</span>
         <h2>{{title}}</h2>
-        <span class="on" @click="done">确定</span>
+        <span class="on" @click.stop="done">确定</span>
       </div>
       <textarea v-model="content" placeholder='请输入您要提问的内容'></textarea>
     </div>

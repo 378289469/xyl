@@ -1,7 +1,7 @@
 <template>
   <div id="tip" v-show="tipShow">
-      <span class="iconfont" :class="tipClass[tipType]"></span>
-      <p>{{tipText[tipType]}}</p>
+      <span class="iconfont" :class="tipClass[tipType[0]]"></span>
+      <p>{{tipText[tipType[0]]}}</p>
   </div>
 </template>
 

@@ -12,6 +12,7 @@ export default ({
   },
   actions: {
     tipMsg ({ commit, state }, type) { // type 1加载中  2成功  3失败 4不能为空
+      type = `${type}${Date.now()}`
       commit(TIP_MSG, { type })
     }
   },

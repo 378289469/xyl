@@ -35,6 +35,9 @@ export default {
     go (path) {
       this.$router.replace(path)
     }
+  },
+  mounted () {
+    this.$store.state.searchActivitys = this.$store.state.activitys
   }
 }
 </script>

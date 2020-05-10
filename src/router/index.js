@@ -11,14 +11,29 @@ const routes = [
     component: Home
   },
   {
+    path: '/CourseIntroduce',
+    name: 'CourseIntroduce',
+    component: () => import('../views/CourseIntroduce/CourseIntroduce.vue')
+  },
+  {
     path: '/study',
     name: 'Study',
     component: () => import('../views/Study/Study.vue')
   },
   {
+    path: '/PDF',
+    name: 'PDF',
+    component: () => import('../views/PDF/PDF.vue')
+  },
+  {
     path: '/activity',
     name: 'Activity',
     component: () => import('../views/Activity/Activity.vue')
+  },
+  {
+    path: '/ActivityDetail',
+    name: 'ActivityDetail',
+    component: () => import('../views/ActivityDetail/ActivityDetail.vue')
   },
   {
     path: '/communication',
@@ -29,16 +44,6 @@ const routes = [
     path: '/my',
     name: 'My',
     component: () => import('../views/My/My.vue')
-  },
-  {
-    path: '/CourseIntroduce',
-    name: 'CourseIntroduce',
-    component: () => import('../views/CourseIntroduce/CourseIntroduce.vue')
-  },
-  {
-    path: '/PDF',
-    name: 'PDF',
-    component: () => import('../views/PDF/PDF.vue')
   }
 ]
 
