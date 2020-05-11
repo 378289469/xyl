@@ -34,7 +34,7 @@ export default {
         if (CourseChapter[index].isShow) {
           chapter = CourseChapter.filter(cc => cc.parentId === '0' || cc.id === id || cc.parentId === id)
           if (CourseChapter[index].chapterLevel === 3) {
-            chapter.splice(index, 0, this.PdfFile)
+            chapter.splice(index, 0, this.PdfFile[0])
           }
         } else {
           chapter = CourseChapter.filter(cc => cc.parentId === '0' || cc.id === id)
@@ -54,7 +54,7 @@ export default {
         }
       })
       if (this.CourseChapter[CourseChapterId].chapterLevel === 3) {
-        this.$store.dispatch('getPdfFile', id)
+        this.$store.dispatch('getPdfFile', { mainId: id, id: 1 })
         this.noteId = id
       }
       if (this.chapter[index].oldName) {

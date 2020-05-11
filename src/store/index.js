@@ -35,7 +35,7 @@ export default new Vuex.Store({
     usertype: [1, 2],
     CourseChapter: [],
     mainId: '',
-    PdfFile: {},
+    PdfFile: [],
     notes: '',
     msg: ''
   },
@@ -125,10 +125,10 @@ export default new Vuex.Store({
         commit(RECEIVE_COURSE_CHAPTER, { CourseChapter })
       }
     },
-    async getPdfFile ({ commit, state }, mainId) {
-      const result = await reqGetPdfFile(mainId)
+    async getPdfFile ({ commit, state }, { mainId, id }) {
+      const result = await reqGetPdfFile(mainId, id)
       if (result.code === 200) {
-        const PdfFile = result.result.records[0]
+        const PdfFile = result.result.records
         commit(RECEIVE_GET_PDF_FILE, { PdfFile })
       }
     },
