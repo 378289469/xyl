@@ -4,10 +4,10 @@
     <h2 class="activity">活动</h2>
     <Search class="search"/>
     <ul>
-      <li>
+      <li v-for="(list, index) in list" :key="index">
         <div class="info">
           <div class="avatar">
-            <img src="./imgs/person.png" alt="avatar" >
+            <img :src="list.user.avatar" alt="avatar" :onerror="errorurl" >
           </div>
           <span>学生</span>
         </div>
@@ -23,11 +23,27 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import Search from '../../Search/Search'
 
 export default {
+  data () {
+    return {
+      topicType: 1, // 1目录 2 活动
+      errorurl: 'this.src="' + require('./imgs/person.png') + '"'
+    }
+  },
   components: {
     Search
+  },
+  computed: {
+    ...mapState(['evaluatelist']),
+    list () {
+      return this.evaluatelist.records
+    }
+  },
+  mounted () {
+    this.$store.dispatch('getEvaluate', this.topicType)
   }
 }
 </script>
