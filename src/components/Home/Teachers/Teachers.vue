@@ -9,7 +9,7 @@
       <UL>
         <li v-for="(teacher, index) in teachers" :key="index">
             <div class="avatar">
-              <img :src="teacher.avatar" alt="teacher" :onerror="errorurl" >
+              <img :src="teacher.avatar || imgUrl" alt="teacher" :onerror="errorurl" >
             </div>
             <span class="ellipsis">{{teacher.realname}}</span>
         </li>
@@ -25,7 +25,8 @@ import { mapState } from 'vuex'
 export default {
   data () {
     return {
-      errorurl: 'this.src="' + require('./imgs/person.png') + '"'
+      errorurl: 'this.src="' + require('./imgs/person.png') + '"',
+      imgUrl: require('./imgs/person.png')
     }
   },
   computed: {

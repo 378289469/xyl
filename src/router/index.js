@@ -36,7 +36,7 @@ const routes = [
     component: () => import('../views/ActivityDetail/ActivityDetail.vue')
   },
   {
-    path: '/communication',
+    path: '/Communication',
     name: 'Communication',
     component: () => import('../views/Communication/Communication.vue')
   },

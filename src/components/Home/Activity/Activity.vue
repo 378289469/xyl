@@ -74,7 +74,7 @@ export default {
     .btn
       margin-left 6px
   .activitys
-    height 100%
+    height 90%
     overflow hidden
     ul
       margin-left 16px

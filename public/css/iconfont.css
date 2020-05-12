@@ -54,11 +54,11 @@
   content: "\e65d";
 }
 
-.icon-school:before {
+.icon-finger:before {
   content: "\e626";
 }
 
-.icon-face:before {
+.icon-school:before {
   content: "\e6d0";
 }
 
@@ -96,5 +96,9 @@
 
 .icon-load:before {
   content: "\e6b9";
+}
+
+.icon-key:before {
+  content: "\e603";
 }
 

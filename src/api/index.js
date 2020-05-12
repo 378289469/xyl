@@ -24,8 +24,8 @@ export const reqGetNote = (mainId) => ajax('notes/zblNotes/list', { pageNo: 1, p
 // 8打卡/提问 提交
 export const reqEvaluate = (evaluate) => ajax('evaluate/zblEvaluate/add', { evaluate }, 'post')
 
-// 9获取目录资源
-export const reqEvaluateList = (topicType) => ajax('evaluate/zblEvaluate/list', { pageNo: 1, pageSize: 10, topicType })
+// 9获取交流列表
+export const reqEvaluateList = (topicType) => ajax('evaluate/zblEvaluate/appList', { pageNo: 1, pageSize: 10, topicType })
 
 // 10获取打卡/提问列表
 
