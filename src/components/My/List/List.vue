@@ -1,8 +1,8 @@
 <template>
-	<div id="list">
-    <span class="member"></span>
-    <span class="title">账户安全</span>
-    <span class="iconfont icon-right"></span>
+	<div class="list">
+    <slot name="left" class="member"></slot>
+    <slot name="title" class="title"></slot>
+    <slot name="right" class="iconfont icon-right"></slot>
 	</div>
 </template>
 
@@ -22,7 +22,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="stylus">
-#list
+.list
   display flex
   justify-content space-between
   width 345px
@@ -34,16 +34,19 @@ export default {
   line-height 50px
   font-size 15px
   color #333333
+  margin-top 10px
   span
     display block
     width 50px
     height 50px
-  .member,.security
+  .member
     background url('./imgs/member.png') no-repeat
     background-size 30px 30px
     background-position center
   .security
     background url('./imgs/security.png') no-repeat
+    background-size 30px 30px
+    background-position center
   .title
     width 240px
     text-align left

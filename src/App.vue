@@ -29,7 +29,13 @@ export default {
   },
   watch: {
     $route (e) {
-      this.tabType = !(e.name === 'CourseIntroduce' || e.name === 'PDF' || e.name === 'ActivityDetail')
+      this.tabType = !(
+        e.name === 'CourseIntroduce' ||
+        e.name === 'PDF' ||
+        e.name === 'ActivityDetail' ||
+        e.name === 'MyMember' ||
+        e.name === 'MySecurity'
+      )
     }
   }
 }

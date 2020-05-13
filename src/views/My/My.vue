@@ -5,7 +5,11 @@
     </Header>
     <Info/>
     <div class="item">
-      <List/>
+      <List v-for="i in 2" :key="i" @click.native="to(i)">
+          <span :class="leftClass[i]" slot="left"></span>
+          <span class="title" slot="title">{{titles[i]}}</span>
+          <span class="iconfont icon-right" slot="right"></span>
+      </List>
     </div>
   </div>
 </template>
@@ -17,14 +21,21 @@ import Info from '../../components/My/Info/Info.vue'
 import List from '../../components/My/List/List.vue'
 
 export default {
+  data () {
+    return {
+      titles: ['', '小组成员', '账户安全'],
+      leftClass: ['', 'member', 'security'],
+      paths: ['', '/MyMember', '/MySecurity']
+    }
+  },
   components: {
     Header,
     Info,
     List
   },
   methods: {
-    go (path) {
-      this.$router.replace(path)
+    to (index) {
+      this.$router.push(this.paths[index])
     }
   },
   mounted () {
@@ -39,7 +50,7 @@ export default {
   height 100%
   .item
     position absolute
-    top 275px
+    top 265px
     left 14px
     width 345px
     text-align center
