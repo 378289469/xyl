@@ -34,7 +34,9 @@ export default {
         e.name === 'PDF' ||
         e.name === 'ActivityDetail' ||
         e.name === 'MyMember' ||
-        e.name === 'MySecurity'
+        e.name === 'MySecurity' ||
+        e.name === 'UserLogin' ||
+        e.name === 'UserRegister'
       )
     }
   }

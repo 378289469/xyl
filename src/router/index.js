@@ -54,6 +54,16 @@ const routes = [
     path: '/MySecurity',
     name: 'MySecurity',
     component: () => import('../views/MySecurity/MySecurity.vue')
+  },
+  {
+    path: '/UserLogin',
+    name: 'UserLogin',
+    component: () => import('../views/UserLogin/UserLogin.vue')
+  },
+  {
+    path: '/UserRegister',
+    name: 'UserRegister',
+    component: () => import('../views/UserRegister/UserRegister.vue')
   }
 ]
 
