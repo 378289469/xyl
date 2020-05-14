@@ -5,7 +5,7 @@
     </Header>
     <Course/>
     <Activity>
-      <div class="top" slot="top" @click="go('/activity')">
+      <div class="top" slot="top" @click="go('Activity')">
         <span class="icon1"></span>
         <span class="icon2"></span>
         <h2>活动内容</h2>
@@ -23,6 +23,7 @@ import Header from '../../components/Header/Header'
 import Course from '../../components/Home/Course/Course'
 import Activity from '../../components/Home/Activity/Activity'
 import Teachers from '../../components/Home/Teachers/Teachers'
+import routerMain from '../../router/main.js'
 
 export default {
   components: {
@@ -32,9 +33,7 @@ export default {
     Teachers
   },
   methods: {
-    go (path) {
-      this.$router.replace(path)
-    }
+    ...routerMain
   },
   mounted () {
     this.$store.state.searchActivitys = this.$store.state.activitys

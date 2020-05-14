@@ -1,22 +1,22 @@
 <template>
   <footer id="footer-guide">
-    <div @click="to('/')">
+    <div @click="to('Home')">
       <span class="iconfont icon-home guide" :class="{on:'/'===$route.path}"></span>
       <span class="guide" :class="{on:'/'===$route.path}">首页</span>
     </div>
-    <div @click="to('/study')">
+    <div @click="to('Study')">
       <span class="iconfont icon-study guide" :class="{on:'/study'===$route.path}"></span>
       <span class="guide" :class="{on:'/study'===$route.path}">学习</span>
     </div>
-    <div @click="to('/activity')">
+    <div @click="to('Activity')">
       <span class="iconfont icon-activity guide" :class="{on:'/activity'===$route.path}"></span>
       <span class="guide" :class="{on:'/activity'===$route.path}">活动</span>
     </div>
-    <div @click="to('/communication')">
+    <div @click="to('Communication')">
       <span class="iconfont icon-chat guide" :class="{on:'/communication'===$route.path}"></span>
       <span class="guide" :class="{on:'/communication'===$route.path}">交流</span>
     </div>
-    <div @click="to('/my')">
+    <div @click="to('My')">
       <span class="iconfont icon-my guide" :class="{on:'/my'===$route.path}"></span>
       <span class="guide" :class="{on:'/my'===$route.path}">我的</span>
     </div>
@@ -24,11 +24,10 @@
 </template>
 
 <script>
+import routerMain from '../../router/main.js'
 export default {
   methods: {
-    to (path) {
-      this.$router.replace(path)
-    }
+    ...routerMain
   }
 }
 </script>

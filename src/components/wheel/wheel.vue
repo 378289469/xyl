@@ -34,7 +34,7 @@ export default {
     done () {
       const { title, content, topicId, msg } = this
       if (content.trim().length === 0) {
-        this.$store.dispatch('tipMsg', 4) // type 1加载中  2成功  3失败 4不能为空
+        this.$store.dispatch('tipMsg', { type: 4 }) // type 1加载中  2成功  3失败 4不能为空
         return
       }
       const topicType = title === '打卡' ? 1 : 2

@@ -1,7 +1,9 @@
 import axios from 'axios'
+import main from './main'
 
-const URL_BASE = 'http://192.168.5.56:8082/jeecg-boot/'
-const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1ODg5MDE0MDIsInVzZXJuYW1lIjoiMTM5MDAwMDAwMDE6emJsIn0.X-5YkfH-My1Gx4c7deJGA36bL5uhQ_Hu3TrT-0ilYiQ'
+const token = main.token
+const baseUrl = main.baseUrl
+
 axios.interceptors.request.use(
   config => {
     config.headers['X-Access-Token'] = token
@@ -17,7 +19,7 @@ axios.interceptors.response.use(
 
 export default function ajax (url, data = {}, type = 'GET') {
   type = type.toUpperCase()
-  url = URL_BASE + url
+  url = baseUrl + url
   return new Promise(function (resolve, reject) {
     let promise
     if (type === 'GET') {

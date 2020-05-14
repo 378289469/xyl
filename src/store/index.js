@@ -10,7 +10,8 @@ import {
   reqGetPdfFile,
   reqGetNote,
   reqEvaluate,
-  reqEvaluateList
+  reqEvaluateList,
+  reqUserRegister
 } from '../api/index'
 
 import modules from './modules'
@@ -26,6 +27,7 @@ const RECEIVE_GET_PDF_FILE = 'receive_get_pdf_file'
 const RECEIVE_GET_NOTE = 'receive_get_note'
 const RECEIVE_ADD_EVALUATE = 'receive_add_evaluate'
 const RECEIVE_GET_EVALUATE = 'receive_get_evaluate'
+const RECEIVE_USER_REGISTER = 'receive_user_register'
 
 export default new Vuex.Store({
   state: {
@@ -40,8 +42,8 @@ export default new Vuex.Store({
     PdfFile: [],
     notes: '',
     msg: '',
-    evaluatelist: []
-
+    evaluatelist: [],
+    register: {}
   },
   mutations: {
     [RECEIVE_COURSE_INTRODUCE] (state, { courseintroduce }) {
@@ -71,6 +73,9 @@ export default new Vuex.Store({
     },
     [RECEIVE_GET_EVALUATE] (state, { evaluatelist }) {
       state.evaluatelist = evaluatelist
+    },
+    [RECEIVE_USER_REGISTER] (state, { register }) {
+      state.register = register
     }
   },
   actions: {
@@ -158,6 +163,14 @@ export default new Vuex.Store({
       if (result.code === 200) {
         const evaluatelist = result.result
         commit(RECEIVE_GET_EVALUATE, { evaluatelist })
+      }
+    },
+    async userRegister ({ commit, state }, { info, cb }) {
+      const result = await reqUserRegister(info)
+      if (result.code === 200 || result.code === 0 || result.code === 500) {
+        const register = result
+        commit(RECEIVE_USER_REGISTER, { register })
+        cb && cb()
       }
     }
   },

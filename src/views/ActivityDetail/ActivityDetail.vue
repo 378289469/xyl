@@ -42,6 +42,7 @@ import BScroll from 'better-scroll'
 import Header from '../../components/Header/Header'
 import wheel from '../../components/Wheel/wheel'
 import tip from '../../components/Tip/tip'
+import routerMain from '../../router/main.js'
 
 export default {
   data () {
@@ -103,12 +104,7 @@ export default {
     ...mapState(['PdfFile'])
   },
   methods: {
-    back () {
-      this.$router.go(-1)
-    },
-    go () {
-      this.Isclick = !this.Isclick
-    },
+    ...routerMain,
     wheel (title) {
       this.$refs.wheel.wheel(title, this.activity.id)
     }

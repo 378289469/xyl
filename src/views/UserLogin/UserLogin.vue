@@ -5,30 +5,87 @@
     </Header>
     <form action="" class="items">
       <h2>用户登录</h2>
-      <div class="item"  v-for="i in 2" :key="i">
+      <div class="item"  v-for="i in 3" :key="i" :class="{'iconKey':iconClass[i]==='icon-key'}">
         <span class="iconfont" :class="iconClass[i]"></span>
-        <input :type="types[i]" :placeholder="placeholders[i]" >
+        <input  :maxlength="maxlength[i]" :type="types[i]" :placeholder="placeholders[i]"
+        v-model="model[i]" @focus="focus()" @blur="blur()">
+        <span class="keyImg" v-if="iconClass[i]==='icon-key'" @click="key"><img :src="keyUrl" alt=""></span>
       </div>
       <button>登录</button>
-      <h3><span>还没有账号？</span>立即注册</h3>
+      <h3 @click="go('UserRegister')"><span>还没有账号？</span>立即注册</h3>
     </form>
+    <tip/>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import Header from '../../components/Header/Header'
+import tip from '../../components/Tip/tip'
+import { mapState } from 'vuex'
+import main from '../../api/main'
+import routerMain from '../../router/main.js'
 
 export default {
   data () {
     return {
-      types: ['', 'text', 'text'],
-      placeholders: ['', '请输入用户名', '请输入密码', ''],
-      iconClass: ['', 'icon-username', 'icon-userpw']
+      info: { name: this.$route.params.username, password: '', key: '' },
+      types: ['', 'tel', 'text', 'tel'],
+      maxlength: ['', 11, 20, 4],
+      placeholders: ['', '请输入手机号', '请输入密码', '请输入验证码'],
+      iconClass: ['', 'icon-username', 'icon-userpw', 'icon-key'],
+      keyUrl: `${main.baseUrl}/front/login/getCheckCode?${Date.now()}`
     }
   },
   components: {
-    Header
+    Header,
+    tip
+  },
+  computed: {
+    ...mapState(['register']),
+    model () {
+      return ['', this.info.name, this.info.password, this.info.key]
+    }
+  },
+  methods: {
+    ...routerMain,
+    go (path) {
+      this.$router.replace({ name: path })
+    },
+    key () {
+      this.keyUrl = `${main.baseUrl}/front/login/getCheckCode?${Date.now()}`
+    },
+    submit () {
+      const info = {
+        password: this.model[2].trim(),
+        smscode: this.model[3].trim(),
+        username: this.model[1].trim()
+      }
+      if (info.password && info.smscode && info.username) {
+        const paramets = {
+          info,
+          cb: () => {
+            this.$store.dispatch('tipMsg', { type: 5, msg: this.register.message }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+            if (this.register.success) {
+              this.go('My', { username: this.model[2].trim() })
+            }
+          }
+        }
+        this.$store.dispatch('userRegister', paramets)
+      }
+    },
+    focus () {
+      event.target.value = ''
+    },
+    blur () {
+      if (event.target.placeholder === '请输入手机号' && !(/^1[3456789]\d{9}$/.test(event.target.value))) {
+        this.$store.dispatch('tipMsg', { type: 5, msg: '手机号错误' }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+      } else if (!event.target.value && event.target.placeholder === '请输入密码') {
+        this.$store.dispatch('tipMsg', { type: 5, msg: '请输入密码' }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+      } else if (!event.target.value && event.target.placeholder === '请输入验证码') {
+        this.$store.dispatch('tipMsg', { type: 5, msg: '请输入验证码' }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+      }
+    }
   },
   mounted () {
   }
@@ -45,10 +102,10 @@ export default {
     top 97px
     left 30px
     width 315px
-    height 380px
+    height 410px
     text-align center
     background url('./imgs/loginbg.png') no-repeat
-    background-size 315px 380px
+    background-size 315px 410px
     background-position center
     h2
       color #7C4900
@@ -79,6 +136,20 @@ export default {
         color #828282
         font-size 14px
         border none
+    .iconKey
+      position relative
+      width 50%
+      margin-left 35px
+      input
+        width 115px
+      .keyImg
+        position absolute
+        left 170px
+        width 80px
+        height 45px
+        img
+          width 100%
+          height 60%
     button
       margin-top 25px
       color #FFF6C1

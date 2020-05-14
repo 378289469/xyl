@@ -8,14 +8,13 @@
 
 <script>
 import { mapState } from 'vuex'
+import routerMain from '../../../router/main.js'
 export default {
   computed: {
     ...mapState(['courseintroduce', 'courselearners'])
   },
   methods: {
-    to (path) {
-      this.$router.push(path)
-    }
+    ...routerMain
   }
 }
 </script>

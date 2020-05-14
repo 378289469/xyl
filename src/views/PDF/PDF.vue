@@ -34,6 +34,7 @@ import tip from '../../components/Tip/tip'
 import { mapState } from 'vuex'
 import BScroll from 'better-scroll'
 import pdf from 'vue-pdf'
+import routerMain from '../../router/main.js'
 export default {
   data () {
     return {
@@ -53,9 +54,7 @@ export default {
     ...mapState(['notes'])
   },
   methods: {
-    back () {
-      this.$router.go(-1)
-    },
+    ...routerMain,
     getNumPages (url) {
       var loadingTask = pdf.createLoadingTask(url)
       loadingTask.then(pdf => {

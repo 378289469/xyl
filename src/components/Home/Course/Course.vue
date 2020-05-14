@@ -4,9 +4,9 @@
 		<img src="./imgs/person.png" alt="person" />
 		<p>
 			{{introduce}}
-			<span @click="to('/CourseIntroduce')">全文</span>
-		</p>
-		<div @click="go('/study')">
+			<span @click="to('CourseIntroduce')">全文</span>
+    </p>
+		<div @click="go('Study')">
 			<h3>{{courselearners}}</h3>
 		</div>
 	</div>
@@ -14,6 +14,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import routerMain from '../../../router/main.js'
 export default {
   data () {
     return {
@@ -33,12 +34,7 @@ export default {
     }
   },
   methods: {
-    to (path) {
-      this.$router.push(path)
-    },
-    go (path) {
-      this.$router.replace(path)
-    }
+    ...routerMain
   }
 }
 </script>

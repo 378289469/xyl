@@ -17,6 +17,7 @@
 import Header from '../../components/Header/Header'
 import { mapState } from 'vuex'
 import BScroll from 'better-scroll'
+import routerMain from '../../router/main.js'
 export default {
   components: {
     Header
@@ -25,9 +26,7 @@ export default {
     ...mapState(['courseintroduce'])
   },
   methods: {
-    back () {
-      this.$router.go(-1)
-    }
+    ...routerMain
   },
   mounted () {
     new BScroll('.conternt') // eslint-disable-line
@@ -65,8 +64,8 @@ export default {
       line-height: 52px
     .conternt
       height 92%
+      width 92%
       text-align left
-      margin-left -36px
       margin-top 35px
       padding 10px
       overflow hidden

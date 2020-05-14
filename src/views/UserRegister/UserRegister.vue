@@ -3,31 +3,91 @@
     <Header>
       <img src="./imgs/title.png" alt="title" class="title" slot="title">
     </Header>
-    <form action="" class="items">
+    <form action="" class="items" @submit.prevent="submit">
       <h2>用户注册</h2>
-      <div class="item"  v-for="i in 4" :key="i">
+      <div class="item"  v-for="i in 5" :key="i" :class="{'iconKey':iconClass[i]==='icon-key'}">
         <span class="iconfont" :class="iconClass[i]"></span>
-        <input :type="types[i]" :placeholder="placeholders[i]" >
+        <input  :maxlength="maxlength[i]" :type="type[i]" :placeholder="placeholders[i]"
+        v-model="model[i]" @focus="focus()" @blur="blur()">
+        <span class="keyImg" v-if="iconClass[i]==='icon-key'" @click="key"><img :src="keyUrl" alt=""></span>
       </div>
       <button>注册</button>
     </form>
+    <tip/>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import Header from '../../components/Header/Header'
+import tip from '../../components/Tip/tip'
+import main from '../../api/main'
+import { mapState } from 'vuex'
+import routerMain from '../../router/main.js'
 
 export default {
   data () {
     return {
-      types: ['', 'text', 'text', 'text', 'text'],
-      placeholders: ['', '请输入姓名', '请输入手机号', '请输入密码', '请输入确认密码'],
-      iconClass: ['', 'icon-username', 'icon-phone', 'icon-userpw', 'icon-userpw']
+      info: { name: '', phone: '', password: '', surepwd: '', key: '' },
+      maxlength: ['', 8, 11, 20, 20, 4],
+      type: ['', 'text', 'tel', 'password', 'password', 'tel'],
+      placeholders: ['', '请输入姓名', '请输入手机号', '请输入密码', '请输入确认密码', '请输入验证码'],
+      iconClass: ['', 'icon-username', 'icon-phone', 'icon-userpw', 'icon-userpw', 'icon-key'],
+      keyUrl: `${main.baseUrl}/front/login/getCheckCode?${Date.now()}`
     }
   },
   components: {
-    Header
+    Header,
+    tip
+  },
+  computed: {
+    ...mapState(['register']),
+    model () {
+      return ['', this.info.name, this.info.phone, this.info.password, this.info.surepwd, this.info.key]
+    }
+  },
+  methods: {
+    ...routerMain,
+    key () {
+      this.keyUrl = `${main.baseUrl}/front/login/getCheckCode?${Date.now()}`
+    },
+    submit () {
+      const info = {
+        password: this.model[3].trim(),
+        password2: this.model[4].trim(),
+        phone: this.model[2].trim(),
+        smscode: this.model[5].trim(),
+        username: this.model[1].trim()
+      }
+      if (info.password && info.password2 && info.phone && info.smscode && info.username) {
+        const paramets = {
+          info,
+          cb: () => {
+            this.$store.dispatch('tipMsg', { type: 5, msg: this.register.message }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+            if (this.register.success) {
+              this.go('My', { username: this.model[2].trim() })
+            }
+          }
+        }
+        this.$store.dispatch('userRegister', paramets)
+      }
+    },
+    focus () {
+      event.target.value = ''
+    },
+    blur () {
+      if (event.target.placeholder === '请输入手机号' && !(/^1[3456789]\d{9}$/.test(event.target.value))) {
+        this.$store.dispatch('tipMsg', { type: 5, msg: '手机号错误' }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+      } else if (!event.target.value && event.target.placeholder === '请输入姓名') {
+        this.$store.dispatch('tipMsg', { type: 5, msg: '请输入姓名' }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+      } else if (!event.target.value && event.target.placeholder === '请输入密码') {
+        this.$store.dispatch('tipMsg', { type: 5, msg: '请输入密码' }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+      } else if (!event.target.value && event.target.placeholder === '请输入确认密码') {
+        this.$store.dispatch('tipMsg', { type: 5, msg: '请输入确认密码' }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+      } else if (!event.target.value && event.target.placeholder === '请输入验证码') {
+        this.$store.dispatch('tipMsg', { type: 5, msg: '请输入验证码' }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+      }
+    }
   },
   mounted () {
   }
@@ -44,10 +104,10 @@ export default {
     top 97px
     left 30px
     width 315px
-    height 436px
+    height 510px
     text-align center
     background url('./imgs/loginbg.png') no-repeat
-    background-size 315px 436px
+    background-size 315px 510px
     background-position center
     h2
       color #7C4900
@@ -78,6 +138,20 @@ export default {
         color #828282
         font-size 14px
         border none
+    .iconKey
+      position relative
+      width 50%
+      margin-left 35px
+      input
+        width 115px
+      .keyImg
+        position absolute
+        left 170px
+        width 80px
+        height 45px
+        img
+          width 100%
+          height 60%
     button
       margin-top 25px
       color #FFF6C1

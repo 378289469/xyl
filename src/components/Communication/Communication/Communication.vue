@@ -5,7 +5,7 @@
     <Search class="search"/>
     <div class="wrap">
       <ul>
-        <li v-for="(list, index) in list" :key="index" @click="to(index)">
+        <li v-for="(list, index) in list" :key="index" @click="to('CommunicationDetail', {index})">
           <div class="info">
             <div class="avatar">
               <img :src="list.user.avatar || imgUrl" alt="avatar" :onerror="errorurl">
@@ -28,6 +28,7 @@
 import { mapState } from 'vuex'
 import BScroll from 'better-scroll'
 import Search from '../../Search/Search'
+import routerMain from '../../../router/main.js'
 
 export default {
   data () {
@@ -49,6 +50,7 @@ export default {
     }
   },
   methods: {
+    ...routerMain,
     course (type) {
       this.$store.dispatch('getEvaluate', type)
       this.btn = true
@@ -56,9 +58,6 @@ export default {
     activity (type) {
       this.$store.dispatch('getEvaluate', type)
       this.btn = false
-    },
-    to (index) {
-      this.$router.push({ name: 'CommunicationDetail', params: { index: index } })
     }
   },
   mounted () {

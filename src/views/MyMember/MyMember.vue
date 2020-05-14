@@ -24,6 +24,7 @@
 import Header from '../../components/Header/Header'
 import List from '../../components/My/List/List.vue'
 import BScroll from 'better-scroll'
+import routerMain from '../../router/main.js'
 
 export default {
   data () {
@@ -35,12 +36,7 @@ export default {
     List
   },
   methods: {
-    go (path) {
-      this.$router.replace(path)
-    },
-    back () {
-      this.$router.go(-1)
-    }
+    ...routerMain
   },
   mounted () {
     new BScroll('.item') // eslint-disable-line

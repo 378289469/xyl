@@ -1,7 +1,7 @@
 <template>
   <div id="tip" v-show="tipShow">
-      <span class="iconfont" :class="tipClass[tipType[0]]"></span>
-      <p>{{tipText[tipType[0]]}}</p>
+      <span class="iconfont" :class="tipClass[tips.type[0]]"></span>
+      <p>{{tipText[tips.type[0]]}}</p>
   </div>
 </template>
 
@@ -11,18 +11,23 @@ export default {
   data () {
     return {
       tipShow: false,
-      tipClass: ['', 'icon-load', 'icon-success', 'icon-fail', 'icon-fail'],
+      tipClass: ['', 'icon-load', 'icon-success', 'icon-fail', 'icon-fail', 'icon-fail'],
       tipText: ['', '数据加载中', '提交成功', '提交失败', '请输入内容']
     }
   },
   computed: {
     ...mapState(['modules']),
-    tipType () {
-      return this.modules.tipType // type 1加载中  2成功  3失败 4不能为空
+    tips () {
+      return this.modules.tips // type 1加载中  2成功  3失败 4不能为空 5自定义消息
     }
   },
   watch: {
-    tipType () {
+    tips () {
+      const { tips } = this
+      if (tips.type[0] * 1 === 5) {
+        this.tipText = ['', '数据加载中', '提交成功', '提交失败', '请输入内容']
+        this.tipText.push(tips.msg)
+      }
       this.tipShow = true
       setTimeout(() => {
         this.tipShow = false
@@ -41,6 +46,7 @@ export default {
   top 0
   right 0
   margin auto
+  padding 10px
   width 120px
   height 120px
   background rgba(0 0 0 .5)

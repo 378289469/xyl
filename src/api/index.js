@@ -27,7 +27,8 @@ export const reqEvaluate = (evaluate) => ajax('evaluate/zblEvaluate/add', { eval
 // 9获取交流列表
 export const reqEvaluateList = (topicType) => ajax('evaluate/zblEvaluate/appList', { pageNo: 1, pageSize: 10, topicType })
 
-// 10获取打卡/提问列表
+// 10用户注册
+export const reqUserRegister = (info) => ajax('front/login/register', info, 'post')
 
 // 11发起打卡/提问
 
