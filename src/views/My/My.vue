@@ -26,7 +26,7 @@ export default {
     return {
       titles: ['', '小组成员', '账户安全'],
       leftClass: ['', 'member', 'security'],
-      paths: ['', '/MyMember', '/MySecurity']
+      paths: ['', 'MyMember', 'MySecurity']
     }
   },
   components: {

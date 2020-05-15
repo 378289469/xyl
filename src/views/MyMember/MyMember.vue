@@ -6,12 +6,13 @@
     </Header>
     <div class="item">
       <div class="wrap">
-        <List v-for="i in 15" :key="i" class='list'>
+        <List v-for="(person, index) in UserGroup" :key="index" class='list'>
           <div class="title" slot="title">
              <img class="avatar" src="./imgs/avatar.png" alt="">
-             <h3>刘显荣</h3>
-             <span class="user">（成旅系）</span>
-             <span class="tip">组长</span>
+             <h3>{{person.realname}}</h3>
+             <span class="user">（{{person.factions}}）</span>
+             <span class="tip" v-if="person.isGroupLeader==='是'">组长</span>
+             <span class="tip" v-if="person.realname===userInfo.userInfo.realname">我</span>
           </div>
         </List>
       </div>
@@ -25,6 +26,7 @@ import Header from '../../components/Header/Header'
 import List from '../../components/My/List/List.vue'
 import BScroll from 'better-scroll'
 import routerMain from '../../router/main.js'
+import { mapState } from 'vuex'
 
 export default {
   data () {
@@ -35,10 +37,14 @@ export default {
     Header,
     List
   },
+  computed: {
+    ...mapState(['UserGroup', 'userInfo'])
+  },
   methods: {
     ...routerMain
   },
   mounted () {
+    this.$store.dispatch('getUserGroup')
     new BScroll('.item') // eslint-disable-line
   }
 }

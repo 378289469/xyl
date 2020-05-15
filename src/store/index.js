@@ -12,7 +12,9 @@ import {
   reqEvaluate,
   reqEvaluateList,
   reqUserRegister,
-  reqUserLogin
+  reqUserLogin,
+  setUserPassword,
+  getUserGroup
 } from '../api/index'
 
 import modules from './modules'
@@ -30,6 +32,8 @@ const RECEIVE_ADD_EVALUATE = 'receive_add_evaluate'
 const RECEIVE_GET_EVALUATE = 'receive_get_evaluate'
 const RECEIVE_USER_REGISTER = 'receive_user_register'
 const RECEIVE_USER_LOGIN = 'receive_user_login'
+const RECEIVE_SET_PWD = 'receive_set_pwd'
+const RECEIVE_GET_USER_GROUP = 'receive_get_user_group'
 
 export default new Vuex.Store({
   state: {
@@ -46,7 +50,9 @@ export default new Vuex.Store({
     msg: '',
     evaluatelist: [],
     register: {},
-    userInfo: {}
+    userInfo: {},
+    pwdInfo: {},
+    UserGroup: []
   },
   mutations: {
     [RECEIVE_COURSE_INTRODUCE] (state, { courseintroduce }) {
@@ -82,6 +88,12 @@ export default new Vuex.Store({
     },
     [RECEIVE_USER_LOGIN] (state, { userInfo }) {
       state.userInfo = userInfo
+    },
+    [RECEIVE_SET_PWD] (state, { pwdInfo }) {
+      state.pwdInfo = pwdInfo
+    },
+    [RECEIVE_GET_USER_GROUP] (state, { UserGroup }) {
+      state.UserGroup = UserGroup
     }
   },
   actions: {
@@ -185,6 +197,21 @@ export default new Vuex.Store({
         const userInfo = result.result
         commit(RECEIVE_USER_LOGIN, { userInfo })
         cb && cb()
+      }
+    },
+    async changPassword ({ commit, state }, { info, cb }) {
+      const result = await setUserPassword(info)
+      if (result.code === 200 || result.code === 0 || result.code === 500) {
+        const pwdInfo = result.result
+        commit(RECEIVE_SET_PWD, { pwdInfo })
+        cb && cb()
+      }
+    },
+    async getUserGroup ({ commit, state }) {
+      const result = await getUserGroup()
+      if (result.code === 200) {
+        const UserGroup = result.result
+        commit(RECEIVE_GET_USER_GROUP, { UserGroup })
       }
     }
   },

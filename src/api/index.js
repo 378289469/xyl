@@ -33,9 +33,11 @@ export const reqUserRegister = (info) => ajax('front/login/register', info, 'pos
 // 11用户登录
 export const reqUserLogin = (info) => ajax('front/login/login', info, 'post')
 
-// 12用户注册
+// 12用户修改密码
+export const setUserPassword = (info) => ajax('front/login/changPassword', info, 'put')
 
 // 13用户登陆
+export const getUserGroup = () => ajax('group/zblGroup/users')
 
 // 14退出登陆
 

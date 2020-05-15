@@ -67,7 +67,7 @@ export default {
           cb: () => {
             this.$store.dispatch('tipMsg', { type: 5, msg: this.userInfo.message }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
             if (this.userInfo.userInfo) {
-              this.go('My', { userInfo: this.userInfo.userInfo })
+              this.go('My')
             }
           }
         }

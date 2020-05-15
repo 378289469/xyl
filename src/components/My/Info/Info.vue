@@ -1,21 +1,23 @@
 <template>
 	<div id="info">
-		<img src="./imgs/person.png" alt="person" />
-    <h2>李明德</h2>
-    <h3>计算机信息技术专业</h3>
+		<img :src="userInfo.userInfo.avatar || imgUrl" :onerror="errorurl" alt="student" />
+    <h2>{{userInfo.userInfo.realname}}</h2>
+    <h3>{{userInfo.userInfo.factions}}</h3>
     <span class="iconfont icon-school">太原技师学院</span>
 	</div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import routerMain from '../../../router/main.js'
 export default {
-  computed: {
-    ...mapState(['courseintroduce', 'courselearners'])
+  data () {
+    return {
+      errorurl: 'this.src="' + require('./imgs/person.png') + '"',
+      imgUrl: require('./imgs/person.png')
+    }
   },
-  methods: {
-    ...routerMain
+  computed: {
+    ...mapState(['userInfo'])
   }
 }
 </script>

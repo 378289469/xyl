@@ -5,15 +5,20 @@
       <img src="./imgs/title.png" alt="title" class="title" slot="title">
     </Header>
     <div class="item">
-      <List v-for="i in 5" :key="i" class='list'>
-        <div class="title" slot="title">
-           <span >{{titles[i]}}</span>
-           <input class="content" :placeholder="placeholders[i]" :value="i===2? userName:''" type="text">
-           <img v-if="avatar[i]" class="avatar" src="./imgs/avatar.png" alt="">
-        </div>
-      </List>
+      <form action="" @submit.prevent="submit">
+        <List v-for="i in 5" :key="i" class='list'>
+          <div class="title" slot="title">
+             <span >{{titles[i]}}</span>
+             <span class="username" v-if="i===2">{{userInfo.userInfo.realname}}</span>
+             <input class="content" :disabled="disabled[i]" :maxlength="maxlength[i]" :type="type[i]"
+              :placeholder="placeholders[i]" v-model="model[i]" @focus="focus()" @blur="blur()">
+             <img @click="upload" v-if="i===1" class="avatar" :src="userInfo.userInfo.avatar || imgUrl" :onerror="errorurl" alt="avatar">
+          </div>
+        </List>
+        <button>保存</button>
+      </form>
+     <tip/>
     </div>
-    <button>保存</button>
   </div>
 </template>
 
@@ -21,24 +26,70 @@
 // @ is an alias to /src
 import Header from '../../components/Header/Header'
 import List from '../../components/My/List/List.vue'
+import tip from '../../components/Tip/tip'
 import routerMain from '../../router/main.js'
+import { mapState } from 'vuex'
 
 export default {
   data () {
     return {
+      info: { oldpwd: '', newpwd: '', surepwd: '' },
+      disabled: ['', true, true, false, false, false],
+      maxlength: ['', '', '', 20, 20, 20],
+      type: ['', 'text', 'text', 'password', 'password', 'password'],
       titles: ['', '修改头像：', '用户名：', '原始密码：', '新密码：', '确认密码：'],
-      leftClass: ['', 'member', 'security'],
       placeholders: ['', '', '', '请输入原密码', '请输入新密码', '请输入确认密码'],
-      avatar: ['', '1', '', '', '', ''], // 只有第一个有头像
-      userName: '用户名'
+      errorurl: 'this.src="' + require('./imgs/avatar.png') + '"',
+      imgUrl: require('./imgs/avatar.png')
     }
   },
   components: {
     Header,
-    List
+    List,
+    tip
+  },
+  computed: {
+    ...mapState(['userInfo']),
+    model () {
+      return [this.info.oldpwd, this.info.newpwd, this.info.surepwd]
+    }
   },
   methods: {
-    ...routerMain
+    ...routerMain,
+    submit () {
+      const info = {
+        oldpwd: this.model[0].trim(),
+        newpwd: this.model[1].trim(),
+        surepwd: this.model[2].trim()
+      }
+      if (info.name && info.oldpwd && info.newpwd && info.surepwd) {
+        const paramets = {
+          info,
+          cb: () => {
+            this.$store.dispatch('tipMsg', { type: 5, msg: this.register.message }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+            if (this.register.success) {
+              this.go('My', { username: this.model[2].trim() })
+            }
+          }
+        }
+        this.$store.dispatch('changPassword', paramets)
+      }
+    },
+    focus () {
+      event.target.value = ''
+    },
+    blur () {
+      if (!event.target.value && event.target.placeholder === '请输入原密码') {
+        this.$store.dispatch('tipMsg', { type: 5, msg: '请输入原密码' }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+      } else if (!event.target.value && event.target.placeholder === '请输入新密码') {
+        this.$store.dispatch('tipMsg', { type: 5, msg: '请输入新密码' }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+      } else if (!event.target.value && event.target.placeholder === '请输入确认密码') {
+        this.$store.dispatch('tipMsg', { type: 5, msg: '请输入确认密码' }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+      }
+    },
+    upload () {
+      console.log('更换头像')
+    }
   },
   mounted () {
   }
@@ -71,8 +122,12 @@ export default {
           color #494949
           font-size 15px
           margin-left 15px
+        .username
+          margin-left 45px
         .content
           width 50%
+          height 20px
+          margin auto
           color #828282
           font-size 15px
           border none
