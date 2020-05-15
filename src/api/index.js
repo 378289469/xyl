@@ -1,4 +1,4 @@
-import ajax from './ajax'
+import { ajax } from './ajax'
 
 // 1、获取课程介绍
 export const reqCourseIntroduce = () => ajax('back/zblCourse/queryById')

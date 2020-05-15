@@ -23,7 +23,7 @@
 import Header from '../../components/Header/Header'
 import tip from '../../components/Tip/tip'
 import { mapState } from 'vuex'
-import main from '../../api/main'
+import { baseUrl } from '../../api/ajax'
 import routerMain from '../../router/main.js'
 
 export default {
@@ -34,7 +34,7 @@ export default {
       maxlength: ['', 11, 20, 4],
       placeholders: ['', '请输入手机号', '请输入密码', '请输入验证码'],
       iconClass: ['', 'icon-username', 'icon-userpw', 'icon-key'],
-      keyUrl: `${main.baseUrl}/front/login/getCheckCode?${Date.now()}`
+      keyUrl: `${baseUrl}/front/login/getCheckCode?${Date.now()}`
     }
   },
   components: {
@@ -53,7 +53,7 @@ export default {
       this.$router.replace({ name: path })
     },
     key () {
-      this.keyUrl = `${main.baseUrl}/front/login/getCheckCode?${Date.now()}`
+      this.keyUrl = `${baseUrl}/front/login/getCheckCode?${Date.now()}`
     },
     submit () {
       const info = {
@@ -66,8 +66,8 @@ export default {
           info,
           cb: () => {
             this.$store.dispatch('tipMsg', { type: 5, msg: this.userInfo.message }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
-            if (this.userInfo.success) {
-              // this.go('My', { username: this.model[2].trim() })
+            if (this.userInfo.userInfo) {
+              this.go('My', { userInfo: this.userInfo.userInfo })
             }
           }
         }

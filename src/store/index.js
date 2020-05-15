@@ -182,7 +182,7 @@ export default new Vuex.Store({
     async userLogin ({ commit, state }, { info, cb }) {
       const result = await reqUserLogin(info)
       if (result.code === 200 || result.code === 0 || result.code === 500) {
-        const userInfo = result
+        const userInfo = result.result
         commit(RECEIVE_USER_LOGIN, { userInfo })
         cb && cb()
       }

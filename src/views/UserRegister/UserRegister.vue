@@ -21,7 +21,7 @@
 // @ is an alias to /src
 import Header from '../../components/Header/Header'
 import tip from '../../components/Tip/tip'
-import main from '../../api/main'
+import { baseUrl } from '../../api/ajax'
 import { mapState } from 'vuex'
 import routerMain from '../../router/main.js'
 
@@ -33,7 +33,7 @@ export default {
       type: ['', 'text', 'tel', 'password', 'password', 'tel'],
       placeholders: ['', '请输入姓名', '请输入手机号', '请输入密码', '请输入确认密码', '请输入验证码'],
       iconClass: ['', 'icon-username', 'icon-phone', 'icon-userpw', 'icon-userpw', 'icon-key'],
-      keyUrl: `${main.baseUrl}/front/login/getCheckCode?${Date.now()}`
+      keyUrl: `${baseUrl}/front/login/getCheckCode?${Date.now()}`
     }
   },
   components: {
@@ -49,7 +49,7 @@ export default {
   methods: {
     ...routerMain,
     key () {
-      this.keyUrl = `${main.baseUrl}/front/login/getCheckCode?${Date.now()}`
+      this.keyUrl = `${baseUrl}/front/login/getCheckCode?${Date.now()}`
     },
     submit () {
       const info = {

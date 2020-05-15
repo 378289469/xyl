@@ -1,5 +1,6 @@
-import { token } from '../api/main'
+import store from '../store/index'
 
+const token = store.state.userInfo.token
 export default {
   to (path, params = {}) {
     if (!token) {
