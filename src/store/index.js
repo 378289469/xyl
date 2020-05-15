@@ -11,7 +11,8 @@ import {
   reqGetNote,
   reqEvaluate,
   reqEvaluateList,
-  reqUserRegister
+  reqUserRegister,
+  reqUserLogin
 } from '../api/index'
 
 import modules from './modules'
@@ -28,6 +29,7 @@ const RECEIVE_GET_NOTE = 'receive_get_note'
 const RECEIVE_ADD_EVALUATE = 'receive_add_evaluate'
 const RECEIVE_GET_EVALUATE = 'receive_get_evaluate'
 const RECEIVE_USER_REGISTER = 'receive_user_register'
+const RECEIVE_USER_LOGIN = 'receive_user_login'
 
 export default new Vuex.Store({
   state: {
@@ -43,7 +45,8 @@ export default new Vuex.Store({
     notes: '',
     msg: '',
     evaluatelist: [],
-    register: {}
+    register: {},
+    userInfo: {}
   },
   mutations: {
     [RECEIVE_COURSE_INTRODUCE] (state, { courseintroduce }) {
@@ -76,6 +79,9 @@ export default new Vuex.Store({
     },
     [RECEIVE_USER_REGISTER] (state, { register }) {
       state.register = register
+    },
+    [RECEIVE_USER_LOGIN] (state, { userInfo }) {
+      state.userInfo = userInfo
     }
   },
   actions: {
@@ -170,6 +176,14 @@ export default new Vuex.Store({
       if (result.code === 200 || result.code === 0 || result.code === 500) {
         const register = result
         commit(RECEIVE_USER_REGISTER, { register })
+        cb && cb()
+      }
+    },
+    async userLogin ({ commit, state }, { info, cb }) {
+      const result = await reqUserLogin(info)
+      if (result.code === 200 || result.code === 0 || result.code === 500) {
+        const userInfo = result
+        commit(RECEIVE_USER_LOGIN, { userInfo })
         cb && cb()
       }
     }

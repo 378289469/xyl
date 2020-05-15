@@ -3,7 +3,7 @@
     <Header>
       <img src="./imgs/title.png" alt="title" class="title" slot="title">
     </Header>
-    <form action="" class="items">
+    <form action="" class="items" @submit.prevent="submit">
       <h2>用户登录</h2>
       <div class="item"  v-for="i in 3" :key="i" :class="{'iconKey':iconClass[i]==='icon-key'}">
         <span class="iconfont" :class="iconClass[i]"></span>
@@ -30,7 +30,7 @@ export default {
   data () {
     return {
       info: { name: this.$route.params.username, password: '', key: '' },
-      types: ['', 'tel', 'text', 'tel'],
+      types: ['', 'tel', 'password', 'tel'],
       maxlength: ['', 11, 20, 4],
       placeholders: ['', '请输入手机号', '请输入密码', '请输入验证码'],
       iconClass: ['', 'icon-username', 'icon-userpw', 'icon-key'],
@@ -42,7 +42,7 @@ export default {
     tip
   },
   computed: {
-    ...mapState(['register']),
+    ...mapState(['userInfo']),
     model () {
       return ['', this.info.name, this.info.password, this.info.key]
     }
@@ -65,13 +65,13 @@ export default {
         const paramets = {
           info,
           cb: () => {
-            this.$store.dispatch('tipMsg', { type: 5, msg: this.register.message }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
-            if (this.register.success) {
-              this.go('My', { username: this.model[2].trim() })
+            this.$store.dispatch('tipMsg', { type: 5, msg: this.userInfo.message }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+            if (this.userInfo.success) {
+              // this.go('My', { username: this.model[2].trim() })
             }
           }
         }
-        this.$store.dispatch('userRegister', paramets)
+        this.$store.dispatch('userLogin', paramets)
       }
     },
     focus () {

@@ -30,7 +30,8 @@ export const reqEvaluateList = (topicType) => ajax('evaluate/zblEvaluate/appList
 // 10用户注册
 export const reqUserRegister = (info) => ajax('front/login/register', info, 'post')
 
-// 11发起打卡/提问
+// 11用户登录
+export const reqUserLogin = (info) => ajax('front/login/login', info, 'post')
 
 // 12用户注册
 
