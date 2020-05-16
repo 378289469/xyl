@@ -57,16 +57,18 @@ export default {
     },
     submit () {
       const info = {
-        password: this.model[2].trim(),
-        smscode: this.model[3].trim(),
-        username: this.model[1].trim()
+        password: this.model[2] && this.model[2].trim(),
+        smscode: this.model[3] && this.model[3].trim(),
+        username: this.model[1] && this.model[1].trim()
       }
       if (info.password && info.smscode && info.username) {
         const paramets = {
           info,
           cb: () => {
-            this.$store.dispatch('tipMsg', { type: 5, msg: this.userInfo.message }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
-            if (this.userInfo.userInfo) {
+            if (this.userInfo) {
+              this.$store.dispatch('tipMsg', { type: 5, msg: this.userInfo.message }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+            }
+            if (this.userInfo.result && this.userInfo.result.userInfo) {
               this.go('My')
             }
           }

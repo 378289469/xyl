@@ -1,9 +1,9 @@
 <template>
 	<div id="info">
-		<img :src="userInfo.userInfo.avatar || imgUrl" :onerror="errorurl" alt="student" />
-    <h2>{{userInfo.userInfo.realname}}</h2>
-    <h3>{{userInfo.userInfo.factions}}</h3>
-    <span class="iconfont icon-school">太原技师学院</span>
+		<img :src="userInfo.result.userInfo.avatar || imgUrl" :onerror="errorurl" alt="student" />
+    <h2>{{userInfo.result.userInfo.realname}}</h2>
+    <h3>{{userInfo.result.userInfo.factions}}</h3>
+    <span class="iconfont icon-school">资本论课程平台</span>
 	</div>
 </template>
 

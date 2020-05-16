@@ -12,11 +12,12 @@
              <h3>{{person.realname}}</h3>
              <span class="user">（{{person.factions}}）</span>
              <span class="tip" v-if="person.isGroupLeader==='是'">组长</span>
-             <span class="tip" v-if="person.realname===userInfo.userInfo.realname">我</span>
+             <span class="tip" v-if="person.realname===userInfo.result.userInfo.realname">我</span>
           </div>
         </List>
       </div>
     </div>
+    <tip/>
   </div>
 </template>
 
@@ -24,6 +25,7 @@
 // @ is an alias to /src
 import Header from '../../components/Header/Header'
 import List from '../../components/My/List/List.vue'
+import tip from '../../components/Tip/tip'
 import BScroll from 'better-scroll'
 import routerMain from '../../router/main.js'
 import { mapState } from 'vuex'
@@ -35,7 +37,8 @@ export default {
   },
   components: {
     Header,
-    List
+    List,
+    tip
   },
   computed: {
     ...mapState(['UserGroup', 'userInfo'])

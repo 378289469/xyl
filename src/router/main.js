@@ -2,7 +2,7 @@ import store from '../store/index'
 
 export default {
   to (path, params = {}) {
-    const token = store.state.userInfo.token
+    const token = store.state.userInfo.result ? store.state.userInfo.result.token : ''
     if (!token) {
       this.$router.replace({ name: 'UserLogin', params })
     } else {
@@ -10,7 +10,7 @@ export default {
     }
   },
   go (path, params = {}) {
-    const token = store.state.userInfo.token
+    const token = store.state.userInfo.result ? store.state.userInfo.result.token : ''
     if (!token) {
       this.$router.replace({ name: 'UserLogin', params })
     } else {

@@ -99,7 +99,7 @@ export default new Vuex.Store({
   actions: {
     async getCourseIntroduce ({ commit, state }) {
       const result = await reqCourseIntroduce()
-      if (result.code === 200) {
+      if (result.code === 200 || result.code === 0 || result.code === 500) {
         // console.log(result)
         const courseintroduce = result.result.courseIntroduce
         commit(RECEIVE_COURSE_INTRODUCE, { courseintroduce })
@@ -107,7 +107,7 @@ export default new Vuex.Store({
     },
     async getCourseLearners ({ commit, state }) {
       const result = await reqCourseLearners()
-      if (result.code === 200) {
+      if (result.code === 200 || result.code === 0 || result.code === 500) {
         // console.log(result)
         const courselearners = result.result.studentCount
         commit(RECEIVE_COURSE_LEARNERS, { courselearners })
@@ -115,7 +115,7 @@ export default new Vuex.Store({
     },
     async reqActivitys ({ commit, state }) {
       const result = await reqActivitys()
-      if (result.code === 200) {
+      if (result.code === 200 || result.code === 0 || result.code === 500) {
         // console.log(result)
         const activitys = result.result.records
         commit(RECEIVE_ACTIVITYS, { activitys })
@@ -123,7 +123,7 @@ export default new Vuex.Store({
     },
     async getTeachers ({ commit, state }) {
       const result = await reqTeachers(state.usertype[0])
-      if (result.code === 200) {
+      if (result.code === 200 || result.code === 0 || result.code === 500) {
         // console.log(result)
         const teachers = result.result.records
         commit(RECEIVE_TEACHERS, { teachers })
@@ -131,7 +131,7 @@ export default new Vuex.Store({
     },
     async getCourseChapter ({ commit, state }) {
       const result = await reqCourseChapter()
-      if (result.code === 200) {
+      if (result.code === 200 || result.code === 0 || result.code === 500) {
         // console.log(result)
         let CourseChapter = result.result.records
         const oneChapter = CourseChapter.filter(cc => cc.chapterLevel === 1)
@@ -157,28 +157,28 @@ export default new Vuex.Store({
     },
     async getPdfFile ({ commit, state }, { mainId, id }) {
       const result = await reqGetPdfFile(mainId, id)
-      if (result.code === 200) {
+      if (result.code === 200 || result.code === 0 || result.code === 500) {
         const PdfFile = result.result.records
         commit(RECEIVE_GET_PDF_FILE, { PdfFile })
       }
     },
     async getNote ({ commit, state }, mainId) {
       const result = await reqGetNote(mainId)
-      if (result.code === 200) {
+      if (result.code === 200 || result.code === 0 || result.code === 500) {
         const notes = result.result.records
         commit(RECEIVE_GET_NOTE, { notes })
       }
     },
     async addEvaluate ({ commit, state }, Evaluate) {
       const result = await reqEvaluate(Evaluate)
-      if (result.code === 200) {
+      if (result.code === 200 || result.code === 0 || result.code === 500) {
         const msg = result.result.message
         commit(RECEIVE_ADD_EVALUATE, { msg })
       }
     },
     async getEvaluate ({ commit, state }, topicType) {
       const result = await reqEvaluateList(topicType)
-      if (result.code === 200) {
+      if (result.code === 200 || result.code === 0 || result.code === 500) {
         const evaluatelist = result.result
         commit(RECEIVE_GET_EVALUATE, { evaluatelist })
       }
@@ -194,7 +194,7 @@ export default new Vuex.Store({
     async userLogin ({ commit, state }, { info, cb }) {
       const result = await reqUserLogin(info)
       if (result.code === 200 || result.code === 0 || result.code === 500) {
-        const userInfo = result.result
+        const userInfo = result
         commit(RECEIVE_USER_LOGIN, { userInfo })
         cb && cb()
       }

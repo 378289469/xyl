@@ -9,10 +9,10 @@
         <List v-for="i in 5" :key="i" class='list'>
           <div class="title" slot="title">
              <span >{{titles[i]}}</span>
-             <span class="username" v-if="i===2">{{userInfo.userInfo.realname}}</span>
+             <span class="username" v-if="i===2">{{userInfo.result.userInfo.phone}}</span>
              <input class="content" :disabled="disabled[i]" :maxlength="maxlength[i]" :type="type[i]"
               :placeholder="placeholders[i]" v-model="model[i]" @focus="focus()" @blur="blur()">
-             <img @click="upload" v-if="i===1" class="avatar" :src="userInfo.userInfo.avatar || imgUrl" :onerror="errorurl" alt="avatar">
+             <img @click="upload" v-if="i===1" class="avatar" :src="userInfo.result.userInfo.avatar || imgUrl" :onerror="errorurl" alt="avatar">
           </div>
         </List>
         <button>保存</button>
@@ -49,7 +49,7 @@ export default {
     tip
   },
   computed: {
-    ...mapState(['userInfo']),
+    ...mapState(['userInfo', 'pwdInfo']),
     model () {
       return [this.info.oldpwd, this.info.newpwd, this.info.surepwd]
     }
@@ -58,17 +58,24 @@ export default {
     ...routerMain,
     submit () {
       const info = {
-        oldpwd: this.model[0].trim(),
-        newpwd: this.model[1].trim(),
-        surepwd: this.model[2].trim()
+        username: this.userInfo.result.userInfo.phone,
+        oldpwd: this.model[3] && this.model[3].trim(),
+        newpwd: this.model[4] && this.model[4].trim(),
+        surepwd: this.model[5] && this.model[5].trim()
       }
-      if (info.name && info.oldpwd && info.newpwd && info.surepwd) {
+      if (info.oldpwd && info.newpwd && info.surepwd && info.newpwd !== info.surepwd) {
+        this.$store.dispatch('tipMsg', { type: 5, msg: '两次密码不一致' }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+        return
+      }
+      if (info.oldpwd && info.newpwd && info.surepwd) {
         const paramets = {
           info,
           cb: () => {
-            this.$store.dispatch('tipMsg', { type: 5, msg: this.register.message }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
-            if (this.register.success) {
-              this.go('My', { username: this.model[2].trim() })
+            if (this.pwdInfo) {
+              this.$store.dispatch('tipMsg', { type: 5, msg: this.pwdInfo.message }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+            }
+            if (this.pwdInfo && this.pwdInfo.success) {
+              this.go('My')
             }
           }
         }
@@ -123,7 +130,7 @@ export default {
           font-size 15px
           margin-left 15px
         .username
-          margin-left 45px
+          margin-left 35px
         .content
           width 50%
           height 20px

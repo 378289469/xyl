@@ -1,19 +1,21 @@
 import axios from 'axios'
 import store from '../store/index'
+import modules from '../store/modules'
 
-export const baseUrl = 'http://192.168.5.56:8082/jeecg-boot/'
+export const baseUrl = 'http://192.168.1.5:8082/jeecg-boot/'
 
 axios.interceptors.request.use(
   config => {
-    if (store.state.userInfo.token) {
-      config.headers['X-Access-Token'] = store.state.userInfo.token
-    }
+    config.headers['X-Access-Token'] = store.state.userInfo.result ? store.state.userInfo.result.token : ''
     return config
   }
 )
 
 axios.interceptors.response.use(
   response => {
+    if (response.data.code === 0 || response.data.code === 500) {
+      modules.actions.tipMsg({ commit: store.commit }, { type: 5, msg: response.data.message })
+    }
     return response
   }
 )

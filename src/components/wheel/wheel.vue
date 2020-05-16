@@ -34,13 +34,13 @@ export default {
     done () {
       const { title, content, topicId, msg } = this
       if (content.trim().length === 0) {
-        this.$store.dispatch('tipMsg', { type: 4 }) // type 1加载中  2成功  3失败 4不能为空
+        this.$store.dispatch('tipMsg', { type: 4 }) // type 1加载中  2成功  3失败 4不能为空 5自定义
         return
       }
       const topicType = title === '打卡' ? 1 : 2
       const evaluate = {
         context: content, // 内容
-        isActiorchapter: 1, //
+        isActiorchapter: '1', //
         topicId: topicId, // 章节id
         topicType: topicType, // 1打卡 2提问 3笔记
         parentId: 0 // 父id
