@@ -3,18 +3,18 @@
     <Header>
       <img src="./imgs/title.png" alt="title" class="title" slot="title">
     </Header>
-    <Activity/>
+    <ActivityContent/>
   </div>
 </template>
 
 <script>
 import Header from '../../components/Header/Header'
-import Activity from '../../components/Activity/Activity/Activity'
+import ActivityContent from '../../components/ActivityContent/ActivityContent/ActivityContent'
 
 export default {
   components: {
     Header,
-    Activity
+    ActivityContent
   }
 }
 </script>

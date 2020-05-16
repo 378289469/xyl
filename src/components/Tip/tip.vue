@@ -23,13 +23,14 @@ export default {
   },
   watch: {
     tips () {
+      clearInterval(intervalID) // eslint-disable-line
       const { tips } = this
       if (tips.type[0] * 1 === 5) {
         this.tipText = ['', '数据加载中', '提交成功', '提交失败', '请输入内容']
         this.tipText.push(tips.msg || '操作错误')
       }
       this.tipShow = true
-      setTimeout(() => {
+      var intervalID = setTimeout(() => {
         this.tipShow = false
       }, 2000)
     }

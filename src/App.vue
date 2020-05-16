@@ -18,10 +18,10 @@ export default {
     }
   },
   mounted () {
-    // this.$store.dispatch('getCourseIntroduce')
+    const page = 1
+    this.$store.dispatch('reqActivitys', { page })
     this.getCourseIntroduce()
     this.getCourseLearners()
-    this.reqActivitys()
     this.getTeachers()
   },
   methods: {

@@ -113,8 +113,9 @@ export default new Vuex.Store({
         commit(RECEIVE_COURSE_LEARNERS, { courselearners })
       }
     },
-    async reqActivitys ({ commit, state }) {
-      const result = await reqActivitys()
+    async reqActivitys ({ commit, state }, { page }) {
+      console.log(page)
+      const result = await reqActivitys(page)
       if (result.code === 200 || result.code === 0 || result.code === 500) {
         // console.log(result)
         const activitys = result.result.records

@@ -69,7 +69,10 @@ export default {
               this.$store.dispatch('tipMsg', { type: 5, msg: this.userInfo.message }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
             }
             if (this.userInfo.result && this.userInfo.result.userInfo) {
-              this.go('My')
+              var intervalID = setTimeout(() => {
+                clearInterval(intervalID)
+                this.go('My')
+              }, 3000)
             }
           }
         }
