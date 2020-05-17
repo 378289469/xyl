@@ -39,7 +39,7 @@ export default new Vuex.Store({
   state: {
     courseintroduce: {},
     courselearners: 0,
-    activitys: [],
+    activitys: false,
     searchActivitys: [],
     teachers: [],
     usertype: [1, 2],
@@ -62,8 +62,12 @@ export default new Vuex.Store({
       state.courselearners = courselearners
     },
     [RECEIVE_ACTIVITYS] (state, { activitys }) {
-      state.activitys = activitys
-      state.searchActivitys = activitys
+      if (activitys.length === 0) {
+        state.activitys = true
+      } else {
+        state.activitys = false
+        state.searchActivitys = activitys
+      }
     },
     [RECEIVE_TEACHERS] (state, { teachers }) {
       state.teachers = teachers
@@ -114,7 +118,6 @@ export default new Vuex.Store({
       }
     },
     async reqActivitys ({ commit, state }, { page, cb }) {
-      console.log(page)
       const result = await reqActivitys(page)
       if (result.code === 200 || result.code === 0 || result.code === 500) {
         // console.log(result)

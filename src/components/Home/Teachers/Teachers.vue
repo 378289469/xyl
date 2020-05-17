@@ -34,6 +34,9 @@ export default {
   },
   mounted () {
     new BScroll('.teachers', { scrollX: true }) // eslint-disable-line
+  },
+  updated () {
+    new BScroll('.teachers', { scrollX: true }) // eslint-disable-line
   }
 }
 </script>

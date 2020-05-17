@@ -7,7 +7,7 @@ export const reqCourseIntroduce = () => ajax('back/zblCourse/queryById')
 export const reqCourseLearners = () => ajax('evaluate/zblEvaluate/listCount', { queryContextNum: 1 })
 
 // 3、获取活动列表
-export const reqActivitys = (page) => ajax('activity/zblActivity/list', { pageNo: page, pageSize: 30 })
+export const reqActivitys = (page) => ajax('activity/zblActivity/list', { pageNo: page, pageSize: 9 })
 
 // 4、获取教师列表
 export const reqTeachers = (roleItemId) => ajax('back/zblUser/list', { roleItemId, pageNo: 1, pageSize: 10 })

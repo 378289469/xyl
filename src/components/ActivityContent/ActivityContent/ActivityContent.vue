@@ -2,22 +2,19 @@
   <div id="activity">
     <Search/>
     <div class="content">
-      <Activity ref="Activity" class="context"/>
+      <ActivityList  class="context"/>
     </div>
   </div>
 </template>
 
 <script>
-import Activity from '../../Home/Activity/Activity'
+import ActivityList from '../ActivityList/ActivityList'
 import Search from '../../Search/Search'
 
 export default {
   components: {
-    Activity,
+    ActivityList,
     Search
-  },
-  mounted () {
-    this.$refs.Activity.ActivityAll()
   }
 }
 </script>

@@ -1,9 +1,9 @@
 <template>
   <div id="activity">
     <slot name="top" class="top"></slot>
-    <div class="activitys" >
+    <div class="activitys" ref="bsWrapper" >
       <ul class="list" >
-        <li v-for="(activity ,index) in Activitys" :key="index" @click="to('ActivityDetail', {activity})">
+        <li v-for="(activity ,index) in searchActivitys" :key="index" @click="to('ActivityDetail', {activity})">
           <h3 class="ellipsis">{{activity.activityName}}</h3>
           <span class="iconfont icon-date btn icon3"></span>
           <span class="time">{{activity.activityStart}}---{{activity.activityEnd}}</span>
@@ -15,24 +15,70 @@
 
 <script>
 import BScroll from 'better-scroll'
+import PullDown from '@better-scroll/pull-down'
+import Pullup from '@better-scroll/pull-up'
 import { mapState } from 'vuex'
 import routerMain from '../../../router/main.js'
 
+BScroll.use(Pullup)
+BScroll.use(PullDown)
+
 export default {
-  computed: {
-    ...mapState(['searchActivitys']),
-    Activitys () {
-      return this.searchActivitys.slice(0, 10)
+  data () {
+    return {
+      page: 1,
+      isPull: false
     }
   },
+  computed: {
+    ...mapState(['searchActivitys', 'activitys'])
+  },
+  created () {
+    this.bscroll = null
+  },
   mounted () {
-    new BScroll('.activitys') // eslint-disable-line
+    this.$store.dispatch('reqActivitys', { page: this.page, cb: this.cb })
   },
   updated () {
-    new BScroll('.activitys') // eslint-disable-line
+    this.initBscroll()
   },
   methods: {
-    ...routerMain
+    ...routerMain,
+    cb () {
+      this.isPull = false
+      this.bscroll && this.bscroll.scrollTo(0, 0)
+    },
+    initBscroll () {
+      this.bscroll = new BScroll(this.$refs.bsWrapper, {
+        scrollY: true,
+        pullUpLoad: true,
+        pullDownRefresh: {
+          threshold: 80, // 下拉距离
+          stop: 30 // 停止距离
+        }
+      })
+      this.bscroll.on('pullingDown', () => {
+        if (!this.isPull) {
+          this.isPull = true
+          if (this.page < 2) {
+            return
+          }
+          this.page -= 1
+          this.$store.dispatch('reqActivitys', { page: this.page, cb: this.cb })
+        }
+      })
+      this.bscroll.on('pullingUp', () => {
+        if (!this.isPull) {
+          this.isPull = true
+          if (this.activitys) {
+            this.page -= 1
+            return
+          }
+          this.page += 1
+          this.$store.dispatch('reqActivitys', { page: this.page, cb: this.cb })
+        }
+      })
+    }
   }
 }
 </script>
@@ -83,6 +129,7 @@ export default {
     height 90%
     overflow hidden
     ul
+      height 600px
       margin-left 16px
       line-height 30px
       text-align left
