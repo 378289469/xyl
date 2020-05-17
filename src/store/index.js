@@ -113,13 +113,14 @@ export default new Vuex.Store({
         commit(RECEIVE_COURSE_LEARNERS, { courselearners })
       }
     },
-    async reqActivitys ({ commit, state }, { page }) {
+    async reqActivitys ({ commit, state }, { page, cb }) {
       console.log(page)
       const result = await reqActivitys(page)
       if (result.code === 200 || result.code === 0 || result.code === 500) {
         // console.log(result)
         const activitys = result.result.records
         commit(RECEIVE_ACTIVITYS, { activitys })
+        cb && cb()
       }
     },
     async getTeachers ({ commit, state }) {

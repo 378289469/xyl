@@ -10,50 +10,14 @@
 <script>
 import Activity from '../../Home/Activity/Activity'
 import Search from '../../Search/Search'
-import BScroll from 'better-scroll'
-import Pullup from '@better-scroll/pull-up'
-import PullDown from '@better-scroll/pull-down'
-
-BScroll.use(Pullup)
-BScroll.use(PullDown)
 
 export default {
   components: {
     Activity,
     Search
   },
-  data () {
-    return {
-      y: 0,
-      page: 1,
-      getMore: false
-    }
-  },
   mounted () {
     this.$refs.Activity.ActivityAll()
-    const bs = new BScroll('.activitys', { // eslint-disable-line
-      scrollY: true,
-      pullUpLoad: true,
-      pullDownRefresh: true
-    })
-    bs.on('pullingUp', () => {
-      console.log('下拉刷新')
-    })
-    bs.on('scrollEnd', point => {
-      if (this.getMore) {
-        this.getMore = false
-        this.$store.dispatch('reqActivitys', { page: this.page })
-      }
-      this.y = Math.abs(point.y)
-      const h = document.querySelector('#activity .list').clientHeight - document.querySelector('#activity .activitys').clientHeight
-      if (this.y === h) {
-        this.page += 1
-        this.getMore = true
-      } else if (this.y === 0 && this.page > 1) {
-        this.page -= 1
-        this.getMore = true
-      }
-    })
   }
 }
 </script>
