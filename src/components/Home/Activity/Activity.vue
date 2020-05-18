@@ -22,10 +22,15 @@ export default {
   computed: {
     ...mapState(['searchActivitys']),
     Activitys () {
-      return this.searchActivitys.slice(0, 10)
+      let Activitys = []
+      if (this.searchActivitys.length > 0) {
+        Activitys = this.searchActivitys.slice(0, 10)
+      }
+      return Activitys
     }
   },
   mounted () {
+    this.$store.dispatch('reqActivitys', { page: 1 })
     new BScroll('.activitys') // eslint-disable-line
   },
   updated () {

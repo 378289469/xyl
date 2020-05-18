@@ -18,8 +18,6 @@ export default {
     }
   },
   mounted () {
-    const page = 1
-    this.$store.dispatch('reqActivitys', { page })
     this.getCourseIntroduce()
     this.getCourseLearners()
     this.getTeachers()

@@ -2,11 +2,12 @@ import axios from 'axios'
 import store from '../store/index'
 import modules from '../store/modules'
 
-export const baseUrl = 'http://192.168.1.5:8082/jeecg-boot/'
+export const baseUrl = 'http://192.168.5.56:8082/jeecg-boot/'
+const token1 = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1ODk4Njc5OTcsInVzZXJuYW1lIjoiMTM3NTMxNjcwNjU6emJsIn0.9MoIDIJyWifLmW5hCBamK1WzLfT-nXo01ymqZ3MDf2s'
 
 axios.interceptors.request.use(
   config => {
-    config.headers['X-Access-Token'] = store.state.userInfo.result ? store.state.userInfo.result.token : ''
+    config.headers['X-Access-Token'] = store.state.userInfo.result ? store.state.userInfo.result.token : token1
     return config
   }
 )

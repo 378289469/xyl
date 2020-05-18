@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Viewer from 'v-viewer'
 import 'viewerjs/dist/viewer.css'
-import VuevideoPlayer from 'vue-video-player'
+import VueVideoPlayer from 'vue-video-player'
 import 'vue-video-player/node_modules/video.js/dist/video-js.css'
 import App from './App.vue'
 import router from './router'
@@ -37,4 +37,4 @@ Viewer.setDefaults({
   }
 })
 
-Vue.use(VuevideoPlayer)
+Vue.use(VueVideoPlayer)
