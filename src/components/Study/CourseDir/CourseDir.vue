@@ -83,7 +83,7 @@ export default {
             }
           }
         })
-        // this.noteId = id
+        this.noteId = id
       }
     }
   }

@@ -13,14 +13,16 @@
         </div>
         <div class="tips">
           <div>
-           <div v-for="(note,index) in notes " :key="index" class="tip">{{note.context}}</div>
+           <div v-for="(note,index) in notes" :key="index" class="tip" >
+             <span v-html="note.context"></span>
+           </div>
           </div>
         </div>
       </div>
     </div>
     <div class="btns">
-      <span class="btn"  :class="{on:isOn}" @click="wheel('提问')">提问</span>
-      <span class="btn" :class="{on:!isOn}" @click="wheel('打卡')">打卡</span>
+      <span class="btn"  :class="{on:ansIsOn}" @click="wheel(1)">提问</span>
+      <span class="btn" :class="{on:signIsOn}" @click="wheel(2)">打卡</span>
     </div>
     <wheel ref="wheel"/>
     <tip/>
@@ -41,7 +43,8 @@ export default {
       url: 'http://storage.xuetangx.com/public_assets/xuetangx/PDF/PlayerAPI_v1.0.6.pdf',
       // url: this.$route.params.url,
       Pages: 2,
-      isOn: true
+      ansIsOn: false,
+      signIsOn: false
     }
   },
   components: {
@@ -62,14 +65,16 @@ export default {
         this.Pages = pdf.numPages
       }).catch(() => {})
     },
-    wheel (title) {
-      this.isOn = !this.isOn
+    wheel (id) {
+      this.ansIsOn = id === 1
+      this.signIsOn = id === 2
+      const title = id === 1 ? '提问' : '打卡'
       this.$refs.wheel.wheel(title, this.$route.params.id)
     }
   },
   mounted () {
     this.getNumPages(this.url)
-    this.$store.dispatch('getNote', this.$route.params.id)
+    this.$store.dispatch('getNote', { mainId: this.$route.params.id })
     new BScroll('.PDFwrap', {// eslint-disable-line
       scrollX: true,
       scrollY: false
@@ -103,8 +108,17 @@ export default {
       .pages,.tips
         height 690px
         width 50%
-      .pdf,tip
-        width 100%
+      .pdf,.tip
+        width 90%
+        padding 10px
+      .tip
+        margin-left 15px
+        span>>>p
+          width 100%
+          word-break break-all
+          text-align left
+        span>>>img
+          width 90%
   .btns
     display flex
     justify-content space-around

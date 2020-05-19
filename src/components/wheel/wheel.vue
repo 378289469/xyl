@@ -27,6 +27,7 @@ export default {
   },
   methods: {
     wheel (title, id) {
+      console.log(id)
       this.title = title
       this.isShow = true
       this.topicId = id
@@ -40,7 +41,7 @@ export default {
         return
       }
       const topicType = title === '打卡' ? 1 : 2
-      const evaluate = {
+      const Evaluate = {
         context: content, // 内容
         isActiorchapter: '1', //
         topicId: topicId, // 章节id
@@ -48,17 +49,21 @@ export default {
         parentId: 0 // 父id
         // targetUserId: 0 // 目标用户
       }
-      this.$store.dispatch('addEvaluate', evaluate)
-      if (msg.trim().length !== 0) {
-        this.isShow = false
-        this.$store.dispatch('tipMsg', {
-          tips: { type: 2 }
-        }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
-      } else {
-        this.$store.dispatch('tipMsg', {
-          tips: { type: 1 }
-        }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
-      }
+      this.$store.dispatch('addEvaluate', {
+        Evaluate,
+        cb: () => {
+          if (msg.trim().length !== 0) {
+            this.isShow = false
+            this.$store.dispatch('tipMsg', {
+              tips: { type: 2 }
+            }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+          } else {
+            this.$store.dispatch('tipMsg', {
+              tips: { type: 1 }
+            }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+          }
+        }
+      })
     },
     cancel () {
       this.isShow = false
