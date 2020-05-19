@@ -3,7 +3,7 @@
     <slot name="top" class="top"></slot>
     <div class="activitys" ref="bsWrapper" >
       <ul class="list" >
-        <li v-for="(activity ,index) in searchActivitys" :key="index" @click="to('ActivityDetail', {activity})">
+        <li v-for="(activity ,index) in searchActivitys" :key="index" @click="hand(activity)">
           <h3 class="ellipsis">{{activity.activityName}}</h3>
           <span class="iconfont icon-date btn icon3"></span>
           <span class="time">{{activity.activityStart}}---{{activity.activityEnd}}</span>
@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import BScroll from 'better-scroll'
+import BScroll from '@better-scroll/core'
 import PullDown from '@better-scroll/pull-down'
 import Pullup from '@better-scroll/pull-up'
 import { mapState } from 'vuex'
@@ -77,6 +77,16 @@ export default {
           this.page += 1
           this.$store.dispatch('reqActivitys', { page: this.page, cb: this.cb })
         }
+      })
+    },
+    hand (activity) {
+      this.$store.dispatch('getPdfFile', {
+        mainId: activity.id,
+        id: 2,
+        cb: () => this.$store.dispatch('activity', {
+          activity,
+          cb: () => this.to('ActivityDetail', { activity })
+        })
       })
     }
   }

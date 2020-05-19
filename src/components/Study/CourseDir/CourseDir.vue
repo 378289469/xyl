@@ -11,57 +11,80 @@
         </div>
       </li>
     </ul>
+    <tip/>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import tip from '../../Tip/tip'
 export default {
   data () {
     return {
       dirClass: ['', 'one=dir', 'two-dir', 'three-dir', 'resource-dir'],
-      id: '0',
+      id: 0,
+      parentId: 0,
       index: 0,
       noteId: 0
     }
   },
+  components: {
+    tip
+  },
   computed: {
     ...mapState(['CourseChapter', 'PdfFile']),
     chapter () {
-      const { CourseChapter, id, index } = this
+      const { CourseChapter, id, index, parentId } = this
       let chapter = []
-      try {
+      if (CourseChapter.length > 0) {
         if (CourseChapter[index].isShow) {
-          chapter = CourseChapter.filter(cc => cc.parentId === '0' || cc.id === id || cc.parentId === id)
-          if (CourseChapter[index].chapterLevel === 3) {
-            chapter.splice(index, 0, this.PdfFile[0])
-          }
+          chapter = CourseChapter.filter(cc => cc.parentId === '0' || cc.id === id || cc.parentId === id || cc.id === parentId || cc.oldName)
         } else {
-          chapter = CourseChapter.filter(cc => cc.parentId === '0' || cc.id === id)
+          chapter = CourseChapter.filter(cc => cc.parentId === '0' || cc.id === id || cc.id === parentId || cc.oldName)
         }
-      } catch (error) {}
+      }
       return chapter
     }
   },
   methods: {
     show (index) {
+      if (this.chapter[index] && this.chapter[index].oldName) {
+        this.$router.push({ name: 'PDF', params: { url: this.chapter[index].path, id: this.noteId } })
+        return
+      }
       const id = this.id = this.chapter[index].id
       let CourseChapterId = 0
       this.CourseChapter.forEach((cc, key) => {
         if (cc.id === id) {
           cc.isShow = !cc.isShow
           CourseChapterId = key
+          this.parentId = cc.parentId
+        } else {
+          cc.isShow = false
+          if (cc.oldName) {
+            this.CourseChapter.splice(key, 0)
+          }
         }
       })
-      if (this.CourseChapter[CourseChapterId].chapterLevel === 3) {
-        this.$store.dispatch('getPdfFile', { mainId: id, id: 1 })
-        this.noteId = id
-      }
-      if (this.chapter[index].oldName) {
-        this.$router.push({ name: 'PDF', params: { url: this.chapter[index].path, id: this.noteId } })
-      }
       this.index = CourseChapterId
-      this.CourseChapter.splice(0, 1, this.CourseChapter[0])
+      if (this.CourseChapter[CourseChapterId].chapterLevel === 3) {
+        this.$store.dispatch('getPdfFile', {
+          mainId: id,
+          id: 1,
+          cb: () => {
+            const PdfFile = this.PdfFile[0]
+            if (PdfFile) {
+              PdfFile.parentId = null
+              this.CourseChapter.splice(CourseChapterId + 1, 0, PdfFile)
+            } else {
+              this.$store.dispatch('tipMsg', {
+                tips: { type: 5, msg: '当前目录暂无内容' }
+              }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+            }
+          }
+        })
+        // this.noteId = id
+      }
     }
   }
 }
@@ -102,7 +125,7 @@ export default {
     line-height 45px
     text-align left
     border 1px solid #E1BD85
-    .icon {
+    .iconfont {
       display block
       margin-left 10px
       color #925F25
@@ -125,7 +148,7 @@ export default {
     border-radius: 0!important
     text-indent : 1em
     .iconfont{
-      margin-left -1em
+      margin-left -5px
     }
   }
 
@@ -135,7 +158,7 @@ export default {
     border-radius: 0!important
     text-indent : 2em
     .iconfont{
-      margin-left -1.8em
+      margin-left -20px
     }
   }
 

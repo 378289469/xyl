@@ -63,7 +63,9 @@ export default {
         const paramets = {
           info,
           cb: () => {
-            this.$store.dispatch('tipMsg', { type: 5, msg: this.register.message }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+            this.$store.dispatch('tipMsg', {
+              tips: { type: 5, msg: this.register.message }
+            }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
             if (this.register.success) {
               this.go('My', { username: this.model[2].trim() })
             }
@@ -77,15 +79,25 @@ export default {
     },
     blur () {
       if (event.target.placeholder === '请输入手机号' && !(/^1[3456789]\d{9}$/.test(event.target.value))) {
-        this.$store.dispatch('tipMsg', { type: 5, msg: '手机号错误' }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+        this.$store.dispatch('tipMsg', {
+          tips: { type: 5, msg: '手机号错误' }
+        }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
       } else if (!event.target.value && event.target.placeholder === '请输入姓名') {
-        this.$store.dispatch('tipMsg', { type: 5, msg: '请输入姓名' }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+        this.$store.dispatch('tipMsg', {
+          tips: { type: 5, msg: '请输入姓名' }
+        }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
       } else if (!event.target.value && event.target.placeholder === '请输入密码') {
-        this.$store.dispatch('tipMsg', { type: 5, msg: '请输入密码' }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+        this.$store.dispatch('tipMsg', {
+          tips: { type: 5, msg: '请输入密码' }
+        }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
       } else if (!event.target.value && event.target.placeholder === '请输入确认密码') {
-        this.$store.dispatch('tipMsg', { type: 5, msg: '请输入确认密码' }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+        this.$store.dispatch('tipMsg', {
+          tips: { type: 5, msg: '请输入确认密码' }
+        }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
       } else if (!event.target.value && event.target.placeholder === '请输入验证码') {
-        this.$store.dispatch('tipMsg', { type: 5, msg: '请输入验证码' }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+        this.$store.dispatch('tipMsg', {
+          tips: { type: 5, msg: '请输入验证码' }
+        }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
       }
     }
   },

@@ -34,7 +34,9 @@ export default {
     done () {
       const { title, content, topicId, msg } = this
       if (content.trim().length === 0) {
-        this.$store.dispatch('tipMsg', { type: 4 }) // type 1加载中  2成功  3失败 4不能为空 5自定义
+        this.$store.dispatch('tipMsg', {
+          tips: { type: 4 }
+        }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
         return
       }
       const topicType = title === '打卡' ? 1 : 2
@@ -49,9 +51,13 @@ export default {
       this.$store.dispatch('addEvaluate', evaluate)
       if (msg.trim().length !== 0) {
         this.isShow = false
-        this.$store.dispatch('tipMsg', 2)
+        this.$store.dispatch('tipMsg', {
+          tips: { type: 2 }
+        }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
       } else {
-        this.$store.dispatch('tipMsg', 1)
+        this.$store.dispatch('tipMsg', {
+          tips: { type: 1 }
+        }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
       }
     },
     cancel () {

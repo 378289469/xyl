@@ -66,7 +66,9 @@ export default {
           info,
           cb: () => {
             if (this.userInfo) {
-              this.$store.dispatch('tipMsg', { type: 5, msg: this.userInfo.message }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+              this.$store.dispatch('tipMsg', {
+                tips: { type: 5, msg: this.userInfo.message }
+              }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
             }
             if (this.userInfo.result && this.userInfo.result.userInfo) {
               var intervalID = setTimeout(() => {
@@ -84,11 +86,17 @@ export default {
     },
     blur () {
       if (event.target.placeholder === '请输入手机号' && !(/^1[3456789]\d{9}$/.test(event.target.value))) {
-        this.$store.dispatch('tipMsg', { type: 5, msg: '手机号错误' }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+        this.$store.dispatch('tipMsg', {
+          tips: { type: 5, msg: '手机号错误' }
+        }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
       } else if (!event.target.value && event.target.placeholder === '请输入密码') {
-        this.$store.dispatch('tipMsg', { type: 5, msg: '请输入密码' }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+        this.$store.dispatch('tipMsg', {
+          tips: { type: 5, msg: '请输入密码' }
+        }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
       } else if (!event.target.value && event.target.placeholder === '请输入验证码') {
-        this.$store.dispatch('tipMsg', { type: 5, msg: '请输入验证码' }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+        this.$store.dispatch('tipMsg', {
+          tips: { type: 5, msg: '请输入验证码' }
+        }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
       }
     }
   },

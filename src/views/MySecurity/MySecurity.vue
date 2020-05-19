@@ -64,7 +64,9 @@ export default {
         surepwd: this.model[5] && this.model[5].trim()
       }
       if (info.oldpwd && info.newpwd && info.surepwd && info.newpwd !== info.surepwd) {
-        this.$store.dispatch('tipMsg', { type: 5, msg: '两次密码不一致' }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+        this.$store.dispatch('tipMsg', {
+          tips: { type: 5, msg: '两次密码不一致' }
+        }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
         return
       }
       if (info.oldpwd && info.newpwd && info.surepwd) {
@@ -72,7 +74,9 @@ export default {
           info,
           cb: () => {
             if (this.pwdInfo) {
-              this.$store.dispatch('tipMsg', { type: 5, msg: this.pwdInfo.message }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+              this.$store.dispatch('tipMsg', {
+                tips: { type: 5, msg: this.pwdInfo.message }
+              }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
             }
             if (this.pwdInfo && this.pwdInfo.success) {
               this.go('My')
@@ -87,11 +91,17 @@ export default {
     },
     blur () {
       if (!event.target.value && event.target.placeholder === '请输入原密码') {
-        this.$store.dispatch('tipMsg', { type: 5, msg: '请输入原密码' }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+        this.$store.dispatch('tipMsg', {
+          tips: { type: 5, msg: '请输入原密码' }
+        }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
       } else if (!event.target.value && event.target.placeholder === '请输入新密码') {
-        this.$store.dispatch('tipMsg', { type: 5, msg: '请输入新密码' }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+        this.$store.dispatch('tipMsg', {
+          tips: { type: 5, msg: '请输入新密码' }
+        }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
       } else if (!event.target.value && event.target.placeholder === '请输入确认密码') {
-        this.$store.dispatch('tipMsg', { type: 5, msg: '请输入确认密码' }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+        this.$store.dispatch('tipMsg', {
+          tips: { type: 5, msg: '请输入确认密码' }
+        }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
       }
     },
     upload () {
