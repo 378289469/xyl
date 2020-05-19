@@ -49,8 +49,10 @@ export default {
     ...mapState(['PdfFile', 'CourseChapter']),
     activity () {
       const activity = this.$route.params.activity
-      const id = activity.id
-      this.$store.dispatch('getPdfFile', { mainId: id, id: 2 })
+      if (activity) {
+        const id = activity.id
+        this.$store.dispatch('getPdfFile', { mainId: id, id: 2 })
+      }
       return activity
     },
     ActivityDetail () {
@@ -102,7 +104,7 @@ export default {
       const { pdfFiles } = this
       if (pdfFiles[index].suffix === 'mp4' || pdfFiles[index].suffix === 'MP4' || pdfFiles[index].suffix === 'Mp4' || pdfFiles[index].suffix === 'mP4') {
         event.stopPropagation()
-        this.$router.push({ name: 'Video', params: { url: pdfFiles[index].path } })
+        this.$router.push({ name: 'Video', params: { url: pdfFiles[index].path, activity: this.$route.params.activity } })
       }
     }
   },

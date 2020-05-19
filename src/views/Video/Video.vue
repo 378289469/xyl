@@ -1,7 +1,7 @@
 <template>
   <div id="video">
     <Header>
-      <span class="iconfont icon-left back" slot="back" @click="back"/>
+      <span class="iconfont icon-left back" slot="back" @click="hand"/>
       <img src="./imgs/title.png" alt="title" class="title" slot="title">
     </Header>
      <video-player
@@ -28,6 +28,7 @@
 import Header from '../../components/Header/Header'
 import { videoPlayer } from 'vue-video-player'
 import video_zhCN from '../../../public/json/zh-CN.json'  // eslint-disable-line
+import routerMain from '../../router/main.js'
 
 export default {
   data () {
@@ -56,7 +57,6 @@ export default {
           fullscreenToggle: true // 全屏按钮
         }
       }
-
     }
   },
   components: {
@@ -69,12 +69,17 @@ export default {
     }
   },
   methods: {
+    ...routerMain,
+    hand (index) {
+      const { activity } = this.$route.params.activity
+      this.back({ activity })
+    },
     onPlayerPlay (player) { // 监听播放
-      console.log(player)
+      // console.log(player)
       // this.$refs.videoPlayer.player.play();
     },
     onPlayerPause (player) { // 监听暂停
-      console.log(player)
+      // console.log(player)
       // this.$refs.videoPlayer.player.pause();
     },
     playerStateChanged (player) { // 监听播放状态改变
@@ -93,7 +98,7 @@ export default {
       // console.log(player);
     },
     onPlayerTimeupdate (player) { // 当前播放位置发生变化时触发。
-      console.log(player.cache_.currentTime)
+      // console.log(player.cache_.currentTime)
     },
     onPlayerCanplay (player) { // 媒体的readyState为HAVE_FUTURE_DATA或更高
       // console.log('player Canplay!', player)
@@ -105,7 +110,7 @@ export default {
     // 将侦听器绑定到组件的就绪状态。与事件监听器的不同之处在于，如果ready事件已经发生，它将立即触发该函数。。
     playerReadied (player) {
       // this.sources.src = require( "E:\\java\\WorkSpace\\ISPER_UI_9_19\\src\\views\\business\\progress\\video\\bunn.mp4" )
-      player.currentTime(45.279074)	// 视频开始播放的时间
+      // player.currentTime(45.279074)	// 视频开始播放的时间
     }
   },
   mounted () {

@@ -18,7 +18,7 @@ export default {
       this.$router.replace({ name: path, params })
     }
   },
-  back () {
-    this.$router.go(-1)
+  back (params = {}) {
+    this.$router.go(-1, params)
   }
 }
