@@ -34,7 +34,8 @@ export default {
         e.name === 'MyMember' ||
         e.name === 'MySecurity' ||
         e.name === 'UserLogin' ||
-        e.name === 'UserRegister'
+        e.name === 'UserRegister' ||
+        e.name === 'Video'
       )
     }
   }

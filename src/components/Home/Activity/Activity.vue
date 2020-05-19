@@ -3,7 +3,7 @@
     <slot name="top" class="top"></slot>
     <div class="activitys" >
       <ul class="list" >
-        <li v-for="(activity ,index) in Activitys" :key="index" @click="to('ActivityDetail', {activity})">
+        <li v-for="(activity ,index) in Activitys" :key="index" @click="hand(activity)">
           <h3 class="ellipsis">{{activity.activityName}}</h3>
           <span class="iconfont icon-date btn icon3"></span>
           <span class="time">{{activity.activityStart}}---{{activity.activityEnd}}</span>
@@ -37,7 +37,17 @@ export default {
     new BScroll('.activitys') // eslint-disable-line
   },
   methods: {
-    ...routerMain
+    ...routerMain,
+    hand (activity) {
+      this.$store.dispatch('getPdfFile', {
+        mainId: activity.id,
+        id: 2,
+        cb: () => this.$store.dispatch('activity', {
+          activity,
+          cb: () => this.to('ActivityDetail', { activity })
+        })
+      })
+    }
   }
 }
 </script>

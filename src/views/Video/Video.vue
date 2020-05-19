@@ -1,10 +1,10 @@
 <template>
   <div id="video">
     <Header>
-      <span class="iconfont icon-left back" slot="back" @click="hand"/>
+      <span class="iconfont icon-left back" slot="back" @click="back"/>
       <img src="./imgs/title.png" alt="title" class="title" slot="title">
     </Header>
-     <video-player
+    <video-player
      ref="videoPlayer"
      :options="playerOptions"
      :playsinline="true"
@@ -21,10 +21,19 @@
      @statechanged="playerStateChanged($event)"
      @ready="playerReadied">
     ></video-player>
+    <div class="videoWrap">
+      <ul class="vidoeList">
+        <li class="videoImg" v-for="(pf, index) in modules.pdfFiles" :key="index">
+          <img :src="pf.url">
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import BScroll from 'better-scroll'
 import Header from '../../components/Header/Header'
 import { videoPlayer } from 'vue-video-player'
 import video_zhCN from '../../../public/json/zh-CN.json'  // eslint-disable-line
@@ -35,9 +44,9 @@ export default {
     return {
       playerOptions: {
         playbackRates: [0.7, 1.0, 1.5, 2.0], // 播放速度
-        autoplay: false, // 如果true,浏览器准备好时开始回放。
+        autoplay: true, // 如果true,浏览器准备好时开始回放。
         muted: false, // 默认情况下将会消除任何音频。
-        loop: true, // 导致视频一结束就重新开始。
+        loop: false, // 导致视频一结束就重新开始。
         preload: 'auto', // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
         language: 'zh-CN',
         aspectRatio: '16:9', // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
@@ -51,9 +60,9 @@ export default {
         // width: document.documentElement.clientWidth, // 播放器宽度
         notSupportedMessage: '此视频暂无法播放，请稍后再试', // 允许覆盖Video.js无法播放媒体源时显示的默认信息。
         controlBar: {
-          timeDivider: true,
-          durationDisplay: true,
-          remainingTimeDisplay: false,
+          timeDivider: true, // 时间分割线
+          durationDisplay: true, // 播放时长
+          remainingTimeDisplay: true, // 剩余时长
           fullscreenToggle: true // 全屏按钮
         }
       }
@@ -64,16 +73,13 @@ export default {
     videoPlayer
   },
   computed: {
+    ...mapState(['modules']),
     player () {
       return this.$refs.videoPlayer.player
     }
   },
   methods: {
     ...routerMain,
-    hand (index) {
-      const { activity } = this.$route.params.activity
-      this.back({ activity })
-    },
     onPlayerPlay (player) { // 监听播放
       // console.log(player)
       // this.$refs.videoPlayer.player.play();
@@ -114,8 +120,11 @@ export default {
     }
   },
   mounted () {
-    const url = this.$route.params.url
-    this.playerOptions.sources[0].src = url
+    const { pdfFiles } = this.modules
+    pdfFiles.forEach(pf => {
+      this.playerOptions.sources.push({ type: 'video/mp4', src: pf.path })
+    })
+    new BScroll('.videoWrap') // eslint-disable-line
   }
 }
 </script>
@@ -131,4 +140,10 @@ export default {
   width 345px
   height 85%
   background url('./imgs/bg.png') no-repeat
+  .videoWrap
+    margin 10px
+    height 70%
+    overflow hidden
+    img
+      width 100%
 </style>

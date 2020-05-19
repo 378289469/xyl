@@ -46,28 +46,23 @@ export default {
     tip
   },
   computed: {
-    ...mapState(['PdfFile', 'CourseChapter']),
+    ...mapState(['PdfFile', 'CourseChapter', 'modules']),
     activity () {
-      const activity = this.$route.params.activity
-      if (activity) {
-        const id = activity.id
-        this.$store.dispatch('getPdfFile', { mainId: id, id: 2 })
-      }
-      return activity
+      return this.modules.activity
     },
     ActivityDetail () {
-      let ActivityDetail = []
-      ActivityDetail = [
-        { title: this.activity.activityName, tag: '名称：' },
+      const { activity } = this
+      const ActivityDetail = [
+        { title: activity.activityName, tag: '名称：' },
         { content: 0, tag: '内容：' },
-        { title: `${this.activity.activityStart.slice(0, 10)}一${this.activity.activityEnd.slice(0, 10)}`, tag: '时间：' },
+        { title: `${activity.activityStart.slice(0, 10)}一${activity.activityEnd.slice(0, 10)}`, tag: '时间：' },
         { content: 1, tag: '任务：', title: `${this.tasks[0]}----------${this.tasks[1]}` },
         { content: 2, tag: '附件：' }
       ]
       return ActivityDetail
     },
     tasks () {
-      return this.$route.params.activity.activityTask.split('-')
+      return this.activity.activityTask.split('-')
     },
     taskDir () {
       const taskDir = []
@@ -102,15 +97,17 @@ export default {
     },
     hand (index) {
       const { pdfFiles } = this
+      const pdfFileList = pdfFiles.filter(pf => pf.suffix === 'mp4' || pf.suffix === 'MP4' || pf.suffix === 'Mp4' || pf.suffix === 'mP4')
       if (pdfFiles[index].suffix === 'mp4' || pdfFiles[index].suffix === 'MP4' || pdfFiles[index].suffix === 'Mp4' || pdfFiles[index].suffix === 'mP4') {
         event.stopPropagation()
-        this.$router.push({ name: 'Video', params: { url: pdfFiles[index].path, activity: this.$route.params.activity } })
+        this.$store.dispatch('pdfFiles', {
+          pdfFiles: pdfFileList,
+          cb: this.to('Video')
+        })
       }
     }
   },
   mounted () {
-    const id = this.$route.params.activity.id
-    this.$store.dispatch('getPdfFile', { mainId: id, id: 2 })
     this.$store.dispatch('getCourseChapter')
     new BScroll('.detail') // eslint-disable-line
     new BScroll('.task') // eslint-disable-line

@@ -101,20 +101,22 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    async getCourseIntroduce ({ commit, state }) {
+    async getCourseIntroduce ({ commit, state }, cb) {
       const result = await reqCourseIntroduce()
       if (result.code === 200 || result.code === 0 || result.code === 500) {
         // console.log(result)
         const courseintroduce = result.result.courseIntroduce
         commit(RECEIVE_COURSE_INTRODUCE, { courseintroduce })
+        cb && cb()
       }
     },
-    async getCourseLearners ({ commit, state }) {
+    async getCourseLearners ({ commit, state }, cb) {
       const result = await reqCourseLearners()
       if (result.code === 200 || result.code === 0 || result.code === 500) {
         // console.log(result)
         const courselearners = result.result.studentCount
         commit(RECEIVE_COURSE_LEARNERS, { courselearners })
+        cb && cb()
       }
     },
     async reqActivitys ({ commit, state }, { page, cb }) {
@@ -126,15 +128,16 @@ export default new Vuex.Store({
         cb && cb()
       }
     },
-    async getTeachers ({ commit, state }) {
+    async getTeachers ({ commit, state }, cb) {
       const result = await reqTeachers(state.usertype[0])
       if (result.code === 200 || result.code === 0 || result.code === 500) {
         // console.log(result)
         const teachers = result.result.records
         commit(RECEIVE_TEACHERS, { teachers })
+        cb && cb()
       }
     },
-    async getCourseChapter ({ commit, state }) {
+    async getCourseChapter ({ commit, state }, cb) {
       const result = await reqCourseChapter()
       if (result.code === 200 || result.code === 0 || result.code === 500) {
         // console.log(result)
@@ -158,34 +161,39 @@ export default new Vuex.Store({
         })
         CourseChapter = temp
         commit(RECEIVE_COURSE_CHAPTER, { CourseChapter })
+        cb && cb()
       }
     },
-    async getPdfFile ({ commit, state }, { mainId, id }) {
+    async getPdfFile ({ commit, state }, { mainId, id, cb }) {
       const result = await reqGetPdfFile(mainId, id)
       if (result.code === 200 || result.code === 0 || result.code === 500) {
         const PdfFile = result.result.records
         commit(RECEIVE_GET_PDF_FILE, { PdfFile })
+        cb && cb()
       }
     },
-    async getNote ({ commit, state }, mainId) {
+    async getNote ({ commit, state }, { mainId, cb }) {
       const result = await reqGetNote(mainId)
       if (result.code === 200 || result.code === 0 || result.code === 500) {
         const notes = result.result.records
         commit(RECEIVE_GET_NOTE, { notes })
+        cb && cb()
       }
     },
-    async addEvaluate ({ commit, state }, Evaluate) {
+    async addEvaluate ({ commit, state }, { Evaluate, cb }) {
       const result = await reqEvaluate(Evaluate)
       if (result.code === 200 || result.code === 0 || result.code === 500) {
         const msg = result.result.message
         commit(RECEIVE_ADD_EVALUATE, { msg })
+        cb && cb()
       }
     },
-    async getEvaluate ({ commit, state }, topicType) {
+    async getEvaluate ({ commit, state }, { topicType, cb }) {
       const result = await reqEvaluateList(topicType)
       if (result.code === 200 || result.code === 0 || result.code === 500) {
         const evaluatelist = result.result
         commit(RECEIVE_GET_EVALUATE, { evaluatelist })
+        cb && cb()
       }
     },
     async userRegister ({ commit, state }, { info, cb }) {
@@ -212,11 +220,12 @@ export default new Vuex.Store({
         cb && cb()
       }
     },
-    async getUserGroup ({ commit, state }) {
+    async getUserGroup ({ commit, state }, cb) {
       const result = await getUserGroup()
       if (result.code === 200) {
         const UserGroup = result.result
         commit(RECEIVE_GET_USER_GROUP, { UserGroup })
+        cb && cb()
       }
     }
   },
