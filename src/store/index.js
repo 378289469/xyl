@@ -181,10 +181,9 @@ export default new Vuex.Store({
       }
     },
     async addEvaluate ({ commit, state }, { Evaluate, cb }) {
-      console.log(Evaluate)
       const result = await reqEvaluate(Evaluate)
       if (result.code === 200 || result.code === 0 || result.code === 500) {
-        const msg = result.result.message
+        const msg = result.message
         commit(RECEIVE_ADD_EVALUATE, { msg })
         cb && cb()
       }

@@ -27,10 +27,10 @@ export default {
   },
   methods: {
     wheel (title, id) {
-      console.log(id)
       this.title = title
       this.isShow = true
       this.topicId = id
+      this.content = ''
     },
     done () {
       const { title, content, topicId, msg } = this
@@ -52,16 +52,10 @@ export default {
       this.$store.dispatch('addEvaluate', {
         Evaluate,
         cb: () => {
-          if (msg.trim().length !== 0) {
-            this.isShow = false
-            this.$store.dispatch('tipMsg', {
-              tips: { type: 2 }
-            }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
-          } else {
-            this.$store.dispatch('tipMsg', {
-              tips: { type: 1 }
-            }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
-          }
+          this.isShow = false
+          this.$store.dispatch('tipMsg', {
+            tips: { type: 5, msg: msg }
+          }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
         }
       })
     },

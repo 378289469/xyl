@@ -22,7 +22,7 @@ export const reqGetPdfFile = (mainId, id) => ajax(`wordPdf/getPdfFile/${mainId}/
 export const reqGetNote = (mainId) => ajax('notes/zblNotes/list', { pageNo: 1, pageSize: 1, chapterId: mainId })
 
 // 8打卡/提问 提交
-export const reqEvaluate = (evaluate) => ajax('evaluate/zblEvaluate/add', { evaluate }, 'post')
+export const reqEvaluate = (evaluate) => ajax('evaluate/zblEvaluate/add', evaluate, 'post')
 
 // 9获取交流列表
 export const reqEvaluateList = (topicType) => ajax('evaluate/zblEvaluate/appList', { pageNo: 1, pageSize: 10, topicType })

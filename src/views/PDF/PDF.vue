@@ -81,6 +81,14 @@ export default {
     })
     new BScroll('.pages')// eslint-disable-line
     new BScroll('.tips')// eslint-disable-line
+  },
+  updated () {
+    new BScroll('.PDFwrap', {// eslint-disable-line
+      scrollX: true,
+      scrollY: false
+    })
+    new BScroll('.pages')// eslint-disable-line
+    new BScroll('.tips')// eslint-disable-line
   }
 }
 </script>
