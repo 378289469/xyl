@@ -1,11 +1,25 @@
 <template>
-  <div id="communication">
-    <h2 class="course" :class="{on: btn}" @click="course(1)">课程学习</h2>
-    <h2 class="activity" :class="{on: !btn}" @click="activity(2)">活动</h2>
-    <Search class="search"/>
+  <div id="CommunicationDetail">
+    <div class="top">
+      <div class="info">
+        <div class="avatar">
+          <img :src="evaluatelist[index].user.avatar || imgUrl" alt="avatar" :onerror="errorurl">
+        </div>
+        <span>学生</span>
+      </div>
+      <div class="content">
+        <div class="author">
+            <span class="realname">{{evaluatelist[index].user.realname}}</span>
+            <span class="createTime">{{evaluatelist[index].createTime}}</span>
+        </div>
+        <p>{{evaluatelist[index].context}}</p>
+        <i class="ellipsis">知识点：{{evaluatelist[index].chapter? evaluatelist[index].chapter.chapterPath: ''}}{{evaluatelist[index].chapter? evaluatelist[index].chapter.chapterName: ''}}</i>
+        <div class="source">来源：<span class="sourse-type">{{sourse[evaluatelist[index].topicType]}}</span><span class="count">{{evaluatelist[index].list.length}}</span>回复</div>
+      </div>
+    </div>
     <div class="wrap">
       <ul>
-        <li v-for="(list, index) in evaluatelist" :key="index" @click="to('CommunicationDetail', {index})">
+        <li v-for="(list, index) in evaluatelist[index]" :key="index" @click="to('CommunicationDetail', {index})">
           <div class="info">
             <div class="avatar">
               <img :src="list.user.avatar || imgUrl" alt="avatar" :onerror="errorurl">
@@ -30,24 +44,21 @@
 <script>
 import { mapState } from 'vuex'
 import BScroll from 'better-scroll'
-import Search from '../../Search/Search'
 import routerMain from '../../../router/main.js'
 
 export default {
   data () {
     return {
-      topicType: 1, // 1目录 2 活动
       errorurl: 'this.src="' + require('./imgs/person.png') + '"',
       imgUrl: require('./imgs/person.png'),
-      btn: true,
       sourse: ['', '打卡', '提问']
     }
   },
-  components: {
-    Search
-  },
   computed: {
-    ...mapState(['evaluatelist'])
+    ...mapState(['evaluatelist']),
+    index () {
+      return this.$route.params.index
+    }
   },
   methods: {
     ...routerMain,
@@ -69,43 +80,17 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="stylus">
-#communication {
+#CommunicationDetail {
   position: absolute;
   top: 112px;
   left: 14px;
   width: 346px;
   height: 80%;
-  padding-top 35px
+  padding-top 15px
   background: url('./imgs/bg.png') no-repeat;
   background-color: white;
-  .course,.activity {
-    position: absolute;
-    top: -22px;
-    width: 127px;
-    height: 44px;
-    background: url('./imgs/title.png') no-repeat;
-    color: #F4D6B2;
-    font-size: 20px;
-    line-height: 52px;
-  }
-  .course{
-    left 34px
-  }
-  .activity {
-    right 34px
-  }
-  .on{
-     background: url('./imgs/on.png') no-repeat;
-     color white
-  }
-  .search{
-    background-color #F3EFE8
-    width 90%
-    margin-left 16px
-  }
   .wrap{
-    height 85%
-    margin-top 14px
+    height 95%
     overflow hidden
   }
     ul{

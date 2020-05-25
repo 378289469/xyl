@@ -1,4 +1,4 @@
-import { ajax } from './ajax'
+import { ajax, userId } from './ajax'
 
 // 1、获取课程介绍
 export const reqCourseIntroduce = () => ajax('back/zblCourse/queryById')
@@ -25,7 +25,7 @@ export const reqGetNote = (mainId) => ajax('notes/zblNotes/list', { pageNo: 1, p
 export const reqEvaluate = (evaluate) => ajax('evaluate/zblEvaluate/add', evaluate, 'post')
 
 // 9获取交流列表
-export const reqEvaluateList = (topicType) => ajax('evaluate/zblEvaluate/appList', { pageNo: 1, pageSize: 10, topicType })
+export const reqEvaluateList = (isActiorchapter) => ajax('evaluate/zblEvaluate/appList', { pageNo: 1, pageSize: 10, userId, isActiorchapter })
 
 // 10用户注册
 export const reqUserRegister = (info) => ajax('front/login/register', info, 'post')
@@ -38,15 +38,3 @@ export const setUserPassword = (info) => ajax('front/login/changPassword', info,
 
 // 13用户登陆
 export const getUserGroup = () => ajax('group/zblGroup/users')
-
-// 14退出登陆
-
-// 15修改密码
-
-// 16修改个人信息
-
-// 17获取验证码
-
-// 18获取token
-
-// 19获取小组成员
