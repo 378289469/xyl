@@ -11,6 +11,7 @@
           <span class="iconfont icon-right" slot="right"></span>
       </List>
     </div>
+    <FooterGuide/>
   </div>
 </template>
 
@@ -20,6 +21,7 @@ import Header from '../../components/Header/Header'
 import Info from '../../components/My/Info/Info.vue'
 import List from '../../components/My/List/List.vue'
 import routerMain from '../../router/main.js'
+import FooterGuide from '../../components/FooterGuide/FooterGuide'
 
 export default {
   data () {
@@ -32,7 +34,8 @@ export default {
   components: {
     Header,
     Info,
-    List
+    List,
+    FooterGuide
   },
   methods: {
     ...routerMain

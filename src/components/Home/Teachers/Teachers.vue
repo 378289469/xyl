@@ -85,7 +85,9 @@ export default {
     ul
       display flex
       align-items center
+      padding 0
       li
+        list-style none
         width 43px
         margin-right 25px
         .avatar
@@ -103,4 +105,5 @@ export default {
           margin-top 10px
           color #272828
           font-size 14px
+          overflow hidden
 </style>

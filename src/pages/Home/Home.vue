@@ -14,6 +14,7 @@
       </div>
     </Activity>
     <Teachers/>
+    <FooterGuide/>
   </div>
 </template>
 
@@ -24,19 +25,24 @@ import Course from '../../components/Home/Course/Course'
 import Activity from '../../components/Home/Activity/Activity'
 import Teachers from '../../components/Home/Teachers/Teachers'
 import routerMain from '../../router/main.js'
+import FooterGuide from '../../components/FooterGuide/FooterGuide'
 
 export default {
   components: {
     Header,
     Course,
     Activity,
-    Teachers
+    Teachers,
+    FooterGuide
   },
   methods: {
     ...routerMain
   },
   mounted () {
     this.$store.state.searchActivitys = this.$store.state.activitys
+    this.$store.dispatch('getCourseIntroduce')
+    this.$store.dispatch('getCourseLearners')
+    this.$store.dispatch('getTeachers')
   }
 }
 </script>

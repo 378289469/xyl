@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home/Home.vue'
+import Home from '../pages/Home/Home.vue'
 
 Vue.use(VueRouter)
 
@@ -16,9 +16,9 @@ const routes = [
     component: () => import('../views/CourseIntroduce/CourseIntroduce.vue')
   },
   {
-    path: '/study',
+    path: '/Study',
     name: 'Study',
-    component: () => import('../views/Study/Study.vue')
+    component: () => import('../pages/Study/Study.vue')
   },
   {
     path: '/PDF',
@@ -28,7 +28,7 @@ const routes = [
   {
     path: '/activity',
     name: 'Activity',
-    component: () => import('../views/Activity/Activity.vue')
+    component: () => import('../pages/Activity/Activity.vue')
   },
   {
     path: '/ActivityDetail',
@@ -43,7 +43,7 @@ const routes = [
   {
     path: '/Communication',
     name: 'Communication',
-    component: () => import('../views/Communication/Communication.vue')
+    component: () => import('../pages/Communication/Communication.vue')
   },
   {
     path: '/CommunicationDetail',
@@ -53,7 +53,7 @@ const routes = [
   {
     path: '/my',
     name: 'My',
-    component: () => import('../views/My/My.vue')
+    component: () => import('../pages/My/My.vue')
   },
   {
     path: '/MyMember',

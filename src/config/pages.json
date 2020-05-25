@@ -1,0 +1,27 @@
+[
+  {
+    "title": "首页",
+    "name": "Home",
+    "path": "Home/Home"
+  },
+  {
+    "title": "学习",
+    "name": "Study",
+    "path": "Study/Study"
+  },
+  {
+    "title": "活动",
+    "name": "Activity",
+    "path": "Activity/Activity"
+  },
+  {
+    "title": "交流",
+    "name": "Communication",
+    "path": "Communication/Communication"
+  },
+  {
+    "title": "我的",
+    "name": "My",
+    "path": "My/My"
+  }
+]

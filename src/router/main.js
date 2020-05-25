@@ -5,20 +5,25 @@ export default {
   to (path, params = {}) {
     const token = store.state.userInfo.result ? store.state.userInfo.result.token : tokens
     if (!token) {
-      this.$router.replace({ name: 'UserLogin', params })
+      // this.$router.replace({ name: 'UserLogin', params })
+      this.$page.push({ name: 'UserLogin', params })
     } else {
-      this.$router.push({ name: path, params })
+      // this.$router.push({ name: path, params })
+      this.$page.push({ name: path, params })
     }
   },
   go (path, params = {}) {
     const token = store.state.userInfo.result ? store.state.userInfo.result.token : tokens
     if (!token) {
-      this.$router.replace({ name: 'UserLogin', params })
+      // this.$router.replace({ name: 'UserLogin', params })
+      this.$page.push({ name: 'UserLogin', params })
     } else {
-      this.$router.replace({ name: path, params })
+      // this.$router.replace({ name: path, params })
+      this.$page.push({ name: path, params })
     }
   },
   back () {
-    this.$router.go(-1)
+    // this.$router.go(-1)
+    this.$page.go(-1)
   }
 }

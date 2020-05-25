@@ -1,7 +1,6 @@
 <template>
   <div id="app">
     <router-view />
-    <FooterGuide v-if="tabType"/>
   </div>
 </template>
 
@@ -24,21 +23,6 @@ export default {
   },
   methods: {
     ...mapActions(['getCourseIntroduce', 'getCourseLearners', 'reqActivitys', 'getTeachers'])
-  },
-  watch: {
-    $route (e) {
-      this.tabType = !(
-        e.name === 'CourseIntroduce' ||
-        e.name === 'PDF' ||
-        e.name === 'ActivityDetail' ||
-        e.name === 'MyMember' ||
-        e.name === 'MySecurity' ||
-        e.name === 'UserLogin' ||
-        e.name === 'UserRegister' ||
-        e.name === 'Video' ||
-        e.name === 'CommunicationDetail'
-      )
-    }
   }
 }
 </script>

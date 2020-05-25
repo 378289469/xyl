@@ -144,7 +144,9 @@ export default {
       line-height 30px
       text-align left
       color #828282
+      padding 0
       li
+        list-style none
         width 315px
         border-bottom 1px solid #EAEAEA
       li:last-child
