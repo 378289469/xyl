@@ -41,7 +41,7 @@ import routerMain from '../../router/main.js'
 export default {
   data () {
     return {
-      url: 'http://storage.xuetangx.com/public_assets/xuetangx/PDF/PlayerAPI_v1.0.6.pdf',
+      // url: 'http://storage.xuetangx.com/public_assets/xuetangx/PDF/PlayerAPI_v1.0.6.pdf',
       Pages: 2,
       ansIsOn: false,
       signIsOn: false
@@ -55,9 +55,8 @@ export default {
   },
   computed: {
     ...mapState(['notes', 'modules']),
-    url11 () {
-      console.log(this.modules.pdfFileUrl)
-      return this.modules.pdfFileUrl
+    url () {
+      return this.$page.pageParam().url
     }
   },
   methods: {
@@ -73,7 +72,7 @@ export default {
       this.ansIsOn = id === 1
       this.signIsOn = id === 2
       const title = id === 1 ? '提问' : '打卡'
-      this.$refs.wheel.wheel(title, this.$route.params.id)
+      this.$refs.wheel.wheel(title, this.$page.pageParam().id)
     }
   },
   mounted () {

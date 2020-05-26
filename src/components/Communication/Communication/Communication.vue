@@ -5,7 +5,7 @@
     <Search class="search"/>
     <div class="wrap">
       <ul>
-        <li v-for="(list, index) in evaluatelist" :key="index" @click="to('CommunicationDetail', {index})">
+        <li v-for="(list, index) in evaluatelist" :key="index" @click="hand(list)">
           <div class="info">
             <div class="avatar">
               <img :src="list.user.avatar || imgUrl" alt="avatar" :onerror="errorurl">
@@ -51,6 +51,9 @@ export default {
   },
   methods: {
     ...routerMain,
+    hand (list) {
+      this.to('CommunicationDetail', { list })
+    },
     course (type) {
       this.$store.dispatch('getEvaluate', { isActiorchapter: type })
       this.btn = true

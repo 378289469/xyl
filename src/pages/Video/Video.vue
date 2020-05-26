@@ -23,7 +23,7 @@
     ></video-player>
     <div class="videoWrap">
       <ul class="vidoeList">
-        <li class="videoImg" v-for="(pf, index) in modules.pdfFiles" :key="index">
+        <li class="videoImg" v-for="(pf, index) in pdfFileList" :key="index" @click="show(pf.path)">
           <img :src="pf.url">
         </li>
       </ul>
@@ -73,13 +73,24 @@ export default {
     videoPlayer
   },
   computed: {
-    ...mapState(['modules']),
+    ...mapState(['pdfFiles']),
     player () {
       return this.$refs.videoPlayer.player
+    },
+    pdfFileList () {
+      const pdfFileList = this.$page.pageParam().videoPaths
+      return pdfFileList
     }
+  },
+  mounted () {
+    new BScroll('.videoWrap') // eslint-disable-line
+    this.playerOptions.sources[0].src = this.$page.pageParam().url
   },
   methods: {
     ...routerMain,
+    show (url) {
+      this.playerOptions.sources[0].src = url
+    },
     onPlayerPlay (player) { // 监听播放
       // console.log(player)
       // this.$refs.videoPlayer.player.play();
@@ -118,13 +129,6 @@ export default {
       // this.sources.src = require( "E:\\java\\WorkSpace\\ISPER_UI_9_19\\src\\views\\business\\progress\\video\\bunn.mp4" )
       // player.currentTime(45.279074)	// 视频开始播放的时间
     }
-  },
-  mounted () {
-    const { pdfFiles } = this.modules
-    pdfFiles.forEach(pf => {
-      this.playerOptions.sources.push({ type: 'video/mp4', src: pf.path })
-    })
-    new BScroll('.videoWrap') // eslint-disable-line
   }
 }
 </script>

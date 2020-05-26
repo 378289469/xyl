@@ -64,7 +64,10 @@ export default {
     tip
   },
   computed: {
-    ...mapState(['evaluatelist'])
+    ...mapState(['evaluatelist']),
+    list () {
+      return this.$page.pageParam().list
+    }
   },
   methods: {
     ...routerMain,

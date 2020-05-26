@@ -52,10 +52,12 @@ export default {
     show (index) {
       if (this.chapter[index] && this.chapter[index].oldName) {
         // this.$router.push({ name: 'PDF', params: { url: this.chapter[index].path, id: this.noteId } })
-        this.$store.dispatch('pdfFileUrl', {
-          url: this.chapter[index].path,
-          id: this.noteId,
-          cb: () => this.to('PDF')
+        this.$page.push({
+          name: 'PDF',
+          pageParam: {
+            url: this.chapter[index].path,
+            id: this.noteId
+          }
         })
         return
       }

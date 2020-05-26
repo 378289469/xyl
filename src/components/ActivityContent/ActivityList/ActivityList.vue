@@ -80,14 +80,7 @@ export default {
       })
     },
     hand (activity) {
-      this.$store.dispatch('getPdfFile', {
-        mainId: activity.id,
-        id: 2,
-        cb: () => this.$store.dispatch('activity', {
-          activity,
-          cb: () => this.to('ActivityDetail', { activity })
-        })
-      })
+      this.to('ActivityDetail', { activity })
     }
   }
 }

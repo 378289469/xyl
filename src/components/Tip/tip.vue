@@ -27,7 +27,7 @@ export default {
       const { tips } = this
       if (tips.type[0] * 1 === 5) {
         this.tipText = ['', '数据加载中', '提交成功', '提交失败', '请输入内容']
-        this.tipText.push(tips.msg || '操作错误')
+        this.tipText.push(tips.msg || '添加成功')
       }
       this.tipShow = true
       var intervalID = setTimeout(() => {
@@ -51,6 +51,7 @@ export default {
   width 120px
   height 120px
   background rgba(0 0 0 .5)
+  text-align center
   span
     color white
     font-size 40px

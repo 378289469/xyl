@@ -2,14 +2,14 @@ import store from '../store/index'
 const tokens = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1ODk4Njc5OTcsInVzZXJuYW1lIjoiMTM3NTMxNjcwNjU6emJsIn0.9MoIDIJyWifLmW5hCBamK1WzLfT-nXo01ymqZ3MDf2s'
 
 export default {
-  to (path, params = {}) {
+  to (path, pageParam = {}) {
     const token = store.state.userInfo.result ? store.state.userInfo.result.token : tokens
     if (!token) {
       // this.$router.replace({ name: 'UserLogin', params })
-      this.$page.open({ name: 'UserLogin', params })
+      this.$page.open({ name: 'UserLogin', pageParam })
     } else {
       // this.$router.push({ name: path, params })
-      this.$page.push({ name: path, params })
+      this.$page.push({ name: path, pageParam })
     }
   },
   go (path, params = {}) {

@@ -15,7 +15,10 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
   response => {
     if (response.data.code === 0 || response.data.code === 500) {
-      modules.actions.tipMsg({ commit: store.commit }, { type: 5, msg: response.data.message })
+      modules.actions.tipMsg(
+        { commit: store.commit },
+        { tips: { type: 5, msg: response.data.message } }
+      )
     }
     return response
   }

@@ -38,17 +38,19 @@ import Header from '../../components/Header/Header'
 import wheel from '../../components/Wheel/wheel'
 import tip from '../../components/Tip/tip'
 import routerMain from '../../router/main.js'
+import Viewer from 'v-viewer/src/component.vue'
 
 export default {
   components: {
     Header,
     wheel,
-    tip
+    tip,
+    Viewer
   },
   computed: {
     ...mapState(['PdfFile', 'CourseChapter', 'modules']),
     activity () {
-      return this.modules.activity
+      return this.$page.pageParam().activity
     },
     ActivityDetail () {
       const { activity } = this
@@ -97,17 +99,22 @@ export default {
     },
     hand (index) {
       const { pdfFiles } = this
-      const pdfFileList = pdfFiles.filter(pf => pf.suffix === 'mp4' || pf.suffix === 'MP4' || pf.suffix === 'Mp4' || pf.suffix === 'mP4')
+      const videoPaths = pdfFiles.filter(pf => pf.url === require('./imgs/video.png'))
       if (pdfFiles[index].suffix === 'mp4' || pdfFiles[index].suffix === 'MP4' || pdfFiles[index].suffix === 'Mp4' || pdfFiles[index].suffix === 'mP4') {
         event.stopPropagation()
-        this.$store.dispatch('pdfFiles', {
-          pdfFiles: pdfFileList,
-          cb: this.to('Video')
-        })
+        const pageParam = {
+          url: pdfFiles[index].path,
+          videoPaths
+        }
+        this.to('Video', pageParam)
       }
     }
   },
   mounted () {
+    this.$store.dispatch('getPdfFile', {
+      mainId: this.$page.pageParam().activity.id,
+      id: 2
+    })
     this.$store.dispatch('getCourseChapter')
     new BScroll('.detail') // eslint-disable-line
     new BScroll('.task') // eslint-disable-line
