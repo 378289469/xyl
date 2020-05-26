@@ -87,6 +87,7 @@ export default {
     color: #F4D6B2;
     font-size: 20px;
     line-height: 52px;
+    text-align center
   }
   .course{
     left 34px
