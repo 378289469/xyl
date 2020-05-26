@@ -5,7 +5,7 @@
     </Header>
     <Course/>
     <Activity>
-      <div class="top" slot="top" @click="go('Activity')">
+      <div class="top" slot="top" @click="to('Activity')">
         <span class="icon1"></span>
         <span class="icon2"></span>
         <h2>活动内容</h2>

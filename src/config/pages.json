@@ -5,9 +5,24 @@
     "path": "Home/Home"
   },
   {
+    "title": "课程简介",
+    "name": "CourseIntroduce",
+    "path": "CourseIntroduce/CourseIntroduce"
+  },
+  {
     "title": "学习",
     "name": "Study",
     "path": "Study/Study"
+  },
+  {
+    "title": "PDF",
+    "name": "PDF",
+    "path": "PDF/PDF"
+  },
+  {
+    "title": "Video",
+    "name": "Video",
+    "path": "Video/Video"
   },
   {
     "title": "活动",
@@ -15,13 +30,43 @@
     "path": "Activity/Activity"
   },
   {
+    "title": "活动详情",
+    "name": "ActivityDetail",
+    "path": "ActivityDetail/ActivityDetail"
+  },
+  {
     "title": "交流",
     "name": "Communication",
     "path": "Communication/Communication"
   },
   {
+    "title": "交流详情",
+    "name": "CommunicationDetail",
+    "path": "CommunicationDetail/CommunicationDetail"
+  },
+  {
     "title": "我的",
     "name": "My",
     "path": "My/My"
+  },
+  {
+    "title": "小组成员",
+    "name": "MyMember",
+    "path": "MyMember/MyMember"
+  },
+  {
+    "title": "账户安全",
+    "name": "MySecurity",
+    "path": "MySecurity/MySecurity"
+  },
+  {
+    "title": "用户登录",
+    "name": "UserLogin",
+    "path": "UserLogin/UserLogin"
+  },
+  {
+    "title": "用户注册",
+    "name": "UserRegister",
+    "path": "UserRegister/UserRegister"
   }
 ]

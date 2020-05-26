@@ -17,6 +17,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import routerMain from '../../../router/main.js'
 import tip from '../../Tip/tip'
 export default {
   data () {
@@ -47,9 +48,15 @@ export default {
     }
   },
   methods: {
+    ...routerMain,
     show (index) {
       if (this.chapter[index] && this.chapter[index].oldName) {
-        this.$router.push({ name: 'PDF', params: { url: this.chapter[index].path, id: this.noteId } })
+        // this.$router.push({ name: 'PDF', params: { url: this.chapter[index].path, id: this.noteId } })
+        this.$store.dispatch('pdfFileUrl', {
+          url: this.chapter[index].path,
+          id: this.noteId,
+          cb: () => this.to('PDF')
+        })
         return
       }
       const id = this.id = this.chapter[index].id
@@ -115,6 +122,7 @@ export default {
     color: white;
     font-size: 20px;
     line-height: 52px;
+    text-align center
   }
   .dir {
     display flex

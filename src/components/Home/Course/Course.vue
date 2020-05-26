@@ -6,7 +6,7 @@
 			{{introduce}}
 			<span @click="to('CourseIntroduce')">全文</span>
     </p>
-		<div @click="go('Study')">
+		<div @click="to('Study')">
 			<h3>{{courselearners}}</h3>
 		</div>
 	</div>
@@ -62,6 +62,7 @@ export default {
 		color: white;
 		font-size: 20px;
 		line-height: 52px;
+    text-align center;
 	}
 
 	img {

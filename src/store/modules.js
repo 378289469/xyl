@@ -2,15 +2,17 @@
 const TIP_MSG = 'tip_msg'
 const ACTIVITY_ONE = 'activity_one'
 const PDF_ONE = 'pdf_one'
+const PDF_FILE_URL = 'pdf_file_url'
 
-export default ({
+export default {
   state: {
     tips: {
       type: 0,
       msg: ''
     },
     activity: {},
-    pdfFiles: {}
+    pdfFiles: {},
+    pdfFileUrl: ''
   },
   mutations: {
     [TIP_MSG] (state, { tips }) {
@@ -21,6 +23,9 @@ export default ({
     },
     [PDF_ONE] (state, { pdfFiles }) {
       state.pdfFiles = pdfFiles
+    },
+    [PDF_FILE_URL] (state, { url }) {
+      state.pdfFileUrl = url
     }
   },
   actions: {
@@ -36,8 +41,12 @@ export default ({
     pdfFiles ({ commit, state }, { pdfFiles, cb }) {
       commit(PDF_ONE, { pdfFiles })
       cb && cb()
+    },
+    pdfFileUrl ({ commit, state }, { url, cb }) {
+      commit(PDF_FILE_URL, { url })
+      cb && cb()
     }
   },
   modules: {
   }
-})
+}

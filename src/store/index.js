@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import modules from './modules'
 
 import {
   reqCourseIntroduce,
@@ -16,8 +17,6 @@ import {
   setUserPassword,
   getUserGroup
 } from '../api/index'
-
-import modules from './modules'
 
 Vue.use(Vuex)
 
