@@ -1,7 +1,7 @@
 <template>
   <div id="MyMember">
     <Header>
-      <span class="iconfont icon-left back" slot="back" @click="back"/>
+      <span class="iconfont icon-left back" slot="back" @click="to('My')"/>
       <img src="./imgs/title.png" alt="title" class="title" slot="title">
     </Header>
     <div class="item">
@@ -41,14 +41,27 @@ export default {
     tip
   },
   computed: {
-    ...mapState(['UserGroup', 'userInfo'])
+    ...mapState(['UserGroup', 'userInfo', 'isToken']),
+    token () {
+      return this.$api.getStorage('userinfo')
+    }
   },
   methods: {
     ...routerMain
   },
   mounted () {
-    this.$store.dispatch('getUserGroup')
-    new BScroll('.item') // eslint-disable-line
+    this.$store.dispatch('checkToken', {
+      token: this.token,
+      cb: () => {
+        if (this.isToken) {
+          this.$store.dispatch('getUserGroup', () => {
+            new BScroll('.item') // eslint-disable-line
+          })
+        } else {
+          this.to('UserLogin', {}, '')
+        }
+      }
+    })
   }
 }
 </script>

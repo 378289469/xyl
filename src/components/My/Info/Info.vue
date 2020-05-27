@@ -1,8 +1,8 @@
 <template>
 	<div id="info">
-		<img :src="userInfo.avatar || imgUrl" :onerror="errorurl" alt="student" />
-    <h2>{{userInfo.realname}}</h2>
-    <h3>{{userInfo.factions}}</h3>
+		<img :src="token.result.userInfo.avatar || imgUrl" :onerror="errorurl" alt="student" />
+    <h2>{{token.result.userInfo.realname}}</h2>
+    <h3>{{token.result.userInfo.factions}}</h3>
     <span class="iconfont icon-school">资本论课程平台</span>
 	</div>
 </template>
@@ -16,8 +16,8 @@ export default {
     }
   },
   computed: {
-    userInfo () {
-      return this.$page.pageParam()
+    token () {
+      return this.$api.getStorage('userinfo')
     }
   }
 }

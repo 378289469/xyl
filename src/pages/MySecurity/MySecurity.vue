@@ -1,7 +1,7 @@
 <template>
   <div id="MySecurity">
     <Header>
-      <span class="iconfont icon-left back" slot="back" @click="back"/>
+      <span class="iconfont icon-left back" slot="back" @click="to('My')"/>
       <img src="./imgs/title.png" alt="title" class="title" slot="title">
     </Header>
     <div class="item">
@@ -9,10 +9,10 @@
         <List v-for="i in 5" :key="i" class='list'>
           <div class="title" slot="title">
              <span >{{titles[i]}}</span>
-             <span class="username" v-if="i===2">{{userInfo.result.userInfo.phone}}</span>
+             <span class="username" v-if="i===2">{{token.result.userInfo.phone}}</span>
              <input class="content" :disabled="disabled[i]" :maxlength="maxlength[i]" :type="type[i]"
               :placeholder="placeholders[i]" v-model="model[i]" @focus="focus()" @blur="blur()">
-             <img @click="upload" v-if="i===1" class="avatar" :src="userInfo.result.userInfo.avatar || imgUrl" :onerror="errorurl" alt="avatar">
+             <img @click="upload" v-if="i===1" class="avatar" :src="token.result.userInfo.avatar || imgUrl" :onerror="errorurl" alt="avatar">
           </div>
         </List>
         <button>保存</button>
@@ -49,7 +49,13 @@ export default {
     tip
   },
   computed: {
-    ...mapState(['userInfo', 'pwdInfo']),
+    ...mapState(['userInfo', 'pwdInfo', 'isToken']),
+    token () {
+      return this.$api.getStorage('userinfo')
+    },
+    oldUserpwd () {
+      return this.$api.getStorage('userpwd')
+    },
     model () {
       return [this.info.oldpwd, this.info.newpwd, this.info.surepwd]
     }
@@ -58,10 +64,22 @@ export default {
     ...routerMain,
     submit () {
       const info = {
-        username: this.userInfo.result.userInfo.phone,
+        username: this.token.result.userInfo.phone,
         oldpwd: this.model[3] && this.model[3].trim(),
         newpwd: this.model[4] && this.model[4].trim(),
         surepwd: this.model[5] && this.model[5].trim()
+      }
+      if (info.oldpwd && info.oldpwd !== this.oldUserpwd) {
+        this.$store.dispatch('tipMsg', {
+          tips: { type: 5, msg: '旧密码输入错误' }
+        }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+        return
+      }
+      if (info.oldpwd && info.newpwd && info.surepwd && info.newpwd === info.surepwd && info.newpwd === this.oldUserpwd) {
+        this.$store.dispatch('tipMsg', {
+          tips: { type: 5, msg: '新密码与旧密码一样' }
+        }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+        return
       }
       if (info.oldpwd && info.newpwd && info.surepwd && info.newpwd !== info.surepwd) {
         this.$store.dispatch('tipMsg', {
@@ -83,7 +101,16 @@ export default {
             }
           }
         }
-        this.$store.dispatch('changPassword', paramets)
+        this.$store.dispatch('checkToken', {
+          token: this.token,
+          cb: () => {
+            if (this.isToken) {
+              this.$store.dispatch('changPassword', paramets)
+            } else {
+              this.to('UserLogin', {}, '')
+            }
+          }
+        })
       }
     },
     focus () {
@@ -105,6 +132,16 @@ export default {
       }
     },
     upload () {
+      const photoPicker = this.$api.require('photoPicker')
+      photoPicker.addPhoto({
+        photoMaxNum: 1,
+        rowCount: 3,
+        selectedType: 0,
+        lookGifPhoto: true,
+        lookLivePhoto: true
+      }, function (ret, err) {
+        alert(JSON.stringify(ret))
+      })
       console.log('更换头像')
     }
   },

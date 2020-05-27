@@ -42,32 +42,28 @@ export default {
   methods: {
     ...routerMain,
     hand (activity) {
-      this.check(activity, this.getPDF)
-    },
-    check (activity, fn) {
+      if (!this.token) {
+        this.to('UserLogin', {}, '')
+        return
+      }
       this.$store.dispatch('checkToken', {
         token: this.token,
         cb: () => {
           if (this.isToken) {
-            fn(activity)
+            this.$store.dispatch('getPdfFile', {
+              mainId: activity.id,
+              id: 2,
+              cb: () => {
+                this.$store.dispatch('activity', {
+                  activity,
+                  cb: () => this.to('ActivityDetail', { activity })
+                })
+              }
+            })
           } else {
             this.to('UserLogin', {}, '')
           }
         }
-      })
-    },
-    getPDF (activity) {
-      this.$store.dispatch('getPdfFile', {
-        mainId: activity.id,
-        id: 2,
-        cb: this.getAD
-      })
-    },
-    getAD (activity) {
-      alert(999)
-      this.$store.dispatch('activity', {
-        activity
-        // cb: () => this.to('ActivityDetail', { activity }, this.token)
       })
     }
   }

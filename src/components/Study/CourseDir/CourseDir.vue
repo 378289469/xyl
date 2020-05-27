@@ -33,7 +33,10 @@ export default {
     tip
   },
   computed: {
-    ...mapState(['CourseChapter', 'PdfFile']),
+    ...mapState(['CourseChapter', 'PdfFile', 'isToken']),
+    token () {
+      return this.$api.getStorage('userinfo')
+    },
     chapter () {
       const { CourseChapter, id, index, parentId } = this
       let chapter = []
@@ -77,18 +80,27 @@ export default {
       })
       this.index = CourseChapterId
       if (this.CourseChapter[CourseChapterId].chapterLevel === 3) {
-        this.$store.dispatch('getPdfFile', {
-          mainId: id,
-          id: 1,
+        this.$store.dispatch('checkToken', {
+          token: this.token,
           cb: () => {
-            const PdfFile = this.PdfFile[0]
-            if (PdfFile) {
-              PdfFile.parentId = null
-              this.CourseChapter.splice(CourseChapterId + 1, 0, PdfFile)
+            if (this.isToken) {
+              this.$store.dispatch('getPdfFile', {
+                mainId: id,
+                id: 1,
+                cb: () => {
+                  const PdfFile = this.PdfFile[0]
+                  if (PdfFile) {
+                    PdfFile.parentId = null
+                    this.CourseChapter.splice(CourseChapterId + 1, 0, PdfFile)
+                  } else {
+                    this.$store.dispatch('tipMsg', {
+                      tips: { type: 5, msg: '当前目录暂无内容' }
+                    }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+                  }
+                }
+              })
             } else {
-              this.$store.dispatch('tipMsg', {
-                tips: { type: 5, msg: '当前目录暂无内容' }
-              }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+              this.to('UserLogin', {}, '')
             }
           }
         })

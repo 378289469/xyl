@@ -80,6 +80,7 @@ export default {
                   }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
                 } else {
                   this.$api.setStorage('userinfo', this.userInfo)
+                  this.$api.setStorage('userpwd', this.model[2] && this.model[2].trim())
                   this.$page.push({ name: 'My', pageParam: userInfo })
                 }
               }, 3000)

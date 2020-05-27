@@ -48,7 +48,7 @@ export default {
     Viewer
   },
   computed: {
-    ...mapState(['PdfFile', 'CourseChapter', 'modules']),
+    ...mapState(['PdfFile', 'CourseChapter', 'modules', 'isToken']),
     token () {
       return this.$api.getStorage('userinfo')
     },
@@ -114,13 +114,30 @@ export default {
     }
   },
   mounted () {
-    this.$store.dispatch('getPdfFile', {
-      mainId: this.$page.pageParam().activity.id,
-      id: 2
+    this.$store.dispatch('checkToken', {
+      token: this.token,
+      cb: () => {
+        if (this.isToken) {
+          this.$store.dispatch('getPdfFile', {
+            mainId: this.$page.pageParam().activity.id,
+            id: 2,
+            cb: () => {
+              new BScroll('.media', {// eslint-disable-line
+                scrollX: true,
+                scrollY: false
+              })
+            }
+          })
+        } else {
+          this.to('UserLogin', {}, '')
+        }
+      }
     })
     this.$store.dispatch('getCourseChapter')
     new BScroll('.detail') // eslint-disable-line
     new BScroll('.task') // eslint-disable-line
+  },
+  updated () {
     new BScroll('.media', {// eslint-disable-line
       scrollX: true,
       scrollY: false

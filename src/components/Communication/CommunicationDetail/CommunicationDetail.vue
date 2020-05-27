@@ -33,7 +33,7 @@
                 <span class="targetUser">{{list.targetUser.realname}}</span>
             </div>
             <div class="context">
-              <p>{{list.context}}测试测试测试测试测试测试测试测试测试测试测试测测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试试测试测试测试测试测试测试测试测试测试测试测试测试测试</p>
+              <p>{{list.context}}</p>
             </div>
              <span class="createTime">{{list.user.updateTime}}</span>
           </div>
@@ -67,7 +67,10 @@ export default {
     tip
   },
   computed: {
-    ...mapState(['evaluatelist', 'componentslist']),
+    ...mapState(['evaluatelist', 'componentslist', 'isToken']),
+    token () {
+      return this.$api.getStorage('userinfo')
+    },
     index () {
       return this.$page.pageParam().index
     }
@@ -81,11 +84,30 @@ export default {
       this.$refs.wheel.wheel(title, this.$route.params.id)
     },
     getEvaluateCb () {
-      this.$store.dispatch('getEvaluateComponents', { parentId: this.evaluatelist[this.index].id })
+      this.$store.dispatch('checkToken', {
+        token: this.token,
+        cb: () => {
+          if (this.isToken) {
+            this.$store.dispatch('getEvaluateComponents', { parentId: this.evaluatelist[this.index].id })
+          } else {
+            this.to('UserLogin', {}, '')
+          }
+        }
+      })
     }
   },
   mounted () {
-    this.$store.dispatch('getEvaluate', { isActiorchapter: this.topicType, cb: this.getEvaluateCb })
+    this.$store.dispatch('checkToken', {
+      token: this.token,
+      cb: () => {
+        if (this.isToken) {
+          const userId = this.token.result.userInfo.id
+          this.$store.dispatch('getEvaluate', { isActiorchapter: this.topicType, userId, cb: this.getEvaluateCb })
+        } else {
+          this.to('UserLogin', {}, '')
+        }
+      }
+    })
   },
   updated () {
     if (this.evaluatelist.length > 0) {

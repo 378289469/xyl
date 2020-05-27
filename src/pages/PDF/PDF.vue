@@ -1,7 +1,7 @@
 <template>
   <div id = "PDF">
     <Header>
-      <span class="iconfont icon-left back" slot="back" @click="back"/>
+      <span class="iconfont icon-left back" slot="back" @click="to('Study')"/>
       <img src="./imgs/title.png" alt="title" class="title" slot="title"/>
     </Header>
     <div class="PDFwrap">
@@ -54,7 +54,10 @@ export default {
     tip
   },
   computed: {
-    ...mapState(['notes', 'modules']),
+    ...mapState(['notes', 'modules', 'isToken']),
+    token () {
+      return this.$api.getStorage('userinfo')
+    },
     url () {
       return this.$page.pageParam().url
     }
@@ -77,7 +80,17 @@ export default {
   },
   mounted () {
     this.getNumPages(this.url)
-    this.$store.dispatch('getNote', { mainId: this.$route.params.id })
+    this.$store.dispatch('checkToken', {
+      token: this.token,
+      cb: () => {
+        if (this.isToken) {
+          this.$store.dispatch('getNote', { mainId: this.$route.params.id })
+        } else {
+          this.to('UserLogin', {}, '')
+        }
+      }
+    })
+
     new BScroll('.PDFwrap', {// eslint-disable-line
       scrollX: true,
       scrollY: false

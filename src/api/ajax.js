@@ -2,12 +2,11 @@ import axios from 'axios'
 import store from '../store/index'
 import modules from '../store/modules'
 
-export const baseUrl = 'http://192.168.5.56:8082/jeecg-boot/'
+export const baseUrl = 'http://192.168.1.2:8082/jeecg-boot/'
 let token = ''
 
 axios.interceptors.request.use(
   config => {
-    console.log(token)
     config.headers['X-Access-Token'] = token && token
     return config
   }

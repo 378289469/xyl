@@ -47,7 +47,7 @@ export default {
     Search
   },
   computed: {
-    ...mapState(['evaluatelist']),
+    ...mapState(['evaluatelist', 'isToken']),
     token () {
       return this.$api.getStorage('userinfo')
     }
@@ -58,16 +58,52 @@ export default {
       this.to('CommunicationDetail', { index }, this.token)
     },
     course (type) {
-      this.$store.dispatch('getEvaluate', { isActiorchapter: type })
+      this.$store.dispatch('checkToken', {
+        token: this.token,
+        cb: () => {
+          if (this.isToken) {
+            this.$store.dispatch('getEvaluate', { isActiorchapter: type })
+          } else {
+            this.to('UserLogin', {}, '')
+          }
+        }
+      })
       this.btn = true
     },
     activity (type) {
-      this.$store.dispatch('getEvaluate', { isActiorchapter: type })
+      this.$store.dispatch('checkToken', {
+        token: this.token,
+        cb: () => {
+          if (this.isToken) {
+            this.$store.dispatch('getEvaluate', { isActiorchapter: type })
+          } else {
+            this.to('UserLogin', {}, '')
+          }
+        }
+      })
       this.btn = false
     }
   },
   mounted () {
-    this.$store.dispatch('getEvaluate', { isActiorchapter: this.topicType })
+    this.$store.dispatch('checkToken', {
+      token: this.token,
+      cb: () => {
+        if (this.isToken) {
+          const userId = this.token.result.userInfo.id
+          this.$store.dispatch('getEvaluate', {
+            isActiorchapter: this.topicType,
+            userId,
+            cb: () => {
+              new BScroll('.wrap') // eslint-disable-line
+            }
+          })
+        } else {
+          this.to('UserLogin', {}, '')
+        }
+      }
+    })
+  },
+  updated () {
     new BScroll('.wrap') // eslint-disable-line
   }
 }
