@@ -50,7 +50,7 @@ export default {
   methods: {
     ...routerMain,
     go (path) {
-      this.$router.replace({ name: path })
+      this.$page.push({ name: path })
     },
     key () {
       this.keyUrl = `${baseUrl}/front/login/getCheckCode?${Date.now()}`
@@ -71,9 +71,17 @@ export default {
               }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
             }
             if (this.userInfo.result && this.userInfo.result.userInfo) {
+              const userInfo = this.userInfo.result.userInfo
               var intervalID = setTimeout(() => {
                 clearInterval(intervalID)
-                this.go('My')
+                if (userInfo.roleItemId === 1) {
+                  this.$store.dispatch('tipMsg', {
+                    tips: { type: 5, msg: '教师账户不能登录' }
+                  }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+                } else {
+                  this.$api.setStorage('userinfo', this.userInfo)
+                  this.$page.push({ name: 'My', pageParam: userInfo })
+                }
               }, 3000)
             }
           }

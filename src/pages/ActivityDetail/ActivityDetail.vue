@@ -49,6 +49,9 @@ export default {
   },
   computed: {
     ...mapState(['PdfFile', 'CourseChapter', 'modules']),
+    token () {
+      return this.$api.getStorage('userinfo')
+    },
     activity () {
       return this.$page.pageParam().activity
     },
@@ -106,7 +109,7 @@ export default {
           url: pdfFiles[index].path,
           videoPaths
         }
-        this.to('Video', pageParam)
+        this.to('Video', pageParam, this.token)
       }
     }
   },

@@ -27,14 +27,20 @@ export const reqEvaluate = (evaluate) => ajax('evaluate/zblEvaluate/add', evalua
 // 9获取交流列表
 export const reqEvaluateList = (isActiorchapter = 1) => ajax('evaluate/zblEvaluate/appList', { pageNo: 1, pageSize: 10, userId, isActiorchapter })
 
-// 10用户注册
+// 10获取交流列表
+export const reqEvaluateComponents = (parentId) => ajax('evaluate/zblEvaluate/queryByParentId', { parentId })
+
+// 11用户注册
 export const reqUserRegister = (info) => ajax('front/login/register', info, 'post')
 
-// 11用户登录
+// 12用户登录
 export const reqUserLogin = (info) => ajax('front/login/login', info, 'post')
 
-// 12用户修改密码
+// 13用户修改密码
 export const setUserPassword = (info) => ajax('front/login/changPassword', info, 'put')
 
-// 13用户登陆
+// 14用户登陆
 export const getUserGroup = () => ajax('group/zblGroup/users')
+
+// 15验证token
+export const checkToken = (token) => ajax('front/login/checkToken', token, 'check')

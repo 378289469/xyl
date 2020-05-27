@@ -31,7 +31,10 @@ export default {
     }
   },
   computed: {
-    ...mapState(['searchActivitys', 'activitys'])
+    ...mapState(['searchActivitys', 'activitys']),
+    token () {
+      return this.$api.getStorage('userinfo')
+    }
   },
   created () {
     this.bscroll = null
@@ -80,7 +83,7 @@ export default {
       })
     },
     hand (activity) {
-      this.to('ActivityDetail', { activity })
+      this.to('ActivityDetail', { activity }, this.token)
     }
   }
 }

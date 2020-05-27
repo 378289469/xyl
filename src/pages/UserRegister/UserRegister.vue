@@ -67,7 +67,7 @@ export default {
               tips: { type: 5, msg: this.register.message }
             }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
             if (this.register.success) {
-              this.go('My', { username: this.model[2].trim() })
+              this.to('My', { username: this.model[2].trim() })
             }
           }
         }

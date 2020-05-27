@@ -5,7 +5,7 @@
     </Header>
     <Course/>
     <Activity>
-      <div class="top" slot="top" @click="to('Activity')">
+      <div class="top" slot="top" @click="to('Activity', {}, token)">
         <span class="icon1"></span>
         <span class="icon2"></span>
         <h2>活动内容</h2>
@@ -34,6 +34,11 @@ export default {
     Activity,
     Teachers,
     FooterGuide
+  },
+  computed: {
+    token () {
+      return this.$api.getStorage('userinfo')
+    }
   },
   methods: {
     ...routerMain

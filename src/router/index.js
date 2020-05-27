@@ -13,7 +13,7 @@ const routes = [
   {
     path: '/CourseIntroduce',
     name: 'CourseIntroduce',
-    component: () => import('../views/CourseIntroduce/CourseIntroduce.vue')
+    component: () => import('../pages/CourseIntroduce/CourseIntroduce.vue')
   },
   {
     path: '/Study',
@@ -23,7 +23,7 @@ const routes = [
   {
     path: '/PDF',
     name: 'PDF',
-    component: () => import('../views/PDF/PDF.vue')
+    component: () => import('../pages/PDF/PDF.vue')
   },
   {
     path: '/activity',
@@ -33,12 +33,12 @@ const routes = [
   {
     path: '/ActivityDetail',
     name: 'ActivityDetail',
-    component: () => import('../views/ActivityDetail/ActivityDetail.vue')
+    component: () => import('../pages/ActivityDetail/ActivityDetail.vue')
   },
   {
     path: '/Video',
     name: 'Video',
-    component: () => import('../views/Video/Video.vue')
+    component: () => import('../pages/Video/Video.vue')
   },
   {
     path: '/Communication',
@@ -48,7 +48,7 @@ const routes = [
   {
     path: '/CommunicationDetail',
     name: 'CommunicationDetail',
-    component: () => import('../views/CommunicationDetail/CommunicationDetail.vue')
+    component: () => import('../pages/CommunicationDetail/CommunicationDetail.vue')
   },
   {
     path: '/my',
@@ -58,22 +58,22 @@ const routes = [
   {
     path: '/MyMember',
     name: 'MyMember',
-    component: () => import('../views/MyMember/MyMember.vue')
+    component: () => import('../pages/MyMember/MyMember.vue')
   },
   {
     path: '/MySecurity',
     name: 'MySecurity',
-    component: () => import('../views/MySecurity/MySecurity.vue')
+    component: () => import('../pages/MySecurity/MySecurity.vue')
   },
   {
     path: '/UserLogin',
     name: 'UserLogin',
-    component: () => import('../views/UserLogin/UserLogin.vue')
+    component: () => import('../pages/UserLogin/UserLogin.vue')
   },
   {
     path: '/UserRegister',
     name: 'UserRegister',
-    component: () => import('../views/UserRegister/UserRegister.vue')
+    component: () => import('../pages/UserRegister/UserRegister.vue')
   }
 ]
 

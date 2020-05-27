@@ -4,9 +4,9 @@
 		<img src="./imgs/person.png" alt="person" />
 		<p>
 			{{introduce}}
-			<span @click="to('CourseIntroduce')">全文</span>
+			<span @click="to('CourseIntroduce', {}, token)">全文</span>
     </p>
-		<div @click="to('Study')">
+		<div @click="to('Study', {}, token)">
 			<h3>{{courselearners}}</h3>
 		</div>
 	</div>
@@ -22,6 +22,9 @@ export default {
   },
   computed: {
     ...mapState(['courseintroduce', 'courselearners']),
+    token () {
+      return this.$api.getStorage('userinfo')
+    },
     introduce () {
       const { courseintroduce } = this
       let introduce = ''

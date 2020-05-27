@@ -3,12 +3,12 @@ import store from '../store/index'
 import modules from '../store/modules'
 
 export const baseUrl = 'http://192.168.5.56:8082/jeecg-boot/'
-const token1 = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1OTA0Nzk5NzYsInVzZXJuYW1lIjoiMTM3NTMxNjcwNjU6emJsIn0.W_yHHiHcRkZV2xmIWrTjzaO0iLOpuG27bavWb4xYgD8'
-export const userId = '1260818088405553153'
+let token = ''
 
 axios.interceptors.request.use(
   config => {
-    config.headers['X-Access-Token'] = store.state.userInfo.result ? store.state.userInfo.result.token : token1
+    console.log(token)
+    config.headers['X-Access-Token'] = token && token
     return config
   }
 )
@@ -29,6 +29,10 @@ export const ajax = (url, data = {}, type = 'GET') => {
   url = baseUrl + url
   return new Promise(function (resolve, reject) {
     let promise
+    if (type === 'CHECK') {
+      token = data.result.token
+      promise = axios.post(url)
+    }
     if (type === 'GET') {
       let dataStr = ''
       Object.keys(data).forEach(key => {

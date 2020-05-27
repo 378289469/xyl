@@ -20,7 +20,10 @@ import routerMain from '../../../router/main.js'
 
 export default {
   computed: {
-    ...mapState(['searchActivitys']),
+    ...mapState(['searchActivitys', 'isToken']),
+    token () {
+      return this.$api.getStorage('userinfo')
+    },
     Activitys () {
       let Activitys = []
       if (this.searchActivitys.length > 0) {
@@ -39,13 +42,32 @@ export default {
   methods: {
     ...routerMain,
     hand (activity) {
+      this.check(activity, this.getPDF)
+    },
+    check (activity, fn) {
+      this.$store.dispatch('checkToken', {
+        token: this.token,
+        cb: () => {
+          if (this.isToken) {
+            fn(activity)
+          } else {
+            this.to('UserLogin', {}, '')
+          }
+        }
+      })
+    },
+    getPDF (activity) {
       this.$store.dispatch('getPdfFile', {
         mainId: activity.id,
         id: 2,
-        cb: () => this.$store.dispatch('activity', {
-          activity,
-          cb: () => this.to('ActivityDetail', { activity })
-        })
+        cb: this.getAD
+      })
+    },
+    getAD (activity) {
+      alert(999)
+      this.$store.dispatch('activity', {
+        activity
+        // cb: () => this.to('ActivityDetail', { activity }, this.token)
       })
     }
   }

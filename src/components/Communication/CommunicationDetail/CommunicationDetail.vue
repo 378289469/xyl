@@ -1,43 +1,46 @@
 <template>
   <div id="communication">
-    <dir class="top">
+    <dir class="top" v-if="evaluatelist.length > 0">
       <div class="info">
         <div class="avatar">
-          <img :src="evaluatelist[id].user.avatar || imgUrl" alt="avatar" :onerror="errorurl">
+          <img :src="evaluatelist[index].user.avatar || imgUrl" alt="avatar" :onerror="errorurl">
         </div>
         <span>学生</span>
       </div>
       <div class="content">
         <div class="author">
-            <span class="realname">{{evaluatelist[id].user.realname}}</span>
-            <span class="createTime">{{evaluatelist[id].createTime}}</span>
+            <span class="realname">{{evaluatelist[index].user.realname}}</span>
+            <span class="createTime">{{evaluatelist[index].createTime}}</span>
         </div>
-        <p>{{evaluatelist[id].context}}</p>
-        <i class="ellipsis">知识点：{{evaluatelist[id].chapter? evaluatelist[id].chapter.chapterPath: ''}}{{evaluatelist[id].chapter? evaluatelist[id].chapter.chapterName: ''}}</i>
-        <div class="source">来源：<span class="sourse-type">{{sourse[evaluatelist[id].topicType]}}</span><span class="count">{{evaluatelist[id].list.length}}</span>回复</div>
+        <p>{{evaluatelist[index].context}}</p>
+        <i class="ellipsis">知识点：{{evaluatelist[index].chapter? evaluatelist[index].chapter.chapterPath: ''}}{{evaluatelist[index].chapter? evaluatelist[index].chapter.chapterName: ''}}</i>
+        <div class="source">来源：<span class="sourse-type">{{sourse[evaluatelist[index].topicType]}}</span><span class="count">{{evaluatelist[index].list.length}}</span>回复</div>
       </div>
     </dir>
-    <div class="wrap">
-      <ul>
-        <li v-for="(list, index) in evaluatelist" :key="index" @click="to('CommunicationDetail', {index})">
+    <div class="wrap" v-if="componentslist.length > 0">
+      <ul >
+        <li v-for="(list, index) in componentslist" :key="index" @click="hand()">
           <div class="info">
             <div class="avatar">
               <img :src="list.user.avatar || imgUrl" alt="avatar" :onerror="errorurl">
             </div>
-            <span>学生</span>
+            <span>{{roleItem[list.user.roleItemId]}}</span>
           </div>
           <div class="content">
             <div class="author">
-                <span class="realname">{{list.user.realname}}</span>
-                <span class="createTime">{{list.createTime}}</span>
+                <span class="user">{{list.user.realname}}</span>
+                <span class="realname">回复</span>
+                <span class="targetUser">{{list.targetUser.realname}}</span>
             </div>
-            <p>{{list.context}}</p>
-            <i class="ellipsis">知识点：{{list.chapter? list.chapter.chapterPath: ''}}{{list.chapter? list.chapter.chapterName: ''}}</i>
-            <div class="source">来源：<span class="sourse-type">{{sourse[list.topicType]}}</span><span class="count">{{list.list.length}}</span>回复</div>
+            <div class="context">
+              <p>{{list.context}}测试测试测试测试测试测试测试测试测试测试测试测测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试试测试测试测试测试测试测试测试测试测试测试测试测试测试</p>
+            </div>
+             <span class="createTime">{{list.user.updateTime}}</span>
           </div>
         </li>
       </ul>
     </div>
+    <p class="footbar">点击教师回复可以进行追问</p>
     <wheel ref="wheel"/>
     <tip/>
   </div>
@@ -56,7 +59,7 @@ export default {
       errorurl: 'this.src="' + require('./imgs/person.png') + '"',
       imgUrl: require('./imgs/person.png'),
       sourse: ['', '打卡', '提问'],
-      id: 0
+      roleItem: ['', '教师', '学生', '学生']
     }
   },
   components: {
@@ -64,9 +67,9 @@ export default {
     tip
   },
   computed: {
-    ...mapState(['evaluatelist']),
-    list () {
-      return this.$page.pageParam().list
+    ...mapState(['evaluatelist', 'componentslist']),
+    index () {
+      return this.$page.pageParam().index
     }
   },
   methods: {
@@ -76,11 +79,25 @@ export default {
       this.signIsOn = id === 2
       const title = id === 1 ? '提问' : '打卡'
       this.$refs.wheel.wheel(title, this.$route.params.id)
+    },
+    getEvaluateCb () {
+      this.$store.dispatch('getEvaluateComponents', { parentId: this.evaluatelist[this.index].id })
     }
   },
   mounted () {
-    this.$store.dispatch('getEvaluate', { isActiorchapter: 1 })
-    new BScroll('.wrap') // eslint-disable-line
+    this.$store.dispatch('getEvaluate', { isActiorchapter: this.topicType, cb: this.getEvaluateCb })
+  },
+  updated () {
+    if (this.evaluatelist.length > 0) {
+      try {
+        new BScroll('.wrap') // eslint-disable-line
+      } catch (error) {}
+    }
+    if (this.componentslist.length > 0) {
+      new BScroll('.context', {// eslint-disable-line
+        stopPropagation: true
+      })
+    }
   }
 }
 </script>
@@ -92,7 +109,7 @@ export default {
   top: 112px;
   left: 14px;
   width: 346px;
-  height: 85%;
+  height: 77%;
   padding-top 15px
   background: url('./imgs/bg.png') no-repeat;
   background-color: white;
@@ -119,6 +136,8 @@ export default {
         }
       }
       span{
+        position relative
+        z-index 10
         display block
         background-color #E0643D
         width 30px
@@ -128,6 +147,7 @@ export default {
         border-radius 6px
         color white
         margin-top -6px
+        text-align center
       }
    }
    .content{
@@ -162,29 +182,10 @@ export default {
         text-align left
         overflow hidden
       }
-      i{
-        display block
-        height 15px
-        margin 9px 0
-        color #828282
-        font-size 12px
-      }
-      .source{
-        color #828282
-        font-size 12px
-        .sourse-type{
-          color #D19A43
-          font-weight bolder
-        }
-        .count{
-          color #FF8800
-          margin-left 130px
-        }
-      }
     }
   }
   .wrap{
-    height 95%
+    height 69%
     margin-top 14px
     overflow hidden
   }
@@ -213,6 +214,8 @@ export default {
             }
           }
           span{
+            position relative
+            z-index 10
             display block
             background-color #E0643D
             width 30px
@@ -222,6 +225,7 @@ export default {
             border-radius 6px
             color white
             margin-top -6px
+            text-align center
           }
        }
         .content{
@@ -235,48 +239,46 @@ export default {
             color #272828
             font-size 15px
             line-height 24px
-            .realname{
+            .realname, .user, .targetUser{
               display block
               width 30%
               overflow hidden
             }
-            .createTime{
-              display block
-              width 70%
+            .realname{
               color #828282
-              font-size 12px
-              overflow hidden
+              width 15%
             }
           }
-          p{
-            height 35px
+          .context{
+            height 50px
             color #484747
             font-size 14px
             line-height 18px
             text-align left
             overflow hidden
           }
-          i{
+          .createTime{
             display block
-            height 15px
-            margin 9px 0
+            width 70%
             color #828282
             font-size 12px
-          }
-          .source{
-            color #828282
-            font-size 12px
-            .sourse-type{
-              color #D19A43
-              font-weight bolder
-            }
-            .count{
-              color #FF8800
-              margin-left 130px
-            }
+            overflow hidden
+            margin 10px 0
           }
         }
       }
     }
+   .footbar{
+     position fixed
+     bottom 10px
+     width 346px
+     height 35px
+     border-radius 20px
+     background-color white
+     line-height 35px
+     font-size 13px
+     color #828282
+     text-align center
+   }
 }
 </style>

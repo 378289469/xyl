@@ -1,14 +1,13 @@
 <template>
 	<div id="info">
-		<img :src="userInfo.result.userInfo.avatar || imgUrl" :onerror="errorurl" alt="student" />
-    <h2>{{userInfo.result.userInfo.realname}}</h2>
-    <h3>{{userInfo.result.userInfo.factions}}</h3>
+		<img :src="userInfo.avatar || imgUrl" :onerror="errorurl" alt="student" />
+    <h2>{{userInfo.realname}}</h2>
+    <h3>{{userInfo.factions}}</h3>
     <span class="iconfont icon-school">资本论课程平台</span>
 	</div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
 export default {
   data () {
     return {
@@ -17,7 +16,9 @@ export default {
     }
   },
   computed: {
-    ...mapState(['userInfo'])
+    userInfo () {
+      return this.$page.pageParam()
+    }
   }
 }
 </script>

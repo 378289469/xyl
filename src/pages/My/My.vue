@@ -5,7 +5,7 @@
     </Header>
     <Info/>
     <div class="item">
-      <List v-for="i in 2" :key="i" @click.native="to(paths[i])">
+      <List v-for="i in 2" :key="i" @click.native="to(paths[i], {}, token)">
           <span :class="leftClass[i]" slot="left"></span>
           <span class="title" slot="title">{{titles[i]}}</span>
           <span class="iconfont icon-right" slot="right"></span>
@@ -36,6 +36,11 @@ export default {
     Info,
     List,
     FooterGuide
+  },
+  computed: {
+    token () {
+      return this.$api.getStorage('userinfo')
+    }
   },
   methods: {
     ...routerMain

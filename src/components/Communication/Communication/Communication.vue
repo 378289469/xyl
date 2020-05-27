@@ -5,7 +5,7 @@
     <Search class="search"/>
     <div class="wrap">
       <ul>
-        <li v-for="(list, index) in evaluatelist" :key="index" @click="hand(list)">
+        <li v-for="(list, index) in evaluatelist" :key="index" @click="hand(index)">
           <div class="info">
             <div class="avatar">
               <img :src="list.user.avatar || imgUrl" alt="avatar" :onerror="errorurl">
@@ -47,12 +47,15 @@ export default {
     Search
   },
   computed: {
-    ...mapState(['evaluatelist'])
+    ...mapState(['evaluatelist']),
+    token () {
+      return this.$api.getStorage('userinfo')
+    }
   },
   methods: {
     ...routerMain,
-    hand (list) {
-      this.to('CommunicationDetail', { list })
+    hand (index) {
+      this.to('CommunicationDetail', { index }, this.token)
     },
     course (type) {
       this.$store.dispatch('getEvaluate', { isActiorchapter: type })
@@ -137,6 +140,8 @@ export default {
             }
           }
           span{
+            position relative
+            z-index 10
             display block
             background-color #E0643D
             width 30px
@@ -146,6 +151,7 @@ export default {
             border-radius 6px
             color white
             margin-top -6px
+            text-align center
           }
        }
         .content{

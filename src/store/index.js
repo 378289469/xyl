@@ -12,10 +12,12 @@ import {
   reqGetNote,
   reqEvaluate,
   reqEvaluateList,
+  reqEvaluateComponents,
   reqUserRegister,
   reqUserLogin,
   setUserPassword,
-  getUserGroup
+  getUserGroup,
+  checkToken
 } from '../api/index'
 
 Vue.use(Vuex)
@@ -29,10 +31,12 @@ const RECEIVE_GET_PDF_FILE = 'receive_get_pdf_file'
 const RECEIVE_GET_NOTE = 'receive_get_note'
 const RECEIVE_ADD_EVALUATE = 'receive_add_evaluate'
 const RECEIVE_GET_EVALUATE = 'receive_get_evaluate'
+const RECEIVE_GET_EVALUATE_COMPONENTS = 'receive_get_evaluate_components'
 const RECEIVE_USER_REGISTER = 'receive_user_register'
 const RECEIVE_USER_LOGIN = 'receive_user_login'
 const RECEIVE_SET_PWD = 'receive_set_pwd'
 const RECEIVE_GET_USER_GROUP = 'receive_get_user_group'
+const RECEIVE_CHECK_TOKEN = 'receive_check_token'
 
 export default new Vuex.Store({
   state: {
@@ -48,10 +52,12 @@ export default new Vuex.Store({
     notes: '',
     msg: '',
     evaluatelist: [],
+    componentslist: [],
     register: {},
     userInfo: {},
     pwdInfo: {},
-    UserGroup: []
+    UserGroup: [],
+    isToken: false
   },
   mutations: {
     [RECEIVE_COURSE_INTRODUCE] (state, { courseintroduce }) {
@@ -86,6 +92,9 @@ export default new Vuex.Store({
     [RECEIVE_GET_EVALUATE] (state, { evaluatelist }) {
       state.evaluatelist = evaluatelist
     },
+    [RECEIVE_GET_EVALUATE_COMPONENTS] (state, { componentslist }) {
+      state.componentslist = componentslist
+    },
     [RECEIVE_USER_REGISTER] (state, { register }) {
       state.register = register
     },
@@ -97,6 +106,9 @@ export default new Vuex.Store({
     },
     [RECEIVE_GET_USER_GROUP] (state, { UserGroup }) {
       state.UserGroup = UserGroup
+    },
+    [RECEIVE_CHECK_TOKEN] (state, { token }) {
+      state.isToken = token
     }
   },
   actions: {
@@ -195,6 +207,14 @@ export default new Vuex.Store({
         cb && cb()
       }
     },
+    async getEvaluateComponents ({ commit, state }, { parentId, cb }) {
+      const result = await reqEvaluateComponents(parentId)
+      if (result.code === 200 || result.code === 0 || result.code === 500) {
+        const componentslist = result.result.reverse()
+        commit(RECEIVE_GET_EVALUATE_COMPONENTS, { componentslist })
+        cb && cb()
+      }
+    },
     async userRegister ({ commit, state }, { info, cb }) {
       const result = await reqUserRegister(info)
       if (result.code === 200 || result.code === 0 || result.code === 500) {
@@ -224,6 +244,14 @@ export default new Vuex.Store({
       if (result.code === 200) {
         const UserGroup = result.result
         commit(RECEIVE_GET_USER_GROUP, { UserGroup })
+        cb && cb()
+      }
+    },
+    async checkToken ({ commit, state }, { token, cb }) {
+      const result = await checkToken(token)
+      if (result.code === 200 || result.code === 600) {
+        const token = result.success
+        commit(RECEIVE_CHECK_TOKEN, { token })
         cb && cb()
       }
     }

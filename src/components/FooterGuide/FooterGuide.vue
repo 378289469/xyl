@@ -1,22 +1,22 @@
 <template>
   <footer id="footer-guide">
-    <div @click="to('Home')">
+    <div @click="to('Home', {}, token)">
       <span class="iconfont icon-home guide" :class="{on:'/'===$route.path}"></span>
       <span class="guide" :class="{on:'/'===$route.path}">首页</span>
     </div>
-    <div @click="to('Study')">
+    <div @click="to('Study', {}, token)">
       <span class="iconfont icon-study guide" :class="{on:'/study'===$route.path}"></span>
       <span class="guide" :class="{on:'/study'===$route.path}">学习</span>
     </div>
-    <div @click="to('Activity')">
+    <div @click="to('Activity', {}, token)">
       <span class="iconfont icon-activity guide" :class="{on:'/activity'===$route.path}"></span>
       <span class="guide" :class="{on:'/activity'===$route.path}">活动</span>
     </div>
-    <div @click="to('Communication')">
+    <div @click="to('Communication', token)">
       <span class="iconfont icon-chat guide" :class="{on:'/communication'===$route.path}"></span>
       <span class="guide" :class="{on:'/communication'===$route.path}">交流</span>
     </div>
-    <div @click="to('My')">
+    <div @click="to('My',  {},token)">
       <span class="iconfont icon-my guide" :class="{on:'/my'===$route.path}"></span>
       <span class="guide" :class="{on:'/my'===$route.path}">我的</span>
     </div>
@@ -26,6 +26,11 @@
 <script>
 import routerMain from '../../router/main.js'
 export default {
+  computed: {
+    token () {
+      return this.$api.getStorage('userinfo')
+    }
+  },
   methods: {
     ...routerMain
   }
