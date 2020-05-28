@@ -1,8 +1,8 @@
 [
   {
     "title": "首页",
-    "name": "Home",
-    "path": "Home/Home"
+    "name": "index",
+    "path": "index/index"
   },
   {
     "title": "课程简介",

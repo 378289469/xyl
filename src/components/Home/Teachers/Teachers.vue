@@ -44,20 +44,17 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="stylus">
 #teachers
-  position absolute
-  width 345px
-  height 130px
+  width 90%
+  height 20%
   display flex
   flex-direction column
-  top 624px
-  left 15px
   border-radius 5px
   box-shadow 0 0 5px #802529
   background white
   div
     display flex
     align-items center
-    width 315px
+    width 90%
     height 44px
     margin-left 16px
     border-bottom 1px solid #70160B

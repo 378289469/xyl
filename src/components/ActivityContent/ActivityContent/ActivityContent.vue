@@ -24,8 +24,9 @@ export default {
 #activity {
   position: absolute;
   top: 90px;
-  left: 14px;
-  width: 346px;
+	left: 50%;
+	width: 90%;
+  transform: translateX(-50%)
   height: 80%;
   .content {
     width 100%
@@ -35,10 +36,8 @@ export default {
     .context{
       box-shadow none
       font-size 14px
-      width 344px
+      width 98%
       height 100%
-      margin-left -12px
-      margin-top -30px
     }
   }
 }

@@ -1,24 +1,24 @@
 <template>
   <footer id="footer-guide">
-    <div @click="hand('Home')">
-      <span class="iconfont icon-home guide" :class="{on:'/'===$route.path}"></span>
-      <span class="guide" :class="{on:'/'===$route.path}">首页</span>
+    <div @click="hand(0)">
+      <span class="iconfont icon-home guide" :class="{on:path === '/indexindex.html'}"></span>
+      <span class="guide" :class="{on:path === '/indexindex.html'}">首页</span>
     </div>
-    <div @click="hand('Study')">
-      <span class="iconfont icon-study guide" :class="{on:'/study'===$route.path}"></span>
-      <span class="guide" :class="{on:'/study'===$route.path}">学习</span>
+    <div @click="hand(1)">
+      <span class="iconfont icon-study guide" :class="{on:path === '/Studystudy.html'}"></span>
+      <span class="guide" :class="{on:path === '/Studystudy.html'}">学习</span>
     </div>
-    <div @click="hand('Activity')">
-      <span class="iconfont icon-activity guide" :class="{on:'/activity'===$route.path}"></span>
-      <span class="guide" :class="{on:'/activity'===$route.path}">活动</span>
+    <div @click="hand(2)">
+      <span class="iconfont icon-activity guide" :class="{on:path === '/Activityactivity.html'}"></span>
+      <span class="guide" :class="{on:path === '/Activityactivity.html'}">活动</span>
     </div>
-    <div @click="hand('Communication')">
-      <span class="iconfont icon-chat guide" :class="{on:'/communication'===$route.path}"></span>
-      <span class="guide" :class="{on:'/communication'===$route.path}">交流</span>
+    <div @click="hand(3)">
+      <span class="iconfont icon-chat guide" :class="{on:path === '/Communicationcommunication.html'}"></span>
+      <span class="guide" :class="{on:path === '/Communicationcommunication.html'}">交流</span>
     </div>
-    <div @click="hand('My')">
-      <span class="iconfont icon-my guide" :class="{on:'/my'===$route.path}"></span>
-      <span class="guide" :class="{on:'/my'===$route.path}">我的</span>
+    <div @click="hand(4)">
+      <span class="iconfont icon-my guide" :class="{on:path === '/Mymy.html'}"></span>
+      <span class="guide" :class="{on:path === '/Mymy.html'}">我的</span>
     </div>
   </footer>
 </template>
@@ -27,16 +27,23 @@
 import { mapState } from 'vuex'
 import routerMain from '../../router/main.js'
 export default {
+  data () {
+    return {
+      nav: ['index', 'Study', 'Activity', 'Communication', 'My']
+    }
+  },
   computed: {
     ...mapState(['isToken']),
     token () {
-      console.log(this.$api.getStorage('userinfo'))
       return this.$api.getStorage('userinfo')
+    },
+    path () {
+      return this.$route.path
     }
   },
   methods: {
     ...routerMain,
-    hand (path) {
+    hand (id) {
       if (!this.token) {
         this.to('UserLogin', {}, '')
         return
@@ -45,9 +52,14 @@ export default {
         token: this.token,
         cb: () => {
           if (this.isToken) {
-            this.to(path, {})
+            if (id === 2) {
+              this.$api.setStorage('search', 'activity')
+            } else if (id === 3) {
+              this.$api.setStorage('search', 'communication')
+            }
+            this.to(this.nav[id], {})
           } else {
-            // this.to('UserLogin', {}, '')
+            this.to('UserLogin', {}, '')
           }
         }
       })

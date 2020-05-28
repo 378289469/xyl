@@ -7,7 +7,7 @@ export const reqCourseIntroduce = () => ajax('back/zblCourse/queryById')
 export const reqCourseLearners = () => ajax('evaluate/zblEvaluate/listCount', { queryContextNum: 1 })
 
 // 3、获取活动列表
-export const reqActivitys = (page) => ajax('activity/zblActivity/list', { pageNo: page, pageSize: 9 })
+export const reqActivitys = (page, reqActivitys) => ajax('activity/zblActivity/list', { reqActivitys, pageNo: page, pageSize: 9 })
 
 // 4、获取教师列表
 export const reqTeachers = (roleItemId) => ajax('back/zblUser/list', { roleItemId, pageNo: 1, pageSize: 10 })
@@ -25,7 +25,7 @@ export const reqGetNote = (mainId) => ajax('notes/zblNotes/list', { pageNo: 1, p
 export const reqEvaluate = (evaluate) => ajax('evaluate/zblEvaluate/add', evaluate, 'post')
 
 // 9获取交流列表
-export const reqEvaluateList = (isActiorchapter = 1, userId, page) => ajax('evaluate/zblEvaluate/appList', { pageNo: page, pageSize: 10, userId, isActiorchapter })
+export const reqEvaluateList = (context = '', isActiorchapter = 1, userId, page) => ajax('evaluate/zblEvaluate/appList', { context, pageNo: page, pageSize: 10, userId, isActiorchapter })
 
 // 10获取交流列表
 export const reqEvaluateComponents = (parentId) => ajax('evaluate/zblEvaluate/queryByParentId', { parentId })

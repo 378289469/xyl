@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="Communication">
     <Header>
       <img src="./imgs/title.png" alt="title" class="title" slot="title">
     </Header>
@@ -21,3 +21,10 @@ export default {
   }
 }
 </script>
+<style lang="stylus">
+#Communication {
+  width 100%
+  height 100%
+  overflow hidden
+}
+</style>

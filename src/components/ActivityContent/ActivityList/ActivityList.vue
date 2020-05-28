@@ -1,5 +1,5 @@
 <template>
-  <div id="activity">
+  <div id="activitylist">
     <slot name="top" class="top"></slot>
     <div class="activitys" ref="bsWrapper" >
       <ul class="list" >
@@ -83,7 +83,7 @@ export default {
       })
     },
     hand (activity) {
-      this.to('ActivityDetail', { activity }, this.token)
+      this.to('ActivityDetail', { activity })
     }
   }
 }
@@ -91,14 +91,15 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="stylus">
-#activity
+#activitylist
   position absolute
-  width 345px
+  width 88%
   height 236px
   display flex
   flex-direction column
-  top 375px
-  left 15px
+  top 90px
+  left 50%
+  transform translateX(-50%)
   border-radius 5px
   box-shadow 0 0 5px #802529
   background white
@@ -135,7 +136,7 @@ export default {
     height 90%
     overflow hidden
     ul
-      height 600px
+      height 100%
       margin-left 16px
       line-height 30px
       text-align left

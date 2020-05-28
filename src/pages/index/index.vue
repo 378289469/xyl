@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <div id="index">
     <Header>
       <img src="./imgs/title.png" alt="title" class="title" slot="title">
     </Header>
-    <Course/>
-    <Activity>
+    <Course class="CourseClass"/>
+    <Activity class="ActivityClass">
       <div class="top" slot="top" @click="to('Activity', {}, token)">
         <span class="icon1"></span>
         <span class="icon2"></span>
@@ -13,7 +13,7 @@
         <span class="iconfont icon-right btn"></span>
       </div>
     </Activity>
-    <Teachers/>
+    <Teachers class="TeachersClass"/>
     <FooterGuide/>
   </div>
 </template>
@@ -51,3 +51,22 @@ export default {
   }
 }
 </script>
+<style lang="stylus">
+#index
+  position relative
+  width 90%
+  height 100%
+  margin  0 auto
+  padding-top 30%
+  overflow hidden
+  display flex
+  flex-direction column
+  .CourseClass
+    position relative
+    width 100%
+  .ActivityClass
+    width 100%
+    margin 10px 0
+  .TeachersClass
+    width 100%
+</style>

@@ -1,7 +1,7 @@
 <template>
   <div id="search">
     <span class="iconfont icon-search icon"></span>
-    <input @click="onSearch" v-model="text" type="text" placeholder="请输入关键字进行搜索">
+    <input @click="onSearch" @focus="onFocus()" @blur="onblur()" v-model="text" type="text" placeholder="请输入关键字进行搜索">
   </div>
 </template>
 
@@ -9,23 +9,37 @@
 export default {
   data () {
     return {
-      text: ''
+      text: '',
+      searchInfo: {}
     }
   },
-  watch: {
-    text (value) {
-      let activitys = this.$store.state.activitys
-      if (value.trim().length === 0) {
-        this.$store.state.searchActivitys = activitys
-        return
-      }
-      activitys = activitys.filter(at => at.activityContext.indexOf(value) !== -1 || at.activityName.indexOf(value) !== -1)
-      this.$store.state.searchActivitys = activitys
+  computed: {
+    search () {
+      return this.$api.setStorage('search')
     }
   },
+  // watch: {
+  //   text (value) {
+  //     let activitys = this.$store.state.activitys
+  //     if (value.trim().length === 0) {
+  //       this.$store.state.searchActivitys = activitys
+  //       return
+  //     }
+  //     activitys = activitys.filter(at => at.activityContext.indexOf(value) !== -1 || at.activityName.indexOf(value) !== -1)
+  //     this.$store.state.searchActivitys = activitys
+  //   }
+  // },
   methods: {
     onSearch () {
       this.text = ''
+    },
+    onFocus () {
+      this.text = ''
+    },
+    onblur () {
+      const { text, search } = this
+      search === 'activity' && this.$store.dispatch('reqActivitys', { activityName: text })
+      search === 'communication' && this.$emit('Search', text)
     }
   }
 }

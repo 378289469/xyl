@@ -130,8 +130,8 @@ export default new Vuex.Store({
         cb && cb()
       }
     },
-    async reqActivitys ({ commit, state }, { page, cb }) {
-      const result = await reqActivitys(page)
+    async reqActivitys ({ commit, state }, { page, activityName, cb }) {
+      const result = await reqActivitys(page, activityName)
       if (result.code === 200 || result.code === 0 || result.code === 500) {
         // console.log(result)
         const activitys = result.result.records
@@ -199,8 +199,8 @@ export default new Vuex.Store({
         cb && cb()
       }
     },
-    async getEvaluate ({ commit, state }, { isActiorchapter, userId, page, cb }) {
-      const result = await reqEvaluateList(isActiorchapter, userId, page)
+    async getEvaluate ({ commit, state }, { context, isActiorchapter, userId, page, cb }) {
+      const result = await reqEvaluateList(context, isActiorchapter, userId, page)
       if (result.code === 200 || result.code === 0 || result.code === 500) {
         const evaluatelist = result.result
         commit(RECEIVE_GET_EVALUATE, { evaluatelist })

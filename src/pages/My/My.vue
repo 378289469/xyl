@@ -53,10 +53,12 @@ export default {
 #my
   width 100%
   height 100%
+  overflow hidden
   .item
     position absolute
     top 265px
-    left 14px
-    width 345px
+    left 50%
+    transform translateX(-50%)
+    width 90%
     text-align center
 </style>

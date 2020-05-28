@@ -2,7 +2,7 @@
   <div id="communication">
     <h2 class="course" :class="{on: btn}" @click="course(1)">课程学习</h2>
     <h2 class="activity" :class="{on: !btn}" @click="activity(2)">活动</h2>
-    <Search class="search"/>
+    <Search class="search" @Search="getEvaluate"/>
     <div class="wrap" ref="bsWrapper">
       <ul>
         <li v-for="(list, index) in evaluatelist" :key="index" @click="hand(index)">
@@ -64,12 +64,18 @@ export default {
     hand (index) {
       this.to('CommunicationDetail', { index, page: this.page })
     },
-    getEvaluate () {
+    getEvaluate (text) {
       const userId = this.token.result.userInfo.id
-      this.$store.dispatch('getEvaluate', {
+      const Evaluate = {
         isActiorchapter: this.topicType,
         userId,
-        page: this.page,
+        page: this.page
+      }
+      if (text) {
+        Evaluate.context = text
+      }
+      this.$store.dispatch('getEvaluate', {
+        ...Evaluate,
         cb: () => {
           this.initBscroll()
         }
@@ -161,8 +167,9 @@ export default {
 #communication {
   position: absolute;
   top: 112px;
-  left: 14px;
-  width: 346px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
   height: 80%;
   padding-top 35px
   background: url('./imgs/bg.png') no-repeat;
@@ -202,9 +209,9 @@ export default {
       margin-top 14px
       li{
         display flex
-        width 315px
+        width 90%
         height 130px
-        margin 16px
+        margin 10px auto
         background-color #FFF8EC
         border 1px solid #E8CC9F
         border-radius 5px

@@ -1,14 +1,14 @@
 <template>
 	<div id="course">
 		<h2>课程介绍</h2>
-		<img src="./imgs/person.png" alt="person" />
+		<img src="./imgs/cover.png" alt="person" />
 		<p>
 			{{introduce}}
 			<span @click="to('CourseIntroduce', {}, token)">全文</span>
     </p>
-		<div @click="to('Study', {}, token)">
+		<!-- <div @click="to('Study', {}, token)">
 			<h3>{{courselearners}}</h3>
-		</div>
+		</div> -->
 	</div>
 </template>
 
@@ -45,11 +45,8 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="stylus">
 #course {
-	position: absolute;
-	top: 112px;
-	left: 14px;
-	width: 346px;
-	height: 248px;
+	width: 90%;
+	height: 20%;
 	background: url('./imgs/bg.png') no-repeat;
 
 	h2 {
@@ -93,7 +90,8 @@ export default {
 
 	div {
 		position: absolute;
-		left: 9px;
+		left: 50%;
+    transform: translateX(-50%)
 		bottom: 2px;
 		width: 329px;
 		height: 88px;

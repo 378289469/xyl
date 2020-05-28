@@ -133,6 +133,7 @@ export default {
     },
     upload () {
       const photoPicker = this.$api.require('photoPicker')
+      alert(photoPicker)
       photoPicker.addPhoto({
         photoMaxNum: 1,
         rowCount: 3,

@@ -116,10 +116,11 @@ export default {
 #course {
   position: absolute;
   top: 112px;
-  left: 14px;
-  width: 346px;
+	left: 50%;
+	width: 90%;
   height: 80%;
   padding-top 35px
+  transform: translateX(-50%)
   background: url('./imgs/bg.png') no-repeat;
   background-color: white;
 
@@ -140,16 +141,15 @@ export default {
   }
   .dir {
     display flex
-    width: 315px;
-    height: 45px;
-    margin-left 16px
+    width: 90%
+    height: 45px
+    margin 0 auto
     font-size: 14px;
     line-height 45px
     text-align left
     border 1px solid #E1BD85
     .iconfont {
       display block
-      margin-left 10px
       color #925F25
     }
     .title {
@@ -170,7 +170,7 @@ export default {
     border-radius: 0!important
     text-indent : 1em
     .iconfont{
-      margin-left -5px
+      margin-left -15px
     }
   }
 
@@ -180,7 +180,7 @@ export default {
     border-radius: 0!important
     text-indent : 2em
     .iconfont{
-      margin-left -20px
+      margin-left -30px
     }
   }
 

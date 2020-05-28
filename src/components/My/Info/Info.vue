@@ -28,8 +28,9 @@ export default {
 #info
   position absolute
   top 90px
-  left 14px
-  width 345px
+  left 50%
+  transform translateX(-50%)
+  width 90%
   height 170px
   text-align center
   background url('./imgs/bg.png') no-repeat

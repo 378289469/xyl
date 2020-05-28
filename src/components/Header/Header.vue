@@ -17,8 +17,9 @@ export default {
   top 0
   left 0
   width 100%
-  height 220px
+  height 20%
   background-image url(./imgs/header.png)
+  background-size 100% 100%
   .back
     width 10px
     height 18px

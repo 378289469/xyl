@@ -42,8 +42,9 @@ export default {
   methods: {
     ...routerMain,
     hand (activity) {
+      alert(999)
       if (!this.token) {
-        this.to('UserLogin', {}, '')
+        this.to('UserLogin', {})
         return
       }
       this.$store.dispatch('checkToken', {
@@ -61,7 +62,7 @@ export default {
               }
             })
           } else {
-            this.to('UserLogin', {}, '')
+            this.to('UserLogin', {})
           }
         }
       })
@@ -73,20 +74,17 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="stylus">
 #activity
-  position absolute
-  width 345px
-  height 236px
+  width 90%
+  height 25%
   display flex
   flex-direction column
-  top 375px
-  left 15px
   border-radius 5px
   box-shadow 0 0 5px #802529
   background white
   .top
     display flex
     align-items center
-    width 315px
+    width 90%
     height 46px
     margin-left 16px
     border-bottom 1px solid #70160B
@@ -107,7 +105,7 @@ export default {
       font-weight  bolder
       color #802529
     .more,.btn
-      margin-left 165px
+      margin-left 50%
       font-size 12px
       color #828282
     .btn

@@ -24,7 +24,7 @@ export default {
 .list
   display flex
   justify-content space-between
-  width 345px
+  width 100%
   height 50px
   text-align center
   background white
