@@ -1,7 +1,7 @@
 <template>
   <div>
     <Header>
-      <span class="iconfont icon-left back" slot="back" @click="back"/>
+      <span class="iconfont icon-left back" slot="back" @click="to('Communication')"/>
       <img src="./imgs/title.png" alt="title" class="title" slot="title">
     </Header>
     <CommunicationDetail/>

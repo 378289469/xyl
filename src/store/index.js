@@ -199,16 +199,16 @@ export default new Vuex.Store({
         cb && cb()
       }
     },
-    async getEvaluate ({ commit, state }, { isActiorchapter, userId, cb }) {
-      const result = await reqEvaluateList(isActiorchapter, userId)
+    async getEvaluate ({ commit, state }, { isActiorchapter, userId, page, cb }) {
+      const result = await reqEvaluateList(isActiorchapter, userId, page)
       if (result.code === 200 || result.code === 0 || result.code === 500) {
         const evaluatelist = result.result
         commit(RECEIVE_GET_EVALUATE, { evaluatelist })
         cb && cb()
       }
     },
-    async getEvaluateComponents ({ commit, state }, { parentId, cb }) {
-      const result = await reqEvaluateComponents(parentId)
+    async getEvaluateComponents ({ commit, state }, { parentId, page, cb }) {
+      const result = await reqEvaluateComponents(parentId, page)
       if (result.code === 200 || result.code === 0 || result.code === 500) {
         const componentslist = result.result.reverse()
         commit(RECEIVE_GET_EVALUATE_COMPONENTS, { componentslist })

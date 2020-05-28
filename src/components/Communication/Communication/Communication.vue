@@ -3,7 +3,7 @@
     <h2 class="course" :class="{on: btn}" @click="course(1)">课程学习</h2>
     <h2 class="activity" :class="{on: !btn}" @click="activity(2)">活动</h2>
     <Search class="search"/>
-    <div class="wrap">
+    <div class="wrap" ref="bsWrapper">
       <ul>
         <li v-for="(list, index) in evaluatelist" :key="index" @click="hand(index)">
           <div class="info">
@@ -29,9 +29,14 @@
 
 <script>
 import { mapState } from 'vuex'
-import BScroll from 'better-scroll'
+import BScroll from '@better-scroll/core'
+import PullDown from '@better-scroll/pull-down'
+import Pullup from '@better-scroll/pull-up'
 import Search from '../../Search/Search'
 import routerMain from '../../../router/main.js'
+
+BScroll.use(Pullup)
+BScroll.use(PullDown)
 
 export default {
   data () {
@@ -40,7 +45,9 @@ export default {
       errorurl: 'this.src="' + require('./imgs/person.png') + '"',
       imgUrl: require('./imgs/person.png'),
       btn: true,
-      sourse: ['', '打卡', '提问']
+      sourse: ['', '打卡', '提问'],
+      page: 1,
+      isPull: false
     }
   },
   components: {
@@ -55,14 +62,26 @@ export default {
   methods: {
     ...routerMain,
     hand (index) {
-      this.to('CommunicationDetail', { index }, this.token)
+      this.to('CommunicationDetail', { index, page: this.page })
+    },
+    getEvaluate () {
+      const userId = this.token.result.userInfo.id
+      this.$store.dispatch('getEvaluate', {
+        isActiorchapter: this.topicType,
+        userId,
+        page: this.page,
+        cb: () => {
+          this.initBscroll()
+        }
+      })
     },
     course (type) {
+      this.topicType = type
       this.$store.dispatch('checkToken', {
         token: this.token,
         cb: () => {
           if (this.isToken) {
-            this.$store.dispatch('getEvaluate', { isActiorchapter: type })
+            this.getEvaluate()
           } else {
             this.to('UserLogin', {}, '')
           }
@@ -71,32 +90,60 @@ export default {
       this.btn = true
     },
     activity (type) {
+      this.topicType = type
       this.$store.dispatch('checkToken', {
         token: this.token,
         cb: () => {
           if (this.isToken) {
-            this.$store.dispatch('getEvaluate', { isActiorchapter: type })
+            this.getEvaluate()
           } else {
             this.to('UserLogin', {}, '')
           }
         }
       })
       this.btn = false
+    },
+    initBscroll () {
+      this.bscroll = new BScroll(this.$refs.bsWrapper, {
+        scrollY: true,
+        pullUpLoad: true,
+        pullDownRefresh: {
+          threshold: 80, // 下拉距离
+          stop: 30 // 停止距离
+        }
+      })
+      this.bscroll.on('pullingDown', () => {
+        if (!this.isPull) {
+          this.isPull = true
+          if (this.page < 2) {
+            return
+          }
+          this.page -= 1
+          this.getEvaluate()
+        }
+      })
+      this.bscroll.on('pullingUp', () => {
+        if (!this.isPull) {
+          this.isPull = true
+          if (this.activitys) {
+            this.page -= 1
+            return
+          }
+          this.page += 1
+          this.getEvaluate()
+        }
+      })
     }
+  },
+  created () {
+    this.bscroll = null
   },
   mounted () {
     this.$store.dispatch('checkToken', {
       token: this.token,
       cb: () => {
         if (this.isToken) {
-          const userId = this.token.result.userInfo.id
-          this.$store.dispatch('getEvaluate', {
-            isActiorchapter: this.topicType,
-            userId,
-            cb: () => {
-              new BScroll('.wrap') // eslint-disable-line
-            }
-          })
+          this.getEvaluate()
         } else {
           this.to('UserLogin', {}, '')
         }
@@ -104,7 +151,7 @@ export default {
     })
   },
   updated () {
-    new BScroll('.wrap') // eslint-disable-line
+    this.initBscroll()
   }
 }
 </script>
@@ -238,7 +285,7 @@ export default {
             }
             .count{
               color #FF8800
-              margin-left 130px
+              margin-left 100px
             }
           }
         }

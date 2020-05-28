@@ -3,23 +3,23 @@
     <dir class="top" v-if="evaluatelist.length > 0">
       <div class="info">
         <div class="avatar">
-          <img :src="evaluatelist[index].user.avatar || imgUrl" alt="avatar" :onerror="errorurl">
+          <img :src="evaluatelist[index.index].user.avatar || imgUrl" alt="avatar" :onerror="errorurl">
         </div>
         <span>学生</span>
       </div>
       <div class="content">
         <div class="author">
-            <span class="realname">{{evaluatelist[index].user.realname}}</span>
-            <span class="createTime">{{evaluatelist[index].createTime}}</span>
+            <span class="realname">{{evaluatelist[index.index].user.realname}}</span>
+            <span class="createTime">{{evaluatelist[index.index].createTime}}</span>
         </div>
-        <p>{{evaluatelist[index].context}}</p>
-        <i class="ellipsis">知识点：{{evaluatelist[index].chapter? evaluatelist[index].chapter.chapterPath: ''}}{{evaluatelist[index].chapter? evaluatelist[index].chapter.chapterName: ''}}</i>
-        <div class="source">来源：<span class="sourse-type">{{sourse[evaluatelist[index].topicType]}}</span><span class="count">{{evaluatelist[index].list.length}}</span>回复</div>
+        <p>{{evaluatelist[index.index].context}}</p>
+        <i class="ellipsis">知识点：{{evaluatelist[index.index].chapter? evaluatelist[index.index].chapter.chapterPath: ''}}{{evaluatelist[index.index].chapter? evaluatelist[index.index].chapter.chapterName: ''}}</i>
+        <div class="source">来源：<span class="sourse-type">{{sourse[evaluatelist[index.index].topicType]}}</span><span class="count">{{evaluatelist[index.index].list.length}}</span>回复</div>
       </div>
     </dir>
     <div class="wrap" v-if="componentslist.length > 0">
       <ul >
-        <li v-for="(list, index) in componentslist" :key="index" @click="hand()">
+        <li v-for="(list, index) in componentslist" :key="index" @click="wheel(list)">
           <div class="info">
             <div class="avatar">
               <img :src="list.user.avatar || imgUrl" alt="avatar" :onerror="errorurl">
@@ -67,28 +67,67 @@ export default {
     tip
   },
   computed: {
-    ...mapState(['evaluatelist', 'componentslist', 'isToken']),
+    ...mapState(['evaluatelist', 'componentslist', 'isToken', 'msg']),
     token () {
       return this.$api.getStorage('userinfo')
     },
     index () {
-      return this.$page.pageParam().index
+      return this.$page.pageParam()
+    },
+    page () {
+      return this.msg === '添加成功！'
+    }
+  },
+  watch: {
+    page () {
+      if (this.page) {
+        this.$store.dispatch('checkToken', {
+          token: this.token,
+          cb: () => {
+            if (this.isToken) {
+              this.getEvaluate()
+            } else {
+              this.to('UserLogin', {}, '')
+            }
+          }
+        })
+        this.page = !this.page
+      }
     }
   },
   methods: {
     ...routerMain,
-    wheel (id) {
-      this.ansIsOn = id === 1
-      this.signIsOn = id === 2
-      const title = id === 1 ? '提问' : '打卡'
-      this.$refs.wheel.wheel(title, this.$route.params.id)
+    wheel (list) {
+      const title = '回复'
+      this.$refs.wheel.wheel(title, '', list)
     },
-    getEvaluateCb () {
+    getEvaluate () {
+      const userId = this.token.result.userInfo.id
+      this.$store.dispatch('getEvaluate', {
+        isActiorchapter: this.topicType,
+        userId,
+        page: this.index.page,
+        cb: () => {
+          this.getEvaluateComponents()
+        }
+      })
+    },
+    getEvaluateComponents () {
       this.$store.dispatch('checkToken', {
         token: this.token,
         cb: () => {
           if (this.isToken) {
-            this.$store.dispatch('getEvaluateComponents', { parentId: this.evaluatelist[this.index].id })
+            this.$store.dispatch('getEvaluateComponents', {
+              parentId: this.evaluatelist[this.index.index].id,
+              cb: () => {
+                try {
+                  new BScroll('.wrap') // eslint-disable-line
+                  new BScroll('.context', {// eslint-disable-line
+                    stopPropagation: true
+                  })
+                } catch (error) {}
+              }
+            })
           } else {
             this.to('UserLogin', {}, '')
           }
@@ -101,25 +140,12 @@ export default {
       token: this.token,
       cb: () => {
         if (this.isToken) {
-          const userId = this.token.result.userInfo.id
-          this.$store.dispatch('getEvaluate', { isActiorchapter: this.topicType, userId, cb: this.getEvaluateCb })
+          this.getEvaluate()
         } else {
           this.to('UserLogin', {}, '')
         }
       }
     })
-  },
-  updated () {
-    if (this.evaluatelist.length > 0) {
-      try {
-        new BScroll('.wrap') // eslint-disable-line
-      } catch (error) {}
-    }
-    if (this.componentslist.length > 0) {
-      new BScroll('.context', {// eslint-disable-line
-        stopPropagation: true
-      })
-    }
   }
 }
 </script>
@@ -172,39 +198,58 @@ export default {
         text-align center
       }
    }
-   .content{
-      width 231px
-      margin-left 12px
-      text-align left
-      .author{
-        display flex
-        justify-content center
-        height 24px
-        color #272828
-        font-size 15px
-        line-height 24px
-        .realname{
-          display block
-          width 30%
-          overflow hidden
-        }
-        .createTime{
-          display block
-          width 70%
-          color #828282
-          font-size 12px
-          overflow hidden
-        }
+  .content{
+    width 231px
+    margin-left 12px
+    text-align left
+    .author{
+      display flex
+      justify-content center
+      height 24px
+      color #272828
+      font-size 15px
+      line-height 24px
+      .realname{
+        display block
+        width 30%
+        overflow hidden
       }
-      p{
-        height 35px
-        color #484747
-        font-size 14px
-        line-height 18px
-        text-align left
+      .createTime{
+        display block
+        width 70%
+        color #828282
+        font-size 12px
         overflow hidden
       }
     }
+    p{
+      height 35px
+      color #484747
+      font-size 14px
+      line-height 18px
+      text-align left
+      overflow hidden
+    }
+    i{
+      display block
+      height 15px
+      margin 9px 0
+      color #828282
+      font-size 12px
+    }
+    .source{
+      color #828282
+      font-size 12px
+      .sourse-type{
+        color #D19A43
+        font-weight bolder
+      }
+      .count{
+        color #FF8800
+        margin-left 100px
+      }
+    }
+  }
   }
   .wrap{
     height 69%
@@ -269,6 +314,9 @@ export default {
             .realname{
               color #828282
               width 15%
+            }
+            .targetUser{
+              text-align right
             }
           }
           .context{

@@ -25,7 +25,7 @@ export const reqGetNote = (mainId) => ajax('notes/zblNotes/list', { pageNo: 1, p
 export const reqEvaluate = (evaluate) => ajax('evaluate/zblEvaluate/add', evaluate, 'post')
 
 // 9获取交流列表
-export const reqEvaluateList = (isActiorchapter = 1, userId) => ajax('evaluate/zblEvaluate/appList', { pageNo: 1, pageSize: 10, userId, isActiorchapter })
+export const reqEvaluateList = (isActiorchapter = 1, userId, page) => ajax('evaluate/zblEvaluate/appList', { pageNo: page, pageSize: 10, userId, isActiorchapter })
 
 // 10获取交流列表
 export const reqEvaluateComponents = (parentId) => ajax('evaluate/zblEvaluate/queryByParentId', { parentId })

@@ -26,11 +26,12 @@ export default {
     ...mapState(['msg'])
   },
   methods: {
-    wheel (title, id) {
+    wheel (title, id, list) {
       this.title = title
       this.isShow = true
       this.topicId = id
       this.content = ''
+      this.list = list
     },
     done () {
       const { title, content, topicId, msg } = this
@@ -43,18 +44,27 @@ export default {
       const topicType = title === '打卡' ? 1 : 2
       const Evaluate = {
         context: content, // 内容
-        isActiorchapter: '1', //
+        isActiorchapter: '1', // 1章节 2活动
         topicId: topicId, // 章节id
         topicType: topicType, // 1打卡 2提问 3笔记
         parentId: 0 // 父id
         // targetUserId: 0 // 目标用户
+      }
+      const { list } = this
+      if (this.list) {
+        Evaluate.parentId = list.parentId
+        Evaluate.topicId = list.topicId
+        Evaluate.topicType = list.topicType
+        Evaluate.targetUserId = list.userId
+        Evaluate.id = list.id
+        Evaluate.isActiorchapter = list.isActiorchapter
       }
       this.$store.dispatch('addEvaluate', {
         Evaluate,
         cb: () => {
           this.isShow = false
           this.$store.dispatch('tipMsg', {
-            tips: { type: 5, msg: msg }
+            tips: { type: 5, msg: msg, page: true }
           }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
         }
       })
@@ -75,6 +85,7 @@ export default {
   width 100%
   height 100%
   background rgba(0 0 0 .5)
+  z-index 99
   .whellItme
     position fixed
     bottom 0
