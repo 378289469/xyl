@@ -63,15 +63,19 @@ export default {
   methods: {
     ...routerMain,
     getNumPages (url) {
-      const pdfReader = this.api.require('pdfReader')
-      pdfReader.open({
+      const pdfReader = this.api.require('androidPdfReader')
+      pdfReader.openView({
+        rect: {
+          x: 0,
+          y: 0,
+          w: 'auto',
+          h: 'auto'
+        },
         path: url,
-        hidden: {
-          print: true,
-          export: true,
-          bookmark: true,
-          email: false
-        }
+        fixedOn: this.api.frameName,
+        fixed: true
+      }, ret => {
+        alert(JSON.stringify(ret))
       })
     },
     wheel (id) {

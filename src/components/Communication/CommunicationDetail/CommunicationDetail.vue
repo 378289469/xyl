@@ -159,7 +159,8 @@ export default {
   width: 346px;
   height: 77%;
   padding-top 15px
-  background: url('./imgs/bg.png') no-repeat;
+  border-radius 5px
+  box-shadow 0 0 5px #802529
   background-color: white;
   .top{
     display flex

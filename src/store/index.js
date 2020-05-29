@@ -211,7 +211,8 @@ export default new Vuex.Store({
     async getEvaluate ({ commit, state }, { context, isActiorchapter, userId, page, cb }) {
       const result = await reqEvaluateList(context, isActiorchapter, userId, page)
       if (result.code === 200 || result.code === 0 || result.code === 500) {
-        const evaluatelist = result.result
+        let evaluatelist = result.result
+        evaluatelist = evaluatelist.filter(el => el.parentId === '0')
         commit(RECEIVE_GET_EVALUATE, { evaluatelist })
         cb && cb()
       }

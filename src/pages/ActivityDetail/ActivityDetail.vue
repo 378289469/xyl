@@ -4,7 +4,7 @@
       <span class="iconfont icon-left back" slot="back" @click="back"/>
       <img src="./imgs/Activity.png" alt="title" class="title" slot="title">
     </Header>
-    <div id="ActivityDetail">
+    <div id="ActivityDetail" v-if="ActivityDetail.length > 0">
       <div class="content" v-for="(ad, index) in ActivityDetail" :key="index">
         <div class="title">
           <span>{{ad.tag}}</span>

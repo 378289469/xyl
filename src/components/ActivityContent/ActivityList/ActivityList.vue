@@ -137,7 +137,7 @@ export default {
     height 90%
     overflow hidden
     ul
-      height 100%
+      height 150%
       margin-left 16px
       line-height 30px
       text-align left

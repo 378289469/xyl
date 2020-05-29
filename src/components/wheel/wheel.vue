@@ -23,7 +23,10 @@ export default {
     }
   },
   computed: {
-    ...mapState(['msg'])
+    ...mapState(['msg']),
+    token () {
+      return this.$api.getStorage('userinfo')
+    }
   },
   methods: {
     wheel (title, id, list) {
@@ -35,6 +38,16 @@ export default {
     },
     done () {
       const { title, content, topicId, msg } = this
+      this.$store.dispatch('checkToken', {
+        token: this.token,
+        cb: () => {
+          if (this.isToken) {
+            // this.$store.dispatch('getNote', { mainId: this.$route.params.id })
+          } else {
+            this.to('UserLogin')
+          }
+        }
+      })
       if (content.trim().length === 0) {
         this.$store.dispatch('tipMsg', {
           tips: { type: 4 }

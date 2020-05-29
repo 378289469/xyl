@@ -47,7 +47,9 @@ export default {
 #course {
 	width: 90%;
 	height: 25%;
-	background: url('./imgs/bg.png') no-repeat;
+	background: white;
+  border-radius: 5px;
+  box-shadow: 0 0 5px #802529;
 
 	h2 {
 		position: absolute;
