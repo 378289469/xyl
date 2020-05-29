@@ -17,7 +17,9 @@ import {
   reqUserLogin,
   setUserPassword,
   getUserGroup,
-  checkToken
+  checkToken,
+  uploadAvatar,
+  editAvatar
 } from '../api/index'
 
 Vue.use(Vuex)
@@ -37,6 +39,7 @@ const RECEIVE_USER_LOGIN = 'receive_user_login'
 const RECEIVE_SET_PWD = 'receive_set_pwd'
 const RECEIVE_GET_USER_GROUP = 'receive_get_user_group'
 const RECEIVE_CHECK_TOKEN = 'receive_check_token'
+const RECEIVE_USER_AVATAR = 'receive_user_avatar'
 
 export default new Vuex.Store({
   state: {
@@ -57,7 +60,8 @@ export default new Vuex.Store({
     userInfo: {},
     pwdInfo: {},
     UserGroup: [],
-    isToken: false
+    isToken: false,
+    userAvatar: ''
   },
   mutations: {
     [RECEIVE_COURSE_INTRODUCE] (state, { courseintroduce }) {
@@ -109,6 +113,9 @@ export default new Vuex.Store({
     },
     [RECEIVE_CHECK_TOKEN] (state, { token }) {
       state.isToken = token
+    },
+    [RECEIVE_USER_AVATAR] (state, { userAvatar }) {
+      state.userAvatar = userAvatar
     }
   },
   actions: {
@@ -131,6 +138,8 @@ export default new Vuex.Store({
       }
     },
     async reqActivitys ({ commit, state }, { page, activityName, cb }) {
+      page = page || 1
+      activityName = activityName || ''
       const result = await reqActivitys(page, activityName)
       if (result.code === 200 || result.code === 0 || result.code === 500) {
         // console.log(result)
@@ -253,6 +262,18 @@ export default new Vuex.Store({
         const token = result.success
         commit(RECEIVE_CHECK_TOKEN, { token })
         cb && cb()
+      }
+    },
+    async UploadAvatar ({ commit, state }, { url, cb }) {
+      const result = await uploadAvatar(url)
+      if (result.code === 0 || result.code === 600) {
+        const AvatarUrl = result.message
+        const resultAvatar = await editAvatar(AvatarUrl)
+        if (resultAvatar.code === 200 || resultAvatar.code === 600) {
+          const userAvatar = resultAvatar.message
+          commit(RECEIVE_USER_AVATAR, { userAvatar })
+          cb && cb()
+        }
       }
     }
   },

@@ -2,7 +2,7 @@
   <div id = "CourseIntroduce">
     <Header>
       <span class="iconfont icon-left back" slot="back" @click="back"/>
-      <img src="./imgs/title.png" alt="title" class="title" slot="title">
+      <img src="./imgs/index.png" alt="title" class="title" slot="title">
     </Header>
     <div class="introduce">
       <h2 class="title">课程简介</h2>

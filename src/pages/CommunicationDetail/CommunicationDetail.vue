@@ -2,7 +2,7 @@
   <div>
     <Header>
       <span class="iconfont icon-left back" slot="back" @click="to('Communication')"/>
-      <img src="./imgs/title.png" alt="title" class="title" slot="title">
+      <img src="./imgs/Communication.png" alt="title" class="title" slot="title">
     </Header>
     <CommunicationDetail/>
   </div>

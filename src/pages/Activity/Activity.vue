@@ -1,7 +1,7 @@
 <template>
   <div id="Activity">
     <Header>
-      <img src="./imgs/title.png" alt="title" class="title" slot="title">
+      <img src="./imgs/Activity.png" alt="title" class="title" slot="title">
     </Header>
     <ActivityContent/>
     <FooterGuide/>

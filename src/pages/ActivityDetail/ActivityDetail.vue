@@ -2,7 +2,7 @@
   <div>
     <Header>
       <span class="iconfont icon-left back" slot="back" @click="back"/>
-      <img src="./imgs/title.png" alt="title" class="title" slot="title">
+      <img src="./imgs/Activity.png" alt="title" class="title" slot="title">
     </Header>
     <div id="ActivityDetail">
       <div class="content" v-for="(ad, index) in ActivityDetail" :key="index">
@@ -53,21 +53,24 @@ export default {
       return this.$api.getStorage('userinfo')
     },
     activity () {
-      return this.$page.pageParam().activity
+      return this.$page.pageParam && this.$page.pageParam().activity
     },
     ActivityDetail () {
-      const { activity } = this
-      const ActivityDetail = [
-        { title: activity.activityName, tag: '名称：' },
-        { content: 0, tag: '内容：' },
-        { title: `${activity.activityStart.slice(0, 10)}一${activity.activityEnd.slice(0, 10)}`, tag: '时间：' },
-        { content: 1, tag: '任务：', title: `${this.tasks[0]}----------${this.tasks[1]}` },
-        { content: 2, tag: '附件：' }
-      ]
+      let ActivityDetail = []
+      if (this.activity) {
+        const { activity } = this
+        ActivityDetail = [
+          { title: activity.activityName, tag: '名称：' },
+          { content: 0, tag: '内容：' },
+          { title: `${activity.activityStart.slice(0, 10)}一${activity.activityEnd.slice(0, 10)}`, tag: '时间：' },
+          { content: 1, tag: '任务：', title: `${this.tasks[0]}----------${this.tasks[1]}` },
+          { content: 2, tag: '附件：' }
+        ]
+      }
       return ActivityDetail
     },
     tasks () {
-      return this.activity.activityTask.split('-')
+      return this.activity && this.activity.activityTask.split('-')
     },
     taskDir () {
       const taskDir = []
@@ -124,7 +127,8 @@ export default {
             cb: () => {
               new BScroll('.media', {// eslint-disable-line
                 scrollX: true,
-                scrollY: false
+                scrollY: false,
+                click: true
               })
             }
           })
@@ -140,7 +144,8 @@ export default {
   updated () {
     new BScroll('.media', {// eslint-disable-line
       scrollX: true,
-      scrollY: false
+      scrollY: false,
+      click: true
     })
   }
 }
@@ -150,7 +155,7 @@ export default {
 <style scoped lang="stylus">
 #ActivityDetail
   position absolute
-  top 110px
+  top 15%
   left 0
   right 0
   margin 0 auto
@@ -162,7 +167,7 @@ export default {
     margin auto
     .title
       display flex
-      padding 15px
+      padding 10px
       background-color #FFEAD0
       border-radius 5px
       margin-top 16px
@@ -174,7 +179,7 @@ export default {
         width 80%
         font-weight bold
     .detail,.task,.media
-      height 74px
+      height 50px
       padding 15px
       text-align left
       background-color #FFF4E2
@@ -185,7 +190,7 @@ export default {
         color #333333
         line-height 25px
     .task
-      height 92px
+      height 50px
     .media
       display flex
       height 80px

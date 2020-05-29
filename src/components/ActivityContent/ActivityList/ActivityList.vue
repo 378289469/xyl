@@ -55,6 +55,7 @@ export default {
       this.bscroll = new BScroll(this.$refs.bsWrapper, {
         scrollY: true,
         pullUpLoad: true,
+        click: true,
         pullDownRefresh: {
           threshold: 80, // 下拉距离
           stop: 30 // 停止距离

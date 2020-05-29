@@ -2,7 +2,7 @@
   <div id="MySecurity">
     <Header>
       <span class="iconfont icon-left back" slot="back" @click="to('My')"/>
-      <img src="./imgs/title.png" alt="title" class="title" slot="title">
+      <img src="./imgs/MySecurity.png" alt="title" class="title" slot="title">
     </Header>
     <div class="item">
       <form action="" @submit.prevent="submit">
@@ -12,7 +12,7 @@
              <span class="username" v-if="i===2">{{token.result.userInfo.phone}}</span>
              <input class="content" :disabled="disabled[i]" :maxlength="maxlength[i]" :type="type[i]"
               :placeholder="placeholders[i]" v-model="model[i]" @focus="focus()" @blur="blur()">
-             <img @click="upload" v-if="i===1" class="avatar" :src="token.result.userInfo.avatar || imgUrl" :onerror="errorurl" alt="avatar">
+             <img @click="upload" v-if="i===1" class="avatar" :src="imgUrl" :onerror="errorurl" alt="avatar">
           </div>
         </List>
         <button>保存</button>
@@ -39,8 +39,7 @@ export default {
       type: ['', 'text', 'text', 'password', 'password', 'password'],
       titles: ['', '修改头像：', '用户名：', '原始密码：', '新密码：', '确认密码：'],
       placeholders: ['', '', '', '请输入原密码', '请输入新密码', '请输入确认密码'],
-      errorurl: 'this.src="' + require('./imgs/avatar.png') + '"',
-      imgUrl: require('./imgs/avatar.png')
+      errorurl: 'this.src="' + require('./imgs/avatar.png') + '"'
     }
   },
   components: {
@@ -58,6 +57,9 @@ export default {
     },
     model () {
       return [this.info.oldpwd, this.info.newpwd, this.info.surepwd]
+    },
+    imgUrl () {
+      return this.token.result.userInfo.avatar || require('./imgs/avatar.png')
     }
   },
   methods: {
@@ -132,8 +134,7 @@ export default {
       }
     },
     upload () {
-      const photoPicker = this.$api.require('photoPicker')
-      alert(photoPicker)
+      const photoPicker = this.api.require('photoPicker')
       photoPicker.addPhoto({
         photoMaxNum: 1,
         rowCount: 3,
@@ -141,7 +142,8 @@ export default {
         lookGifPhoto: true,
         lookLivePhoto: true
       }, function (ret, err) {
-        alert(JSON.stringify(ret))
+        this.imgUrl = JSON.parse(ret)[0].previewPhotoPath || this.token.result.userInfo.avatar || require('./imgs/avatar.png')
+        // alert(JSON.stringify(ret))
       })
       console.log('更换头像')
     }

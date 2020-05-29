@@ -26,7 +26,8 @@ export default {
       id: 0,
       parentId: 0,
       index: 0,
-      noteId: 0
+      noteId: 0,
+      pdf: false
     }
   },
   components: {
@@ -91,7 +92,12 @@ export default {
                   const PdfFile = this.PdfFile[0]
                   if (PdfFile) {
                     PdfFile.parentId = null
-                    this.CourseChapter.splice(CourseChapterId + 1, 0, PdfFile)
+                    this.pdf = !this.pdf
+                    if (this.pdf) {
+                      this.CourseChapter.splice(CourseChapterId + 1, 0, PdfFile)
+                    } else {
+                      this.CourseChapter.splice(CourseChapterId + 1, 1)
+                    }
                   } else {
                     this.$store.dispatch('tipMsg', {
                       tips: { type: 5, msg: '当前目录暂无内容' }
@@ -154,7 +160,7 @@ export default {
     }
     .title {
       display block
-      width 260px
+      width 80%
       margin-left 16px
       font-weight bolder!important
     }

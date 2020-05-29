@@ -4,7 +4,7 @@
 		<img src="./imgs/cover.png" alt="person" />
 		<p>
 			{{introduce}}
-			<span @click="to('CourseIntroduce', {}, token)">全文</span>
+			<span @click="to('CourseIntroduce')">全文</span>
     </p>
 		<!-- <div @click="to('Study', {}, token)">
 			<h3>{{courselearners}}</h3>
@@ -46,7 +46,7 @@ export default {
 <style scoped lang="stylus">
 #course {
 	width: 90%;
-	height: 20%;
+	height: 25%;
 	background: url('./imgs/bg.png') no-repeat;
 
 	h2 {
@@ -68,6 +68,7 @@ export default {
 	img {
 		display: block;
 		position: absolute;
+    width: 30%
 		top: 33px;
 		left: 11px;
 	}
@@ -76,8 +77,8 @@ export default {
 		position: absolute;
 		top: 33px;
 		right: 14px;
-		width: 212px;
-		height: 106px;
+    width: 60%;
+    height: 20%;
 		color: #333333;
 		text-align: left;
 		font-size: 14px;

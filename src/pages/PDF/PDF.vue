@@ -2,13 +2,13 @@
   <div id = "PDF">
     <Header>
       <span class="iconfont icon-left back" slot="back" @click="to('Study')"/>
-      <img src="./imgs/title.png" alt="title" class="title" slot="title"/>
+      <img src="./imgs/Study.png" alt="title" class="title" slot="title"/>
     </Header>
     <div class="PDFwrap">
       <div class="PDFconternt">
         <div class="pages">
           <div class="pdf">
-            <pdf  v-for="i in Pages" :key="i" :src="url" :page="i"></pdf>
+            <!-- <pdf  v-for="i in Pages" :key="i" :src="url" :page="i"></pdf> -->
           </div>
         </div>
         <div class="tips">
@@ -35,7 +35,6 @@ import wheel from '../../components/Wheel/wheel'
 import tip from '../../components/Tip/tip'
 import { mapState } from 'vuex'
 import BScroll from 'better-scroll'
-import pdf from 'vue-pdf'
 import routerMain from '../../router/main.js'
 
 export default {
@@ -49,7 +48,6 @@ export default {
   },
   components: {
     Header,
-    pdf,
     wheel,
     tip
   },
@@ -59,17 +57,22 @@ export default {
       return this.$api.getStorage('userinfo')
     },
     url () {
-      return this.$page.pageParam().url
+      return this.$page.pageParam && this.$page.pageParam().url
     }
   },
   methods: {
     ...routerMain,
     getNumPages (url) {
-      var loadingTask = pdf.createLoadingTask(url)
-      loadingTask.then(pdf => {
-        this.url = loadingTask
-        this.Pages = pdf.numPages
-      }).catch(() => {})
+      const pdfReader = this.api.require('pdfReader')
+      pdfReader.open({
+        path: url,
+        hidden: {
+          print: true,
+          export: true,
+          bookmark: true,
+          email: false
+        }
+      })
     },
     wheel (id) {
       this.ansIsOn = id === 1

@@ -44,3 +44,9 @@ export const getUserGroup = () => ajax('group/zblGroup/users')
 
 // 15验证token
 export const checkToken = (token) => ajax('front/login/checkToken', token, 'check')
+
+// 16上传头像
+export const uploadAvatar = (url) => ajax('sys/common/upload', url, 'post')
+
+// 17修改头像
+export const editAvatar = (url) => ajax('back/zblUser/edit', url, 'put')

@@ -2,7 +2,7 @@
   <div id="video">
     <Header>
       <span class="iconfont icon-left back" slot="back" @click="back"/>
-      <img src="./imgs/title.png" alt="title" class="title" slot="title">
+      <img src="./imgs/Activity.png" alt="title" class="title" slot="title">
     </Header>
     <video-player
      ref="videoPlayer"
@@ -78,7 +78,7 @@ export default {
       return this.$refs.videoPlayer.player
     },
     pdfFileList () {
-      const pdfFileList = this.$page.pageParam().videoPaths
+      const pdfFileList = this.$page.pageParam && this.$page.pageParam().videoPaths
       return pdfFileList
     }
   },

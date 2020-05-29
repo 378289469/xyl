@@ -5,7 +5,7 @@
     <Search class="search" @Search="getEvaluate"/>
     <div class="wrap" ref="bsWrapper">
       <ul>
-        <li v-for="(list, index) in evaluatelist" :key="index" @click="hand(index)">
+        <li v-for="(list, index) in evaluatelist" :key="index" @click="toCommunicationDetail(index)">
           <div class="info">
             <div class="avatar">
               <img :src="list.user.avatar || imgUrl" alt="avatar" :onerror="errorurl">
@@ -61,7 +61,7 @@ export default {
   },
   methods: {
     ...routerMain,
-    hand (index) {
+    toCommunicationDetail (index) {
       this.to('CommunicationDetail', { index, page: this.page })
     },
     getEvaluate (text) {
@@ -113,6 +113,7 @@ export default {
       this.bscroll = new BScroll(this.$refs.bsWrapper, {
         scrollY: true,
         pullUpLoad: true,
+        click: true,
         pullDownRefresh: {
           threshold: 80, // 下拉距离
           stop: 30 // 停止距离

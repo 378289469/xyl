@@ -1,24 +1,24 @@
 <template>
   <footer id="footer-guide">
     <div @click="hand(0)">
-      <span class="iconfont icon-home guide" :class="{on:path === '/indexindex.html'}"></span>
-      <span class="guide" :class="{on:path === '/indexindex.html'}">首页</span>
+      <span class="iconfont icon-home guide" :class="{on:nav[path] === 'index'}"></span>
+      <span class="guide" :class="{on:nav[path] === 'index'}">首页</span>
     </div>
     <div @click="hand(1)">
-      <span class="iconfont icon-study guide" :class="{on:path === '/Studystudy.html'}"></span>
-      <span class="guide" :class="{on:path === '/Studystudy.html'}">学习</span>
+      <span class="iconfont icon-study guide" :class="{on:nav[path] === 'Study'}"></span>
+      <span class="guide" :class="{on:nav[path] === 'Study'}">学习</span>
     </div>
     <div @click="hand(2)">
-      <span class="iconfont icon-activity guide" :class="{on:path === '/Activityactivity.html'}"></span>
-      <span class="guide" :class="{on:path === '/Activityactivity.html'}">活动</span>
+      <span class="iconfont icon-activity guide" :class="{on:nav[path] === 'Activity'}"></span>
+      <span class="guide" :class="{on:nav[path] === 'Activity'}">活动</span>
     </div>
     <div @click="hand(3)">
-      <span class="iconfont icon-chat guide" :class="{on:path === '/Communicationcommunication.html'}"></span>
-      <span class="guide" :class="{on:path === '/Communicationcommunication.html'}">交流</span>
+      <span class="iconfont icon-chat guide" :class="{on:nav[path] === 'Communication'}"></span>
+      <span class="guide" :class="{on:nav[path] === 'Communication'}">交流</span>
     </div>
     <div @click="hand(4)">
-      <span class="iconfont icon-my guide" :class="{on:path === '/Mymy.html'}"></span>
-      <span class="guide" :class="{on:path === '/Mymy.html'}">我的</span>
+      <span class="iconfont icon-my guide" :class="{on:nav[path] === 'My'}"></span>
+      <span class="guide" :class="{on:nav[path] === 'My'}">我的</span>
     </div>
   </footer>
 </template>
@@ -38,28 +38,29 @@ export default {
       return this.$api.getStorage('userinfo')
     },
     path () {
-      return this.$route.path
+      return this.$api.getStorage('page')
     }
   },
   methods: {
     ...routerMain,
     hand (id) {
       if (!this.token) {
-        this.to('UserLogin', {}, '')
+        this.to('UserLogin')
         return
       }
       this.$store.dispatch('checkToken', {
         token: this.token,
         cb: () => {
           if (this.isToken) {
+            this.$api.setStorage('page', id)
             if (id === 2) {
               this.$api.setStorage('search', 'activity')
             } else if (id === 3) {
               this.$api.setStorage('search', 'communication')
             }
-            this.to(this.nav[id], {})
+            this.to(this.nav[id])
           } else {
-            this.to('UserLogin', {}, '')
+            this.to('UserLogin')
           }
         }
       })

@@ -1,7 +1,7 @@
 <template>
   <div id="UserLogin">
     <Header>
-      <img src="./imgs/title.png" alt="title" class="title" slot="title">
+      <img src="./imgs/index.png" alt="title" class="title" slot="title">
     </Header>
     <form action="" class="items" @submit.prevent="submit">
       <h2>用户登录</h2>

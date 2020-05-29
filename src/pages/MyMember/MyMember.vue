@@ -2,7 +2,7 @@
   <div id="MyMember">
     <Header>
       <span class="iconfont icon-left back" slot="back" @click="to('My')"/>
-      <img src="./imgs/title.png" alt="title" class="title" slot="title">
+      <img src="./imgs/MyMember.png" alt="title" class="title" slot="title">
     </Header>
     <div class="item">
       <div class="wrap">

@@ -3,7 +3,7 @@
     <slot name="top" class="top"></slot>
     <div class="activitys" >
       <ul class="list" >
-        <li v-for="(activity ,index) in Activitys" :key="index" @click="hand(activity)">
+        <li v-for="(activity ,index) in Activitys" :key="index" @click="toActivity(activity)">
           <h3 class="ellipsis">{{activity.activityName}}</h3>
           <span class="iconfont icon-date btn icon3"></span>
           <span class="time">{{activity.activityStart}}---{{activity.activityEnd}}</span>
@@ -34,17 +34,16 @@ export default {
   },
   mounted () {
     this.$store.dispatch('reqActivitys', { page: 1 })
-    new BScroll('.activitys') // eslint-disable-line
+    new BScroll('.activitys', {click: true}) // eslint-disable-line
   },
   updated () {
-    new BScroll('.activitys') // eslint-disable-line
+    new BScroll('.activitys', {click: true}) // eslint-disable-line
   },
   methods: {
     ...routerMain,
-    hand (activity) {
-      alert(999)
+    toActivity (activity) {
       if (!this.token) {
-        this.to('UserLogin', {})
+        this.to('UserLogin')
         return
       }
       this.$store.dispatch('checkToken', {
@@ -57,12 +56,14 @@ export default {
               cb: () => {
                 this.$store.dispatch('activity', {
                   activity,
-                  cb: () => this.to('ActivityDetail', { activity })
+                  cb: () => {
+                    this.to('ActivityDetail', { activity })
+                  }
                 })
               }
             })
           } else {
-            this.to('UserLogin', {})
+            this.to('UserLogin')
           }
         }
       })
@@ -105,9 +106,9 @@ export default {
       font-weight  bolder
       color #802529
     .more,.btn
-      margin-left 50%
       font-size 12px
       color #828282
+      margin-left 45%
     .btn
       margin-left 6px
   .activitys
@@ -124,7 +125,7 @@ export default {
       li:last-child
         border-bottom none
       h3
-        width 315px
+        width 90%
         font-size 14px
       .icon3
         margin-left 0

@@ -1,11 +1,11 @@
 <template>
   <div id="index">
     <Header>
-      <img src="./imgs/title.png" alt="title" class="title" slot="title">
+      <img src="./imgs/index.png" alt="title" class="title" slot="title">
     </Header>
     <Course class="CourseClass"/>
     <Activity class="ActivityClass">
-      <div class="top" slot="top" @click="to('Activity', {}, token)">
+      <div class="top" slot="top" @click="hand('Activity')">
         <span class="icon1"></span>
         <span class="icon2"></span>
         <h2>活动内容</h2>
@@ -41,7 +41,11 @@ export default {
     }
   },
   methods: {
-    ...routerMain
+    ...routerMain,
+    hand (path) {
+      this.$api.setStorage('page', 2)
+      this.to(path)
+    }
   },
   mounted () {
     this.$store.state.searchActivitys = this.$store.state.activitys

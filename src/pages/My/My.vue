@@ -1,7 +1,7 @@
 <template>
   <div id="my">
     <Header>
-      <img src="./imgs/title.png" alt="title" class="title" slot="title">
+      <img src="./imgs/index.png" alt="title" class="title" slot="title">
     </Header>
     <Info/>
     <div class="item">
