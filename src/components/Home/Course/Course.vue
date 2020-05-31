@@ -1,10 +1,10 @@
 <template>
 	<div id="course">
 		<h2>课程介绍</h2>
-		<img src="./imgs/cover.png" alt="person" />
+		<img src="../../../../public/imgs/cover.png" alt="person" />
 		<p>
 			{{introduce}}
-			<span @click="to('CourseIntroduce', {}, token)">全文</span>
+			<span @click="to('CourseIntroduce')">全文</span>
     </p>
 		<!-- <div @click="to('Study', {}, token)">
 			<h3>{{courselearners}}</h3>
@@ -21,10 +21,10 @@ export default {
     }
   },
   computed: {
-    ...mapState(['courseintroduce', 'courselearners']),
-    token () {
-      return this.$api.getStorage('userinfo')
-    },
+    ...mapState(['courseintroduce']),
+    // token () {
+    //   return this.$api.getStorage('userinfo')
+    // },
     introduce () {
       const { courseintroduce } = this
       let introduce = ''
@@ -46,8 +46,10 @@ export default {
 <style scoped lang="stylus">
 #course {
 	width: 90%;
-	height: 20%;
-	background: url('./imgs/bg.png') no-repeat;
+	height: 25%;
+	background: white;
+  border-radius: 5px;
+  box-shadow: 0 0 5px #802529;
 
 	h2 {
 		position: absolute;
@@ -58,7 +60,7 @@ export default {
 		margin: 0 auto;
 		width: 127px;
 		height: 44px;
-		background: url('./imgs/title.png') no-repeat;
+		background: url('../../../../public/imgs/titlebg.png') no-repeat;
 		color: white;
 		font-size: 20px;
 		line-height: 52px;
@@ -68,6 +70,7 @@ export default {
 	img {
 		display: block;
 		position: absolute;
+    width: 30%
 		top: 33px;
 		left: 11px;
 	}
@@ -76,8 +79,8 @@ export default {
 		position: absolute;
 		top: 33px;
 		right: 14px;
-		width: 212px;
-		height: 106px;
+    width: 60%;
+    height: 20%;
 		color: #333333;
 		text-align: left;
 		font-size: 14px;
@@ -95,7 +98,7 @@ export default {
 		bottom: 2px;
 		width: 329px;
 		height: 88px;
-		background: url('./imgs/study.png');
+		background: url('../../../../public/imgs/Study.png');
 
 		h3 {
 			position: absolute;

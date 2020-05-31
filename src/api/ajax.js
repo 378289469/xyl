@@ -1,12 +1,13 @@
 import axios from 'axios'
 import store from '../store/index'
 import modules from '../store/modules'
+// import router from '../router/index'
 
-export const baseUrl = 'http://192.168.5.56:8082/jeecg-boot/'
-let token = ''
+export const baseUrl = 'http://192.168.1.2:8082/jeecg-boot/'
 
 axios.interceptors.request.use(
   config => {
+    const token = window.localStorage.getItem('Authorization')
     config.headers['X-Access-Token'] = token && token
     return config
   }
@@ -20,6 +21,22 @@ axios.interceptors.response.use(
       )
     }
     return response
+  },
+  error => {
+    if (error.response) {
+      if (error.response.status === 500) {
+        window.localStorage.removeItem('Authorization')
+        this.$page.push({
+          name: 'UserLogin',
+          pageParam: {},
+          animation: {
+            type: 'push',
+            subType: 'from_left'
+          }
+        })
+        // router.push('/UserLogin')
+      }
+    }
   }
 )
 
@@ -28,10 +45,10 @@ export const ajax = (url, data = {}, type = 'GET') => {
   url = baseUrl + url
   return new Promise(function (resolve, reject) {
     let promise
-    if (type === 'CHECK') {
-      token = data.result.token
-      promise = axios.post(url)
-    }
+    // if (type === 'CHECK') {
+    //   token = data.result.token
+    //   promise = axios.post(url)
+    // }
     if (type === 'GET') {
       let dataStr = ''
       Object.keys(data).forEach(key => {

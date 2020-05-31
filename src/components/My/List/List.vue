@@ -39,11 +39,11 @@ export default {
     width 50px
     height 50px
   .member
-    background url('./imgs/member.png') no-repeat
+    background url('../../../../public/imgs/member.png') no-repeat
     background-size 30px 30px
     background-position center
   .security
-    background url('./imgs/security.png') no-repeat
+    background url('../../../../public/imgs/security.png') no-repeat
     background-size 30px 30px
     background-position center
   .title

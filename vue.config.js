@@ -1,6 +1,8 @@
 module.exports = {
-  outputDir: 'dist',
+  outputDir: 'widget',
   publicPath: './',
+  assetsDir: './assets',
+  productionSourceMap: false,
   filenameHashing: false,
   productionSourceMap: false,
   devServer: {

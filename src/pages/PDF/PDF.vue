@@ -2,13 +2,13 @@
   <div id = "PDF">
     <Header>
       <span class="iconfont icon-left back" slot="back" @click="to('Study')"/>
-      <img src="./imgs/title.png" alt="title" class="title" slot="title"/>
+      <img src="../../../public/imgs/Study.png" alt="title" class="title" slot="title"/>
     </Header>
     <div class="PDFwrap">
       <div class="PDFconternt">
         <div class="pages">
           <div class="pdf">
-            <pdf  v-for="i in Pages" :key="i" :src="url" :page="i"></pdf>
+            <pdf  v-for="i in numPages" :key="i" :src="url" :page="i"></pdf>
           </div>
         </div>
         <div class="tips">
@@ -33,18 +33,20 @@
 import Header from '../../components/Header/Header'
 import wheel from '../../components/Wheel/wheel'
 import tip from '../../components/Tip/tip'
+import pdf from 'vue-pdf'
 import { mapState } from 'vuex'
 import BScroll from 'better-scroll'
-import pdf from 'vue-pdf'
 import routerMain from '../../router/main.js'
+
+// const loadingTask = pdf.createLoadingTask(this.url)
 
 export default {
   data () {
     return {
       // url: 'http://storage.xuetangx.com/public_assets/xuetangx/PDF/PlayerAPI_v1.0.6.pdf',
-      Pages: 2,
       ansIsOn: false,
-      signIsOn: false
+      signIsOn: false,
+      numPages: []
     }
   },
   components: {
@@ -55,42 +57,57 @@ export default {
   },
   computed: {
     ...mapState(['notes', 'modules', 'isToken']),
-    token () {
-      return this.$api.getStorage('userinfo')
-    },
+    // token () {
+    //   return this.$api.getStorage('userinfo')
+    // },
     url () {
-      return this.$page.pageParam().url
+      return this.$page.pageParam && this.$page.pageParam().url
     }
   },
   methods: {
     ...routerMain,
     getNumPages (url) {
-      var loadingTask = pdf.createLoadingTask(url)
+      const loadingTask = pdf.createLoadingTask(url)
       loadingTask.then(pdf => {
         this.url = loadingTask
-        this.Pages = pdf.numPages
-      }).catch(() => {})
+        this.numPages = pdf.numPages
+      }).catch(err => {
+        console.log(err, 'pdf加载失败')
+      })
+    //   // const pdfReader = this.api.require('androidPdfReader')
+    //   // pdfReader.openView({
+    //   //   rect: {
+    //   //     x: 0,
+    //   //     y: 0,
+    //   //     w: 'auto',
+    //   //     h: 'auto'
+    //   //   },
+    //   //   path: url,
+    //   //   fixedOn: this.api.frameName,
+    //   //   fixed: true
+    //   // }, ret => {
+    //   //   alert(JSON.stringify(ret))
+    //   // })
     },
     wheel (id) {
       this.ansIsOn = id === 1
       this.signIsOn = id === 2
       const title = id === 1 ? '提问' : '打卡'
-      this.$refs.wheel.wheel(title, this.$page.pageParam().id)
+      this.$refs.wheel.wheel(title, this.$page.pageParam && this.$page.pageParam().id)
     }
   },
   mounted () {
     this.getNumPages(this.url)
-    this.$store.dispatch('checkToken', {
-      token: this.token,
-      cb: () => {
-        if (this.isToken) {
-          this.$store.dispatch('getNote', { mainId: this.$route.params.id })
-        } else {
-          this.to('UserLogin', {}, '')
-        }
-      }
-    })
-
+    // this.$store.dispatch('checkToken', {
+    //   token: this.token,
+    //   cb: () => {
+    //     if (this.isToken) {
+    //       this.$store.dispatch('getNote', { mainId: this.$page.pageParam && this.$page.pageParam().id })
+    //     } else {
+    //       this.to('UserLogin', {}, '')
+    //     }
+    //   }
+    // })
     new BScroll('.PDFwrap', {// eslint-disable-line
       scrollX: true,
       scrollY: false
@@ -123,7 +140,7 @@ export default {
     margin 0 auto
     width 345px
     height 85%
-    background url('./imgs/bg.png') no-repeat
+    background url('../../../public/imgs/bg.png') no-repeat
     overflow hidden
     .PDFconternt
       display flex

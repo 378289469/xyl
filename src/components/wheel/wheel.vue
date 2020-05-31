@@ -24,6 +24,9 @@ export default {
   },
   computed: {
     ...mapState(['msg'])
+    // token () {
+    //   return this.$api.getStorage('userinfo')
+    // }
   },
   methods: {
     wheel (title, id, list) {

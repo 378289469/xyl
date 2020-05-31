@@ -1,7 +1,7 @@
 <template>
   <div id="UserLogin">
     <Header>
-      <img src="./imgs/title.png" alt="title" class="title" slot="title">
+      <img src="../../../public/imgs/index.png" alt="title" class="title" slot="title">
     </Header>
     <form action="" class="items" @submit.prevent="submit">
       <h2>用户登录</h2>
@@ -12,7 +12,7 @@
         <span class="keyImg" v-if="iconClass[i]==='icon-key'" @click="key"><img :src="keyUrl" alt=""></span>
       </div>
       <button>登录</button>
-      <h3 @click="go('UserRegister')"><span>还没有账号？</span>立即注册</h3>
+      <h3 @click="to('UserRegister')"><span>还没有账号？</span>立即注册</h3>
     </form>
     <tip/>
   </div>
@@ -29,7 +29,7 @@ import routerMain from '../../router/main.js'
 export default {
   data () {
     return {
-      info: { name: this.$route.params.username, password: '', key: '' },
+      info: { name: '', password: '', key: '' },
       types: ['', 'tel', 'password', 'tel'],
       maxlength: ['', 11, 20, 4],
       placeholders: ['', '请输入手机号', '请输入密码', '请输入验证码'],
@@ -45,13 +45,16 @@ export default {
     ...mapState(['userInfo']),
     model () {
       return ['', this.info.name, this.info.password, this.info.key]
+    },
+    userInfo () {
+      return window.localStorage.getItem('UserInfo')
     }
   },
   methods: {
     ...routerMain,
-    go (path) {
-      this.$page.push({ name: path })
-    },
+    // to (path) {
+    //   this.$page.push({ name: path })
+    // },
     key () {
       this.keyUrl = `${baseUrl}/front/login/getCheckCode?${Date.now()}`
     },
@@ -65,26 +68,36 @@ export default {
         const paramets = {
           info,
           cb: () => {
-            if (this.userInfo) {
+            const { userInfo } = this
+            if (userInfo) {
+              const msg = userInfo.roleItemId === 1 ? '教师用户不能登陆' : '登陆成功'
               this.$store.dispatch('tipMsg', {
-                tips: { type: 5, msg: this.userInfo.message }
+                tips: { type: 5, msg }
               }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+              userInfo.roleItemId !== 1 && window.localStorage.setItem('navGuide', 4)
+              userInfo.roleItemId !== 1 && this.to('My', { pageParam: userInfo })
             }
-            if (this.userInfo.result && this.userInfo.result.userInfo) {
-              const userInfo = this.userInfo.result.userInfo
-              var intervalID = setTimeout(() => {
-                clearInterval(intervalID)
-                if (userInfo.roleItemId === 1) {
-                  this.$store.dispatch('tipMsg', {
-                    tips: { type: 5, msg: '教师账户不能登录' }
-                  }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
-                } else {
-                  this.$api.setStorage('userinfo', this.userInfo)
-                  this.$api.setStorage('userpwd', this.model[2] && this.model[2].trim())
-                  this.$page.push({ name: 'My', pageParam: userInfo })
-                }
-              }, 3000)
-            }
+            // if (this.userInfo) {
+            //   this.$store.dispatch('tipMsg', {
+            //     tips: { type: 5, msg: this.userInfo.message }
+            //   }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+            // }
+            // if (this.userInfo.result && this.userInfo.result.userInfo) {
+            //   const userInfo = this.userInfo.result.userInfo
+            //   var intervalID = setTimeout(() => {
+            //     clearInterval(intervalID)
+            //     if (userInfo.roleItemId === 1) {
+            //       this.$store.dispatch('tipMsg', {
+            //         tips: { type: 5, msg: '教师账户不能登录' }
+            //       }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+            //     } else {
+            //       // .$api.setStorage('userinfo', this.userInfo)
+            //       // .$api.setStorage('userpwd', this.model[2] && this.model[2].trim())
+            //       window.localStorage.setItem('navGuide', 4)
+            //       this.to('My', { pageParam: userInfo })
+            //     }
+            //   }, 3000)
+            // }
           }
         }
         this.$store.dispatch('userLogin', paramets)
@@ -126,7 +139,7 @@ export default {
     width 315px
     height 410px
     text-align center
-    background url('./imgs/loginbg.png') no-repeat
+    background url('../../../public/imgs/loginbg.png') no-repeat
     background-size 315px 410px
     background-position center
     h2

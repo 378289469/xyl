@@ -1,8 +1,8 @@
 <template>
 	<div id="info">
-		<img :src="token.result.userInfo.avatar || imgUrl" :onerror="errorurl" alt="student" />
-    <h2>{{token.result.userInfo.realname}}</h2>
-    <h3>{{token.result.userInfo.factions}}</h3>
+		<img :src="UserInfo.avatar || imgUrl" :onerror="errorurl" alt="student" />
+    <h2>{{UserInfo.realname}}</h2>
+    <h3>{{UserInfo.factions}}</h3>
     <span class="iconfont icon-school">资本论课程平台</span>
 	</div>
 </template>
@@ -11,13 +11,13 @@
 export default {
   data () {
     return {
-      errorurl: 'this.src="' + require('./imgs/person.png') + '"',
-      imgUrl: require('./imgs/person.png')
+      errorurl: 'this.src="' + require('../../../../public/imgs/avatar.png') + '"',
+      imgUrl: require('../../../../public/imgs/avatar.png')
     }
   },
   computed: {
-    token () {
-      return this.$api.getStorage('userinfo')
+    UserInfo () {
+      return JSON.parse(window.localStorage.getItem('UserInfo'))
     }
   }
 }
@@ -33,7 +33,7 @@ export default {
   width 90%
   height 170px
   text-align center
-  background url('./imgs/bg.png') no-repeat
+  background url('../../../../public/imgs/userInfoBg.png') no-repeat
   background-size 345px 170px
   img
     width 55px

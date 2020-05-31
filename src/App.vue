@@ -1,14 +1,17 @@
 <template>
   <div id="app">
-    <router-view />
+    <index/>
+    <FooterGuide/>
   </div>
 </template>
 
 <script>
+import index from './pages/index/index'
 import FooterGuide from './components/FooterGuide/FooterGuide'
 import { mapActions } from 'vuex'
 export default {
   components: {
+    index,
     FooterGuide
   },
   data () {
@@ -18,11 +21,10 @@ export default {
   },
   mounted () {
     this.getCourseIntroduce()
-    this.getCourseLearners()
     this.getTeachers()
   },
   methods: {
-    ...mapActions(['getCourseIntroduce', 'getCourseLearners', 'reqActivitys', 'getTeachers'])
+    ...mapActions(['getCourseIntroduce', 'reqActivitys', 'getTeachers'])
   }
 }
 </script>

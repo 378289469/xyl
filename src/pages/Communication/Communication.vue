@@ -1,7 +1,7 @@
 <template>
   <div id="Communication">
     <Header>
-      <img src="./imgs/title.png" alt="title" class="title" slot="title">
+      <img src="../../../public/imgs/Communication.png" alt="title" class="title" slot="title">
     </Header>
     <Communication/>
     <FooterGuide/>

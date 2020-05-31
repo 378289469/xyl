@@ -3,7 +3,7 @@
     <slot name="top" class="top"></slot>
     <div class="activitys" >
       <ul class="list" >
-        <li v-for="(activity ,index) in Activitys" :key="index" @click="hand(activity)">
+        <li v-for="(activity ,index) in Activitys" :key="index" @click="to('ActivityDetail', { activity })">
           <h3 class="ellipsis">{{activity.activityName}}</h3>
           <span class="iconfont icon-date btn icon3"></span>
           <span class="time">{{activity.activityStart}}---{{activity.activityEnd}}</span>
@@ -21,9 +21,9 @@ import routerMain from '../../../router/main.js'
 export default {
   computed: {
     ...mapState(['searchActivitys', 'isToken']),
-    token () {
-      return this.$api.getStorage('userinfo')
-    },
+    // token () {
+    //   return this.$api.getStorage('userinfo')
+    // },
     Activitys () {
       let Activitys = []
       if (this.searchActivitys.length > 0) {
@@ -34,39 +34,40 @@ export default {
   },
   mounted () {
     this.$store.dispatch('reqActivitys', { page: 1 })
-    new BScroll('.activitys') // eslint-disable-line
+    new BScroll('.activitys', {click: true}) // eslint-disable-line
   },
   updated () {
-    new BScroll('.activitys') // eslint-disable-line
+    new BScroll('.activitys', {click: true}) // eslint-disable-line
   },
   methods: {
-    ...routerMain,
-    hand (activity) {
-      alert(999)
-      if (!this.token) {
-        this.to('UserLogin', {})
-        return
-      }
-      this.$store.dispatch('checkToken', {
-        token: this.token,
-        cb: () => {
-          if (this.isToken) {
-            this.$store.dispatch('getPdfFile', {
-              mainId: activity.id,
-              id: 2,
-              cb: () => {
-                this.$store.dispatch('activity', {
-                  activity,
-                  cb: () => this.to('ActivityDetail', { activity })
-                })
-              }
-            })
-          } else {
-            this.to('UserLogin', {})
-          }
-        }
-      })
-    }
+    ...routerMain
+    // toActivity (activity) {
+    //   if (!this.token) {
+    //     this.to('UserLogin')
+    //     return
+    //   }
+    //   this.$store.dispatch('checkToken', {
+    //     token: this.token,
+    //     cb: () => {
+    //       if (this.isToken) {
+    //         this.$store.dispatch('getPdfFile', {
+    //           mainId: activity.id,
+    //           id: 2,
+    //           cb: () => {
+    //             this.$store.dispatch('activity', {
+    //               activity,
+    //               cb: () => {
+    //                 this.to('ActivityDetail', { activity })
+    //               }
+    //             })
+    //           }
+    //         })
+    //       } else {
+    //         this.to('UserLogin')
+    //       }
+    //     }
+    //   })
+    // }
   }
 }
 </script>
@@ -105,9 +106,9 @@ export default {
       font-weight  bolder
       color #802529
     .more,.btn
-      margin-left 50%
       font-size 12px
       color #828282
+      margin-left 45%
     .btn
       margin-left 6px
   .activitys
@@ -124,7 +125,7 @@ export default {
       li:last-child
         border-bottom none
       h3
-        width 315px
+        width 90%
         font-size 14px
       .icon3
         margin-left 0

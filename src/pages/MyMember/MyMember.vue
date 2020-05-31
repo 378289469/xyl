@@ -2,13 +2,13 @@
   <div id="MyMember">
     <Header>
       <span class="iconfont icon-left back" slot="back" @click="to('My')"/>
-      <img src="./imgs/title.png" alt="title" class="title" slot="title">
+      <img src="../../../public/imgs/MyMember.png" alt="title" class="title" slot="title">
     </Header>
     <div class="item">
       <div class="wrap">
         <List v-for="(person, index) in UserGroup" :key="index" class='list'>
           <div class="title" slot="title">
-             <img class="avatar" src="./imgs/avatar.png" alt="">
+             <img class="avatar" src="../../../public/imgs/avatar.png" alt="">
              <h3>{{person.realname}}</h3>
              <span class="user">（{{person.factions}}）</span>
              <span class="tip" v-if="person.isGroupLeader==='是'">组长</span>
@@ -43,24 +43,15 @@ export default {
   computed: {
     ...mapState(['UserGroup', 'userInfo', 'isToken']),
     token () {
-      return this.$api.getStorage('userinfo')
+      return JSON.parse(window.localStorage.getItem('UserInfo'))
     }
   },
   methods: {
     ...routerMain
   },
   mounted () {
-    this.$store.dispatch('checkToken', {
-      token: this.token,
-      cb: () => {
-        if (this.isToken) {
-          this.$store.dispatch('getUserGroup', () => {
-            new BScroll('.item') // eslint-disable-line
-          })
-        } else {
-          this.to('UserLogin', {}, '')
-        }
-      }
+    this.$store.dispatch('getUserGroup', () => {
+      new BScroll('.item') // eslint-disable-line
     })
   }
 }
@@ -80,7 +71,7 @@ export default {
     width 345px
     height 85%
     overflow hidden
-    background url('./imgs/bg.png') no-repeat
+    background url('../../../public/imgs/bg.png') no-repeat
     .wrap
       padding 20px 0
     .list

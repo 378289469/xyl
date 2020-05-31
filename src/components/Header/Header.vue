@@ -17,8 +17,8 @@ export default {
   top 0
   left 0
   width 100%
-  height 20%
-  background-image url(./imgs/header.png)
+  height 30%
+  background-image url(../../../public/imgs/header.png)
   background-size 100% 100%
   .back
     width 10px
@@ -30,8 +30,10 @@ export default {
   .title
     display block
     position absolute
+    width 20%
     top 38px
-    left 126px
+    left 50%
+    transform translateX(-50%)
     color #F2E8B6
     font-size 40px
 </style>

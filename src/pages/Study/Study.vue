@@ -1,7 +1,7 @@
 <template>
   <div id="study">
     <Header>
-      <img src="./imgs/title.png" alt="title" class="title" slot="title">
+      <img src="../../../public/imgs/Study.png" alt="title" class="title" slot="title">
     </Header>
     <CourseDir/>
     <FooterGuide/>

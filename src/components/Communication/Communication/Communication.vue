@@ -5,7 +5,7 @@
     <Search class="search" @Search="getEvaluate"/>
     <div class="wrap" ref="bsWrapper">
       <ul>
-        <li v-for="(list, index) in evaluatelist" :key="index" @click="hand(index)">
+        <li v-for="(list, index) in evaluatelist" :key="index" @click="toCommunicationDetail(index)">
           <div class="info">
             <div class="avatar">
               <img :src="list.user.avatar || imgUrl" alt="avatar" :onerror="errorurl">
@@ -24,6 +24,7 @@
         </li>
       </ul>
     </div>
+    <tip/>
   </div>
 </template>
 
@@ -34,6 +35,7 @@ import PullDown from '@better-scroll/pull-down'
 import Pullup from '@better-scroll/pull-up'
 import Search from '../../Search/Search'
 import routerMain from '../../../router/main.js'
+import tip from '../../Tip/tip'
 
 BScroll.use(Pullup)
 BScroll.use(PullDown)
@@ -42,8 +44,8 @@ export default {
   data () {
     return {
       topicType: 1, // 1目录 2 活动
-      errorurl: 'this.src="' + require('./imgs/person.png') + '"',
-      imgUrl: require('./imgs/person.png'),
+      errorurl: 'this.src="' + require('../../../../public/imgs/avatar.png') + '"',
+      imgUrl: require('../../../../public/imgs/avatar.png'),
       btn: true,
       sourse: ['', '打卡', '提问'],
       page: 1,
@@ -51,21 +53,28 @@ export default {
     }
   },
   components: {
-    Search
+    Search,
+    tip
   },
   computed: {
-    ...mapState(['evaluatelist', 'isToken']),
-    token () {
-      return this.$api.getStorage('userinfo')
-    }
+    ...mapState(['evaluatelist', 'isToken'])
+    // token () {
+    //   return this.$api.getStorage('userinfo')
+    // }
   },
   methods: {
     ...routerMain,
-    hand (index) {
+    toCommunicationDetail (index) {
+      if (this.evaluatelist[index].list.length === 0) {
+        this.$store.dispatch('tipMsg', {
+          tips: { type: 5, msg: '当前交流还没有教师回复' }
+        }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+        return
+      }
       this.to('CommunicationDetail', { index, page: this.page })
     },
     getEvaluate (text) {
-      const userId = this.token.result.userInfo.id
+      const userId = JSON.parse(window.localStorage.getItem('UserInfo')).id
       const Evaluate = {
         isActiorchapter: this.topicType,
         userId,
@@ -83,36 +92,19 @@ export default {
     },
     course (type) {
       this.topicType = type
-      this.$store.dispatch('checkToken', {
-        token: this.token,
-        cb: () => {
-          if (this.isToken) {
-            this.getEvaluate()
-          } else {
-            this.to('UserLogin', {}, '')
-          }
-        }
-      })
+      this.getEvaluate()
       this.btn = true
     },
     activity (type) {
       this.topicType = type
-      this.$store.dispatch('checkToken', {
-        token: this.token,
-        cb: () => {
-          if (this.isToken) {
-            this.getEvaluate()
-          } else {
-            this.to('UserLogin', {}, '')
-          }
-        }
-      })
+      this.getEvaluate()
       this.btn = false
     },
     initBscroll () {
       this.bscroll = new BScroll(this.$refs.bsWrapper, {
         scrollY: true,
         pullUpLoad: true,
+        click: true,
         pullDownRefresh: {
           threshold: 80, // 下拉距离
           stop: 30 // 停止距离
@@ -145,16 +137,7 @@ export default {
     this.bscroll = null
   },
   mounted () {
-    this.$store.dispatch('checkToken', {
-      token: this.token,
-      cb: () => {
-        if (this.isToken) {
-          this.getEvaluate()
-        } else {
-          this.to('UserLogin', {}, '')
-        }
-      }
-    })
+    this.getEvaluate()
   },
   updated () {
     this.initBscroll()
@@ -172,14 +155,14 @@ export default {
   width: 90%;
   height: 80%;
   padding-top 35px
-  background: url('./imgs/bg.png') no-repeat;
+  background: url('../../../../public/imgs/homeCourse.png') no-repeat;
   background-color: white;
   .course,.activity {
     position: absolute;
     top: -22px;
     width: 127px;
     height: 44px;
-    background: url('./imgs/title.png') no-repeat;
+    background: url('../../../../public/imgs/title.png') no-repeat;
     color: #F4D6B2;
     font-size: 20px;
     line-height: 52px;
@@ -192,7 +175,7 @@ export default {
     right 34px
   }
   .on{
-     background: url('./imgs/on.png') no-repeat;
+     background: url('../../../../public/imgs/titlebg.png') no-repeat;
      color white
   }
   .search{

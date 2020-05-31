@@ -3,18 +3,18 @@
     <dir class="top" v-if="evaluatelist.length > 0">
       <div class="info">
         <div class="avatar">
-          <img :src="evaluatelist[index.index].user.avatar || imgUrl" alt="avatar" :onerror="errorurl">
+          <img :src="evaluatelist[index].user.avatar || imgUrl" alt="avatar" :onerror="errorurl">
         </div>
         <span>学生</span>
       </div>
       <div class="content">
         <div class="author">
-            <span class="realname">{{evaluatelist[index.index].user.realname}}</span>
-            <span class="createTime">{{evaluatelist[index.index].createTime}}</span>
+            <span class="realname">{{evaluatelist[index].user.realname}}</span>
+            <span class="createTime">{{evaluatelist[index].createTime}}</span>
         </div>
-        <p>{{evaluatelist[index.index].context}}</p>
-        <i class="ellipsis">知识点：{{evaluatelist[index.index].chapter? evaluatelist[index.index].chapter.chapterPath: ''}}{{evaluatelist[index.index].chapter? evaluatelist[index.index].chapter.chapterName: ''}}</i>
-        <div class="source">来源：<span class="sourse-type">{{sourse[evaluatelist[index.index].topicType]}}</span><span class="count">{{evaluatelist[index.index].list.length}}</span>回复</div>
+        <p>{{evaluatelist[index].context}}</p>
+        <i class="ellipsis">知识点：{{evaluatelist[index].chapter? evaluatelist[index].chapter.chapterPath: ''}}{{evaluatelist[index].chapter? evaluatelist[index].chapter.chapterName: ''}}</i>
+        <div class="source">来源：<span class="sourse-type">{{sourse[evaluatelist[index].topicType]}}</span><span class="count">{{evaluatelist[index].list.length}}</span>回复</div>
       </div>
     </dir>
     <div class="wrap" v-if="componentslist.length > 0">
@@ -56,8 +56,8 @@ import tip from '../../Tip/tip'
 export default {
   data () {
     return {
-      errorurl: 'this.src="' + require('./imgs/person.png') + '"',
-      imgUrl: require('./imgs/person.png'),
+      errorurl: 'this.src="' + require('../../../../public/imgs/avatar.png') + '"',
+      imgUrl: require('../../../../public/imgs/avatar.png'),
       sourse: ['', '打卡', '提问'],
       roleItem: ['', '教师', '学生', '学生']
     }
@@ -68,11 +68,11 @@ export default {
   },
   computed: {
     ...mapState(['evaluatelist', 'componentslist', 'isToken', 'msg']),
-    token () {
-      return this.$api.getStorage('userinfo')
-    },
+    // token () {
+    //   return this.$api.getStorage('userinfo')
+    // },
     index () {
-      return this.$page.pageParam()
+      return this.$page.pageParam && this.$page.pageParam().index
     },
     page () {
       return this.msg === '添加成功！'
@@ -81,16 +81,7 @@ export default {
   watch: {
     page () {
       if (this.page) {
-        this.$store.dispatch('checkToken', {
-          token: this.token,
-          cb: () => {
-            if (this.isToken) {
-              this.getEvaluate()
-            } else {
-              this.to('UserLogin', {}, '')
-            }
-          }
-        })
+        this.getEvaluate()
         this.page = !this.page
       }
     }
@@ -102,50 +93,32 @@ export default {
       this.$refs.wheel.wheel(title, '', list)
     },
     getEvaluate () {
-      const userId = this.token.result.userInfo.id
+      const userId = JSON.parse(window.localStorage.getItem('UserInfo')).id
       this.$store.dispatch('getEvaluate', {
         isActiorchapter: this.topicType,
         userId,
-        page: this.index.page,
+        page: this.$page.pageParam && this.$page.pageParam().page,
         cb: () => {
           this.getEvaluateComponents()
         }
       })
     },
     getEvaluateComponents () {
-      this.$store.dispatch('checkToken', {
-        token: this.token,
+      this.$store.dispatch('getEvaluateComponents', {
+        parentId: this.evaluatelist[this.index].id,
         cb: () => {
-          if (this.isToken) {
-            this.$store.dispatch('getEvaluateComponents', {
-              parentId: this.evaluatelist[this.index.index].id,
-              cb: () => {
-                try {
-                  new BScroll('.wrap') // eslint-disable-line
-                  new BScroll('.context', {// eslint-disable-line
-                    stopPropagation: true
-                  })
-                } catch (error) {}
-              }
+          try {
+            new BScroll('.wrap') // eslint-disable-line
+            new BScroll('.context', {// eslint-disable-line
+              stopPropagation: true
             })
-          } else {
-            this.to('UserLogin', {}, '')
-          }
+          } catch (error) {}
         }
       })
     }
   },
   mounted () {
-    this.$store.dispatch('checkToken', {
-      token: this.token,
-      cb: () => {
-        if (this.isToken) {
-          this.getEvaluate()
-        } else {
-          this.to('UserLogin', {}, '')
-        }
-      }
-    })
+    this.getEvaluate()
   }
 }
 </script>
@@ -159,7 +132,8 @@ export default {
   width: 346px;
   height: 77%;
   padding-top 15px
-  background: url('./imgs/bg.png') no-repeat;
+  border-radius 5px
+  box-shadow 0 0 5px #802529
   background-color: white;
   .top{
     display flex

@@ -1,8 +1,8 @@
 <template>
   <div id="video">
     <Header>
-      <span class="iconfont icon-left back" slot="back" @click="back"/>
-      <img src="./imgs/title.png" alt="title" class="title" slot="title">
+      <span class="iconfont icon-left back" slot="back" @click="hand"/>
+      <img src="../../../public/imgs/Activity.png" alt="title" class="title" slot="title">
     </Header>
     <video-player
      ref="videoPlayer"
@@ -78,18 +78,21 @@ export default {
       return this.$refs.videoPlayer.player
     },
     pdfFileList () {
-      const pdfFileList = this.$page.pageParam().videoPaths
+      const pdfFileList = this.$page.pageParam && this.$page.pageParam().videoPaths
       return pdfFileList
     }
   },
   mounted () {
     new BScroll('.videoWrap') // eslint-disable-line
-    this.playerOptions.sources[0].src = this.$page.pageParam().url
+    this.playerOptions.sources[0].src = this.$page.pageParam && this.$page.pageParam().url
   },
   methods: {
     ...routerMain,
     show (url) {
       this.playerOptions.sources[0].src = url
+    },
+    hand () {
+      this.to('ActivityDetail', { activity: this.$page.pageParam && this.$page.pageParam().activity })
     },
     onPlayerPlay (player) { // 监听播放
       // console.log(player)
@@ -143,7 +146,7 @@ export default {
   margin 0 auto
   width 345px
   height 85%
-  background url('./imgs/bg.png') no-repeat
+  background url('../../../public/imgs/bg.png') no-repeat
   .videoWrap
     margin 10px
     height 70%

@@ -31,10 +31,10 @@ export default {
     }
   },
   computed: {
-    ...mapState(['searchActivitys', 'activitys']),
-    token () {
-      return this.$api.getStorage('userinfo')
-    }
+    ...mapState(['searchActivitys', 'activitys'])
+    // token () {
+    //   return this.$api.getStorage('userinfo')
+    // }
   },
   created () {
     this.bscroll = null
@@ -55,12 +55,14 @@ export default {
       this.bscroll = new BScroll(this.$refs.bsWrapper, {
         scrollY: true,
         pullUpLoad: true,
+        click: true,
         pullDownRefresh: {
           threshold: 80, // 下拉距离
           stop: 30 // 停止距离
         }
       })
       this.bscroll.on('pullingDown', () => {
+        console.log('pullingDown')
         if (!this.isPull) {
           this.isPull = true
           if (this.page < 2) {
@@ -68,9 +70,11 @@ export default {
           }
           this.page -= 1
           this.$store.dispatch('reqActivitys', { page: this.page, cb: this.cb })
+          console.log('pullingDown')
         }
       })
       this.bscroll.on('pullingUp', () => {
+        console.log('pullingUp')
         if (!this.isPull) {
           this.isPull = true
           if (this.activitys) {
@@ -79,6 +83,7 @@ export default {
           }
           this.page += 1
           this.$store.dispatch('reqActivitys', { page: this.page, cb: this.cb })
+          console.log('pullingUp')
         }
       })
     },
@@ -136,7 +141,7 @@ export default {
     height 90%
     overflow hidden
     ul
-      height 100%
+      height 150%
       margin-left 16px
       line-height 30px
       text-align left

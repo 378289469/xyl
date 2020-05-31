@@ -2,7 +2,7 @@
   <div id = "CourseIntroduce">
     <Header>
       <span class="iconfont icon-left back" slot="back" @click="back"/>
-      <img src="./imgs/title.png" alt="title" class="title" slot="title">
+      <img src="../../../public/imgs/index.png" alt="title" class="title" slot="title">
     </Header>
     <div class="introduce">
       <h2 class="title">课程简介</h2>
@@ -30,6 +30,8 @@ export default {
   },
   mounted () {
     this.$store.dispatch('getCourseIntroduce')
+  },
+  beforeUpdate () {
     new BScroll('.conternt') // eslint-disable-line
   }
 }
@@ -49,7 +51,7 @@ export default {
     margin 0 auto
     width 345px
     height 85%
-    background url('./imgs/bg.png') no-repeat
+    background url('../../../public/imgs/bg.png') no-repeat
     .title
       position: absolute
       top: -22px
@@ -59,7 +61,7 @@ export default {
       margin: 0 auto
       width: 127px
       height: 44px
-      background: url('./imgs/titlebg.png') no-repeat
+      background: url('../../../public/imgs/titlebg.png') no-repeat
       color: white
       font-size: 20px
       line-height: 52px
@@ -76,4 +78,8 @@ export default {
         height 50%!important
       div >>> h2
         margin 10px!important
+        padding-left -40px!important
+      div >>> p
+        margin 10px!important
+        padding-left -40px!important
 </style>

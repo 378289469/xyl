@@ -1,10 +1,10 @@
 <template>
   <div>
     <Header>
-      <span class="iconfont icon-left back" slot="back" @click="back"/>
-      <img src="./imgs/title.png" alt="title" class="title" slot="title">
+      <span class="iconfont icon-left back" slot="back" @click="to('Activity')"/>
+      <img src="../../../public/imgs/Activity.png" alt="title" class="title" slot="title">
     </Header>
-    <div id="ActivityDetail">
+    <div id="ActivityDetail" v-if="ActivityDetail.length > 0">
       <div class="content" v-for="(ad, index) in ActivityDetail" :key="index">
         <div class="title">
           <span>{{ad.tag}}</span>
@@ -49,21 +49,25 @@ export default {
   },
   computed: {
     ...mapState(['PdfFile', 'CourseChapter', 'modules', 'isToken']),
-    token () {
-      return this.$api.getStorage('userinfo')
-    },
+    // token () {
+    //   return this.$api.getStorage('userinfo')
+    // },
     activity () {
-      return this.$page.pageParam().activity
+      // return this.$page.pageParam && this.$page.pageParam().activity
+      return this.$page.pageParam && this.$page.pageParam().activity
     },
     ActivityDetail () {
-      const { activity } = this
-      const ActivityDetail = [
-        { title: activity.activityName, tag: '名称：' },
-        { content: 0, tag: '内容：' },
-        { title: `${activity.activityStart.slice(0, 10)}一${activity.activityEnd.slice(0, 10)}`, tag: '时间：' },
-        { content: 1, tag: '任务：', title: `${this.tasks[0]}----------${this.tasks[1]}` },
-        { content: 2, tag: '附件：' }
-      ]
+      let ActivityDetail = []
+      if (this.activity) {
+        const { activity } = this
+        ActivityDetail = [
+          { title: activity.activityName, tag: '名称：' },
+          { content: 0, tag: '内容：' },
+          { title: `${activity.activityStart.slice(0, 10)}一${activity.activityEnd.slice(0, 10)}`, tag: '时间：' },
+          { content: 1, tag: '任务：', title: `${this.tasks[0]}----------${this.tasks[1]}` },
+          { content: 2, tag: '附件：' }
+        ]
+      }
       return ActivityDetail
     },
     tasks () {
@@ -87,7 +91,7 @@ export default {
       const pdfFiles = this.PdfFile
       pdfFiles.forEach(pf => {
         if (pf.suffix === 'mp4' || pf.suffix === 'MP4' || pf.suffix === 'Mp4' || pf.suffix === 'mP4') {
-          pf.url = require('./imgs/video.png')
+          pf.url = require('../../../public/imgs/video.png')
         } else {
           pf.url = pf.path
         }
@@ -102,37 +106,50 @@ export default {
     },
     hand (index) {
       const { pdfFiles } = this
-      const videoPaths = pdfFiles.filter(pf => pf.url === require('./imgs/video.png'))
+      const videoPaths = pdfFiles.filter(pf => pf.url === require('../../../public/imgs/video.png'))
       if (pdfFiles[index].suffix === 'mp4' || pdfFiles[index].suffix === 'MP4' || pdfFiles[index].suffix === 'Mp4' || pdfFiles[index].suffix === 'mP4') {
         event.stopPropagation()
         const pageParam = {
           url: pdfFiles[index].path,
-          videoPaths
+          videoPaths,
+          activity: this.activity
         }
-        this.to('Video', pageParam, this.token)
+        this.to('Video', pageParam)
       }
     }
   },
   mounted () {
-    this.$store.dispatch('checkToken', {
-      token: this.token,
+    this.$store.dispatch('getPdfFile', {
+      mainId: this.activity.id,
+      id: 2,
       cb: () => {
-        if (this.isToken) {
-          this.$store.dispatch('getPdfFile', {
-            mainId: this.$page.pageParam().activity.id,
-            id: 2,
-            cb: () => {
-              new BScroll('.media', {// eslint-disable-line
-                scrollX: true,
-                scrollY: false
-              })
-            }
-          })
-        } else {
-          this.to('UserLogin', {}, '')
-        }
+        new BScroll('.media', {// eslint-disable-line
+          scrollX: true,
+          scrollY: false,
+          click: true
+        })
       }
     })
+    // this.$store.dispatch('checkToken', {
+    // token: this.token,
+    // cb: () => {
+    //   if (this.isToken) {
+    //     this.$store.dispatch('getPdfFile', {
+    //       mainId: this.$page.pageParam && this.$page.pageParam().activity.id,
+    //       id: 2,
+    //       cb: () => {
+    //         new BScroll('.media', {// eslint-disable-line
+    //           scrollX: true,
+    //           scrollY: false,
+    //           click: true
+    //         })
+    //       }
+    //     })
+    //   } else {
+    //     this.to('UserLogin', {}, '')
+    //   }
+    // }
+    // })
     this.$store.dispatch('getCourseChapter')
     new BScroll('.detail') // eslint-disable-line
     new BScroll('.task') // eslint-disable-line
@@ -140,7 +157,8 @@ export default {
   updated () {
     new BScroll('.media', {// eslint-disable-line
       scrollX: true,
-      scrollY: false
+      scrollY: false,
+      click: true
     })
   }
 }
@@ -150,19 +168,19 @@ export default {
 <style scoped lang="stylus">
 #ActivityDetail
   position absolute
-  top 110px
+  top 15%
   left 0
   right 0
   margin 0 auto
   width 345px
   height 85%
-  background url('./imgs/bg.png') no-repeat
+  background url('../../../public/imgs/bg.png') no-repeat
   .content
     width 90%
     margin auto
     .title
       display flex
-      padding 15px
+      padding 10px
       background-color #FFEAD0
       border-radius 5px
       margin-top 16px
@@ -174,7 +192,7 @@ export default {
         width 80%
         font-weight bold
     .detail,.task,.media
-      height 74px
+      height 50px
       padding 15px
       text-align left
       background-color #FFF4E2
@@ -185,7 +203,7 @@ export default {
         color #333333
         line-height 25px
     .task
-      height 92px
+      height 50px
     .media
       display flex
       height 80px

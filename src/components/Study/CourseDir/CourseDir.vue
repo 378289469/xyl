@@ -26,7 +26,8 @@ export default {
       id: 0,
       parentId: 0,
       index: 0,
-      noteId: 0
+      noteId: 0,
+      pdf: false
     }
   },
   components: {
@@ -34,9 +35,9 @@ export default {
   },
   computed: {
     ...mapState(['CourseChapter', 'PdfFile', 'isToken']),
-    token () {
-      return this.$api.getStorage('userinfo')
-    },
+    // token () {
+    //   return this.$api.getStorage('userinfo')
+    // },
     chapter () {
       const { CourseChapter, id, index, parentId } = this
       let chapter = []
@@ -54,14 +55,14 @@ export default {
     ...routerMain,
     show (index) {
       if (this.chapter[index] && this.chapter[index].oldName) {
-        // this.$router.push({ name: 'PDF', params: { url: this.chapter[index].path, id: this.noteId } })
-        this.$page.push({
-          name: 'PDF',
-          pageParam: {
-            url: this.chapter[index].path,
-            id: this.noteId
-          }
-        })
+        this.$router.push({ name: 'PDF', params: { url: this.chapter[index].path, id: this.noteId } })
+        // this.$page.push({
+        //   name: 'PDF',
+        //   pageParam: {
+        //     url: this.chapter[index].path,
+        //     id: this.noteId
+        //   }
+        // })
         return
       }
       const id = this.id = this.chapter[index].id
@@ -77,33 +78,61 @@ export default {
             this.CourseChapter.splice(key, 0)
           }
         }
+        if (cc.oldName) {
+          this.CourseChapter.splice(key, 1)
+        }
       })
       this.index = CourseChapterId
       if (this.CourseChapter[CourseChapterId].chapterLevel === 3) {
-        this.$store.dispatch('checkToken', {
-          token: this.token,
+        this.$store.dispatch('getPdfFile', {
+          mainId: id,
+          id: 1,
           cb: () => {
-            if (this.isToken) {
-              this.$store.dispatch('getPdfFile', {
-                mainId: id,
-                id: 1,
-                cb: () => {
-                  const PdfFile = this.PdfFile[0]
-                  if (PdfFile) {
-                    PdfFile.parentId = null
-                    this.CourseChapter.splice(CourseChapterId + 1, 0, PdfFile)
-                  } else {
-                    this.$store.dispatch('tipMsg', {
-                      tips: { type: 5, msg: '当前目录暂无内容' }
-                    }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
-                  }
-                }
-              })
+            const PdfFile = this.PdfFile[0]
+            if (PdfFile) {
+              PdfFile.parentId = null
+              this.pdf = !this.pdf
+              if (this.pdf) {
+                this.CourseChapter.splice(CourseChapterId + 1, 0, PdfFile)
+              } else {
+                this.CourseChapter.splice(CourseChapterId + 1, 1)
+              }
             } else {
-              this.to('UserLogin', {}, '')
+              this.$store.dispatch('tipMsg', {
+                tips: { type: 5, msg: '当前目录暂无内容' }
+              }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
             }
           }
         })
+        // this.$store.dispatch('checkToken', {
+        //   token: this.token,
+        //   cb: () => {
+        //     if (this.isToken) {
+        //       this.$store.dispatch('getPdfFile', {
+        //         mainId: id,
+        //         id: 1,
+        //         cb: () => {
+        //           const PdfFile = this.PdfFile[0]
+        //           if (PdfFile) {
+        //             PdfFile.parentId = null
+        //             this.pdf = !this.pdf
+        //             if (this.pdf) {
+        //               this.CourseChapter.splice(CourseChapterId + 1, 0, PdfFile)
+        //             } else {
+        //               this.CourseChapter.splice(CourseChapterId + 1, 1)
+        //             }
+        //           } else {
+        //             this.$store.dispatch('tipMsg', {
+        //               tips: { type: 5, msg: '当前目录暂无内容' }
+        //             }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+        //           }
+        //         }
+        //       })
+        //     } else {
+        //       this.to('UserLogin', {}, '')
+        //     }
+        //   }
+        // })
         this.noteId = id
       }
     }
@@ -121,7 +150,7 @@ export default {
   height: 80%;
   padding-top 35px
   transform: translateX(-50%)
-  background: url('./imgs/bg.png') no-repeat;
+  background: url('../../../../public/imgs/homeCourse.png') no-repeat;
   background-color: white;
 
   h2 {
@@ -133,7 +162,7 @@ export default {
     margin: 0 auto;
     width: 127px;
     height: 44px;
-    background: url('./imgs/title.png') no-repeat;
+    background: url('../../../../public/imgs/titlebg.png') no-repeat;
     color: white;
     font-size: 20px;
     line-height: 52px;
@@ -154,7 +183,7 @@ export default {
     }
     .title {
       display block
-      width 260px
+      width 80%
       margin-left 16px
       font-weight bolder!important
     }

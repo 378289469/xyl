@@ -1,7 +1,7 @@
 <template>
   <div id="UserLogin">
     <Header>
-      <img src="./imgs/title.png" alt="title" class="title" slot="title">
+      <img src="../../../public/imgs/index.png" alt="title" class="title" slot="title">
     </Header>
     <form action="" class="items" @submit.prevent="submit">
       <h2>用户注册</h2>
@@ -118,7 +118,7 @@ export default {
     width 315px
     height 510px
     text-align center
-    background url('./imgs/loginbg.png') no-repeat
+    background url('../../../public/imgs/loginbg.png') no-repeat
     background-size 315px 510px
     background-position center
     h2

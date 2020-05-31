@@ -25,8 +25,8 @@ import { mapState } from 'vuex'
 export default {
   data () {
     return {
-      errorurl: 'this.src="' + require('./imgs/person.png') + '"',
-      imgUrl: require('./imgs/person.png')
+      errorurl: 'this.src="' + require('../../../../public/imgs/avatar.png') + '"',
+      imgUrl: require('../../../../public/imgs/avatar.png')
     }
   },
   computed: {

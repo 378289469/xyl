@@ -2,17 +2,18 @@
   <div id="MySecurity">
     <Header>
       <span class="iconfont icon-left back" slot="back" @click="to('My')"/>
-      <img src="./imgs/title.png" alt="title" class="title" slot="title">
+      <img src="../../../public/imgs/MySecurity.png" alt="title" class="title" slot="title">
     </Header>
     <div class="item">
       <form action="" @submit.prevent="submit">
         <List v-for="i in 5" :key="i" class='list'>
           <div class="title" slot="title">
              <span >{{titles[i]}}</span>
-             <span class="username" v-if="i===2">{{token.result.userInfo.phone}}</span>
+             <span class="username" v-if="i===2">{{userInfo.phone}}</span>
              <input class="content" :disabled="disabled[i]" :maxlength="maxlength[i]" :type="type[i]"
               :placeholder="placeholders[i]" v-model="model[i]" @focus="focus()" @blur="blur()">
-             <img @click="upload" v-if="i===1" class="avatar" :src="token.result.userInfo.avatar || imgUrl" :onerror="errorurl" alt="avatar">
+             <img v-if="i===1" class="avatar" :src="imgUrl" :onerror="errorurl" alt="avatar">
+             <input type="file" ref="uploadAvatarImg" class="uploadAvatar" accept="image/*" @change="upload" v-if="i===1">
           </div>
         </List>
         <button>保存</button>
@@ -39,8 +40,8 @@ export default {
       type: ['', 'text', 'text', 'password', 'password', 'password'],
       titles: ['', '修改头像：', '用户名：', '原始密码：', '新密码：', '确认密码：'],
       placeholders: ['', '', '', '请输入原密码', '请输入新密码', '请输入确认密码'],
-      errorurl: 'this.src="' + require('./imgs/avatar.png') + '"',
-      imgUrl: require('./imgs/avatar.png')
+      errorurl: 'this.src="' + require('../../../public/imgs/avatar.png') + '"',
+      uploadAvatarImg: ''
     }
   },
   components: {
@@ -50,14 +51,17 @@ export default {
   },
   computed: {
     ...mapState(['userInfo', 'pwdInfo', 'isToken']),
-    token () {
-      return this.$api.getStorage('userinfo')
+    userinfo () {
+      return JSON.parse(window.localStorage.getItem('UserInfo'))
     },
     oldUserpwd () {
-      return this.$api.getStorage('userpwd')
+      return window.localStorage.getItem('UserPwd')
     },
     model () {
       return [this.info.oldpwd, this.info.newpwd, this.info.surepwd]
+    },
+    imgUrl () {
+      return JSON.parse(window.localStorage.getItem('UserInfo')).avatar || require('../../../public/imgs/avatar.png')
     }
   },
   methods: {
@@ -101,16 +105,7 @@ export default {
             }
           }
         }
-        this.$store.dispatch('checkToken', {
-          token: this.token,
-          cb: () => {
-            if (this.isToken) {
-              this.$store.dispatch('changPassword', paramets)
-            } else {
-              this.to('UserLogin', {}, '')
-            }
-          }
-        })
+        this.$store.dispatch('changPassword', paramets)
       }
     },
     focus () {
@@ -132,18 +127,22 @@ export default {
       }
     },
     upload () {
-      const photoPicker = this.$api.require('photoPicker')
-      alert(photoPicker)
-      photoPicker.addPhoto({
-        photoMaxNum: 1,
-        rowCount: 3,
-        selectedType: 0,
-        lookGifPhoto: true,
-        lookLivePhoto: true
-      }, function (ret, err) {
-        alert(JSON.stringify(ret))
+      // const photoPicker = this.api.require('photoPicker')
+      // photoPicker.addPhoto({
+      //   photoMaxNum: 1,
+      //   rowCount: 3,
+      //   selectedType: 0,
+      //   lookGifPhoto: true,
+      //   lookLivePhoto: true
+      // }, function (ret, err) {
+      //   this.imgUrl = JSON.parse(ret)[0].previewPhotoPath || this.token.result.userInfo.avatar || require('./imgs/avatar.png')
+      //   // alert(JSON.stringify(ret))
+      // })
+      const file = this.$refs.uploadAvatarImg[0].files[0]
+      const path = this.$refs.uploadAvatarImg[0].value
+      file.type.startsWith('image') && this.$store.dispatch('UploadAvatar', path, () => {
+        this.imgUrl = path
       })
-      console.log('更换头像')
     }
   },
   mounted () {
@@ -164,7 +163,7 @@ export default {
     margin 0 auto
     width 345px
     height 85%
-    background url('./imgs/bg.png') no-repeat
+    background url('../../../public/imgs/bg.png') no-repeat
     .list
       width 90%
       margin 15px auto
@@ -187,10 +186,15 @@ export default {
           font-size 15px
           border none
           background-color rgba(0 0 0 0)
-        .avatar
+        .avatar,.uploadAvatar
+          position absolute
+          right 20px
           width 40px
           height 40px
           margin 5px
+        .uploadAvatar
+          display block
+          opacity 0
   button
     position absolute
     top 460px

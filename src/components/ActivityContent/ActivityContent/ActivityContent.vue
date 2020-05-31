@@ -32,7 +32,7 @@ export default {
     width 100%
     height 80%
     margin-top 10px
-    background: url('./imgs/bg.png') no-repeat;
+    background: url('../../../../public/imgs/homeCourse.png') no-repeat;
     .context{
       box-shadow none
       font-size 14px

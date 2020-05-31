@@ -15,7 +15,7 @@ export default {
   },
   computed: {
     search () {
-      return this.$api.setStorage('search')
+      return window.localStorage.getItem('search')
     }
   },
   // watch: {

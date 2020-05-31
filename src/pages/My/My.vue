@@ -1,7 +1,7 @@
 <template>
   <div id="my">
     <Header>
-      <img src="./imgs/title.png" alt="title" class="title" slot="title">
+      <img src="../../../public/imgs/index.png" alt="title" class="title" slot="title">
     </Header>
     <Info/>
     <div class="item">
@@ -39,7 +39,7 @@ export default {
   },
   computed: {
     token () {
-      return this.$api.getStorage('userinfo')
+      return JSON.parse(window.localStorage.getItem('UserInfo'))
     }
   },
   methods: {

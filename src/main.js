@@ -11,15 +11,7 @@ import store from './store'
 
 Vue.config.productionTip = false
 
-Vue
-  .use(VAQ, { pages/*, debugOnPC: process.env.NODE_ENV !== 'production' */ })
-  .init({ el: '#app', render: h => h(App) })
-
-new Vue({
-  router,
-  store,
-  render: h => h(App)
-}).$mount('#app')
+Vue.use(VAQ, { pages/*, debugOnPC: process.env.NODE_ENV !== 'production' */ })
 
 Vue.use(Viewer)
 Viewer.setDefaults({
@@ -44,3 +36,9 @@ Viewer.setDefaults({
 })
 
 Vue.use(VueVideoPlayer)
+
+new Vue({
+  router,
+  store,
+  render: h => h(App)
+}).$mount('#app')
