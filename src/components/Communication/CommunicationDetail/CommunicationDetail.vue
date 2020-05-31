@@ -72,7 +72,7 @@ export default {
     //   return this.$api.getStorage('userinfo')
     // },
     index () {
-      return this.$page.pageParam && this.$page.pageParam().index
+      return JSON.parse(window.localStorage.getItem('Communication')).id
     },
     page () {
       return this.msg === '添加成功！'
@@ -97,7 +97,7 @@ export default {
       this.$store.dispatch('getEvaluate', {
         isActiorchapter: this.topicType,
         userId,
-        page: this.$page.pageParam && this.$page.pageParam().page,
+        page: JSON.parse(window.localStorage.getItem('Communication')).page,
         cb: () => {
           this.getEvaluateComponents()
         }

@@ -3,7 +3,7 @@
     <slot name="top" class="top"></slot>
     <div class="activitys" >
       <ul class="list" >
-        <li v-for="(activity ,index) in Activitys" :key="index" @click="to('ActivityDetail', { activity })">
+        <li v-for="(activity ,index) in Activitys" :key="index" @click="hand('ActivityDetail', { activity })">
           <h3 class="ellipsis">{{activity.activityName}}</h3>
           <span class="iconfont icon-date btn icon3"></span>
           <span class="time">{{activity.activityStart}}---{{activity.activityEnd}}</span>
@@ -40,7 +40,13 @@ export default {
     new BScroll('.activitys', {click: true}) // eslint-disable-line
   },
   methods: {
-    ...routerMain
+    ...routerMain,
+    hand (path, pram) {
+      window.localStorage.setItem('navGuide', 2)
+      const activity = JSON.stringify(pram)
+      window.localStorage.setItem('activity', activity)
+      this.to(path, pram)
+    }
     // toActivity (activity) {
     //   if (!this.token) {
     //     this.to('UserLogin')

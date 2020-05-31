@@ -77,14 +77,16 @@ export default {
     player () {
       return this.$refs.videoPlayer.player
     },
+    videos () {
+      return JSON.parse(window.localStorage.getItem('video'))
+    },
     pdfFileList () {
-      const pdfFileList = this.$page.pageParam && this.$page.pageParam().videoPaths
-      return pdfFileList
+      return this.videos.videoPaths
     }
   },
   mounted () {
     new BScroll('.videoWrap') // eslint-disable-line
-    this.playerOptions.sources[0].src = this.$page.pageParam && this.$page.pageParam().url
+    this.playerOptions.sources[0].src = this.videos.url
   },
   methods: {
     ...routerMain,
@@ -92,7 +94,7 @@ export default {
       this.playerOptions.sources[0].src = url
     },
     hand () {
-      this.to('ActivityDetail', { activity: this.$page.pageParam && this.$page.pageParam().activity })
+      this.to('ActivityDetail', { activity: this.videos.activity })
     },
     onPlayerPlay (player) { // 监听播放
       // console.log(player)

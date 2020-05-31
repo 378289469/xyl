@@ -60,8 +60,11 @@ export default {
     // token () {
     //   return this.$api.getStorage('userinfo')
     // },
+    pdfFile () {
+      return JSON.parse(window.localStorage.getItem('pdf'))
+    },
     url () {
-      return this.$page.pageParam && this.$page.pageParam().url
+      return this.pdfFile.url
     }
   },
   methods: {
@@ -93,7 +96,7 @@ export default {
       this.ansIsOn = id === 1
       this.signIsOn = id === 2
       const title = id === 1 ? '提问' : '打卡'
-      this.$refs.wheel.wheel(title, this.$page.pageParam && this.$page.pageParam().id)
+      this.$refs.wheel.wheel(title, this.pdfFile.id)
     }
   },
   mounted () {

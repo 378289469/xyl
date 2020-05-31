@@ -5,6 +5,7 @@
     <Search class="search" @Search="getEvaluate"/>
     <div class="wrap" ref="bsWrapper">
       <ul>
+        <p class="page" v-show="pageUp">上一页加载中...</p>
         <li v-for="(list, index) in evaluatelist" :key="index" @click="toCommunicationDetail(index)">
           <div class="info">
             <div class="avatar">
@@ -22,6 +23,7 @@
             <div class="source">来源：<span class="sourse-type">{{sourse[list.topicType]}}</span><span class="count">{{list.list.length}}</span>回复</div>
           </div>
         </li>
+        <p class="page" v-show="pageDown">下一页加载中...</p>
       </ul>
     </div>
     <tip/>
@@ -49,7 +51,9 @@ export default {
       btn: true,
       sourse: ['', '打卡', '提问'],
       page: 1,
-      isPull: false
+      isPull: false,
+      pageUp: false,
+      pageDown: false
     }
   },
   components: {
@@ -71,6 +75,12 @@ export default {
         }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
         return
       }
+      let Communication = {
+        index,
+        page: this.page
+      }
+      Communication = JSON.stringify(Communication)
+      window.localStorage.setItem('Communication', Communication)
       this.to('CommunicationDetail', { index, page: this.page })
     },
     getEvaluate (text) {
@@ -85,10 +95,14 @@ export default {
       }
       this.$store.dispatch('getEvaluate', {
         ...Evaluate,
-        cb: () => {
-          this.initBscroll()
-        }
+        cb: this.cb
       })
+    },
+    cb () {
+      this.isPull = false
+      this.pageUp = false
+      this.pageDown = false
+      this.bscroll && this.bscroll.scrollTo(0, 0)
     },
     course (type) {
       this.topicType = type
@@ -117,6 +131,7 @@ export default {
             return
           }
           this.page -= 1
+          this.pageUp = true
           this.getEvaluate()
         }
       })
@@ -128,6 +143,7 @@ export default {
             return
           }
           this.page += 1
+          this.pageDown = true
           this.getEvaluate()
         }
       })
@@ -190,6 +206,10 @@ export default {
   }
     ul{
       margin-top 14px
+      .page{
+        text-align center
+        color #888
+      }
       li{
         display flex
         width 90%

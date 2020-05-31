@@ -3,11 +3,13 @@
     <slot name="top" class="top"></slot>
     <div class="activitys" ref="bsWrapper" >
       <ul class="list" >
-        <li v-for="(activity ,index) in searchActivitys" :key="index" @click="hand(activity)">
+        <p class="page" v-show="pageUp">上一页加载中...</p>
+        <li v-for="(activity ,index) in searchActivitys" :key="index" @click="hand('ActivityDetail', { activity })">
           <h3 class="ellipsis">{{activity.activityName}}</h3>
           <span class="iconfont icon-date btn icon3"></span>
           <span class="time">{{activity.activityStart}}---{{activity.activityEnd}}</span>
         </li>
+        <p class="page" v-show="pageDown">下一页加载中...</p>
       </ul>
     </div>
   </div>
@@ -27,7 +29,9 @@ export default {
   data () {
     return {
       page: 1,
-      isPull: false
+      isPull: false,
+      pageUp: false,
+      pageDown: false
     }
   },
   computed: {
@@ -49,6 +53,8 @@ export default {
     ...routerMain,
     cb () {
       this.isPull = false
+      this.pageUp = false
+      this.pageDown = false
       this.bscroll && this.bscroll.scrollTo(0, 0)
     },
     initBscroll () {
@@ -69,6 +75,7 @@ export default {
             return
           }
           this.page -= 1
+          this.pageUp = true
           this.$store.dispatch('reqActivitys', { page: this.page, cb: this.cb })
           console.log('pullingDown')
         }
@@ -82,13 +89,17 @@ export default {
             return
           }
           this.page += 1
+          this.pageDown = true
           this.$store.dispatch('reqActivitys', { page: this.page, cb: this.cb })
           console.log('pullingUp')
         }
       })
     },
-    hand (activity) {
-      this.to('ActivityDetail', { activity })
+    hand (path, pram) {
+      window.localStorage.setItem('navGuide', 2)
+      const activity = JSON.stringify(pram)
+      window.localStorage.setItem('activity', activity)
+      this.to(path, pram)
     }
   }
 }
@@ -102,7 +113,7 @@ export default {
   height 236px
   display flex
   flex-direction column
-  top 90px
+  top 60px
   left 50%
   transform translateX(-50%)
   border-radius 5px
@@ -146,7 +157,9 @@ export default {
       line-height 30px
       text-align left
       color #828282
-      padding 0
+      .page
+        text-align center
+        color #888
       li
         list-style none
         width 315px

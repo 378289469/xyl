@@ -48,18 +48,18 @@ export default {
     Viewer
   },
   computed: {
-    ...mapState(['PdfFile', 'CourseChapter', 'modules', 'isToken']),
+    ...mapState(['PdfFile', 'CourseChapter', 'modules']),
     // token () {
     //   return this.$api.getStorage('userinfo')
     // },
     activity () {
       // return this.$page.pageParam && this.$page.pageParam().activity
-      return this.$page.pageParam && this.$page.pageParam().activity
+      return JSON.parse(window.localStorage.getItem('activity'))
     },
     ActivityDetail () {
       let ActivityDetail = []
       if (this.activity) {
-        const { activity } = this
+        const activity = this.activity.activity
         ActivityDetail = [
           { title: activity.activityName, tag: '名称：' },
           { content: 0, tag: '内容：' },
@@ -71,7 +71,7 @@ export default {
       return ActivityDetail
     },
     tasks () {
-      return this.activity.activityTask.split('-')
+      return this.activity.activity.activityTask.split('-')
     },
     taskDir () {
       const taskDir = []
@@ -109,11 +109,13 @@ export default {
       const videoPaths = pdfFiles.filter(pf => pf.url === require('../../../public/imgs/video.png'))
       if (pdfFiles[index].suffix === 'mp4' || pdfFiles[index].suffix === 'MP4' || pdfFiles[index].suffix === 'Mp4' || pdfFiles[index].suffix === 'mP4') {
         event.stopPropagation()
-        const pageParam = {
+        let pageParam = {
           url: pdfFiles[index].path,
           videoPaths,
           activity: this.activity
         }
+        pageParam = JSON.stringify(pageParam)
+        window.localStorage.setItem('video', pageParam)
         this.to('Video', pageParam)
       }
     }
