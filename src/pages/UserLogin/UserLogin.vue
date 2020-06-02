@@ -64,6 +64,7 @@ export default {
         smscode: this.model[3] && this.model[3].trim(),
         username: this.model[1] && this.model[1].trim()
       }
+      info.password = window.hex_md5(info.password)
       if (info.password && info.smscode && info.username) {
         const paramets = {
           info,
