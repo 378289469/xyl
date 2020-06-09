@@ -62,6 +62,9 @@ export default {
         Evaluate.id = list.id
         Evaluate.isActiorchapter = list.isActiorchapter
       }
+      if (title === '活动提问') {
+        Evaluate.isActiorchapter = 2
+      }
       this.$store.dispatch('addEvaluate', {
         Evaluate,
         cb: () => {

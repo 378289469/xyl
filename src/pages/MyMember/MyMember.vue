@@ -8,11 +8,11 @@
       <div class="wrap">
         <List v-for="(person, index) in UserGroup" :key="index" class='list'>
           <div class="title" slot="title">
-             <img class="avatar" src="../../../public/imgs/avatar.png" alt="">
+             <img :src="person.avatar || imgUrl" :onerror="errorurl" class="avatar">
              <h3>{{person.realname}}</h3>
              <span class="user">（{{person.factions}}）</span>
              <span class="tip" v-if="person.isGroupLeader==='是'">组长</span>
-             <span class="tip" v-if="person.realname===userInfo.result.userInfo.realname">我</span>
+             <span class="tip" v-if="person.realname===token.realname">我</span>
           </div>
         </List>
       </div>
@@ -33,6 +33,8 @@ import { mapState } from 'vuex'
 export default {
   data () {
     return {
+      errorurl: 'this.src="' + require('../../../public/imgs/avatar.png') + '"',
+      imgUrl: require('../../../public/imgs/avatar.png')
     }
   },
   components: {

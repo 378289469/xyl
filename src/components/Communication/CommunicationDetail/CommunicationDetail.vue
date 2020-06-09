@@ -72,7 +72,7 @@ export default {
     //   return this.$api.getStorage('userinfo')
     // },
     index () {
-      return JSON.parse(window.localStorage.getItem('Communication')).id
+      return JSON.parse(window.localStorage.getItem('Communication')).index
     },
     page () {
       return this.msg === '添加成功！'

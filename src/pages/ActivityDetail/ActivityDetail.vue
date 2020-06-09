@@ -11,7 +11,7 @@
           <h3 class="ellipsis" v-if="ad.title">{{ad.title}}</h3>
         </div>
         <div class="detail" v-if="ad.content === 0" >
-            <p>{{activity.activityContext}}</p>
+            <p>{{activity.activity.activityContext}}</p>
         </div>
         <div class="task" v-if="ad.content === 1" >
             <div>
@@ -24,7 +24,7 @@
           </viewer>
         </div>
       </div>
-      <button @click="wheel('提问')">提问</button>
+      <button @click="wheel('活动提问')">提问</button>
       <wheel ref="wheel"/>
       <tip/>
     </div>
@@ -102,7 +102,7 @@ export default {
   methods: {
     ...routerMain,
     wheel (title) {
-      this.$refs.wheel.wheel(title, this.activity.id)
+      this.$refs.wheel.wheel(title, this.activity.activity.id)
     },
     hand (index) {
       const { pdfFiles } = this
@@ -122,7 +122,7 @@ export default {
   },
   mounted () {
     this.$store.dispatch('getPdfFile', {
-      mainId: this.activity.id,
+      mainId: this.activity.activity.id,
       id: 2,
       cb: () => {
         new BScroll('.media', {// eslint-disable-line
