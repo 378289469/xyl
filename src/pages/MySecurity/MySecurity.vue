@@ -9,7 +9,7 @@
         <List v-for="i in 5" :key="i" class='list'>
           <div class="title" slot="title">
              <span >{{titles[i]}}</span>
-             <span class="username" v-if="i===2">{{userinfo.phone}}</span>
+             <span class="username" v-if="i===2">{{userinfo.username}}</span>
              <input class="content" :disabled="disabled[i]" :maxlength="maxlength[i]" :type="type[i]"
               :placeholder="placeholders[i]" v-model="model[i]" @focus="focus()" @blur="blur()">
              <img v-if="i===1" class="avatar" :src="imgUrl" :onerror="errorurl" alt="avatar">
@@ -80,8 +80,8 @@ export default {
     ...routerMain,
     submit () {
       const info = {
-        username: this.userinfo.phone,
-        phone: this.userinfo.phone,
+        username: this.userinfo.username,
+        phone: this.userinfo.username,
         oldPassword: this.model[3] && this.model[3].trim(),
         password: this.model[4] && this.model[4].trim(),
         password2: this.model[5] && this.model[5].trim()

@@ -77,8 +77,8 @@ export default {
               this.$store.dispatch('tipMsg', {
                 tips: { type: 5, msg }
               }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
-              userInfo.roleItemId !== 1 && window.localStorage.setItem('navGuide', 4)
-              userInfo.roleItemId !== 1 && this.to('My', { pageParam: userInfo })
+              userInfo.roleItemId * 1 !== 1 && window.localStorage.setItem('navGuide', 4)
+              userInfo.roleItemId * 1 !== 1 && this.to('My', { pageParam: userInfo })
             }
             // if (this.userInfo) {
             //   this.$store.dispatch('tipMsg', {
