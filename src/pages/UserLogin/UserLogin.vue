@@ -64,14 +64,16 @@ export default {
         smscode: this.model[3] && this.model[3].trim(),
         username: this.model[1] && this.model[1].trim()
       }
+      window.localStorage.setItem('UserPwd', info.password)
       info.password = window.hex_md5(info.password)
       if (info.password && info.smscode && info.username) {
         const paramets = {
           info,
           cb: () => {
-            const { userInfo } = this
+            let { userInfo } = this
+            userInfo = JSON.parse(userInfo)
             if (userInfo) {
-              const msg = userInfo.roleItemId === 1 ? '教师用户不能登陆' : '登陆成功'
+              const msg = userInfo.roleItemId * 1 === 1 ? '教师用户不能登陆' : '登陆成功'
               this.$store.dispatch('tipMsg', {
                 tips: { type: 5, msg }
               }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息

@@ -9,7 +9,7 @@
         <List v-for="i in 5" :key="i" class='list'>
           <div class="title" slot="title">
              <span >{{titles[i]}}</span>
-             <span class="username" v-if="i===2">{{userInfo.phone}}</span>
+             <span class="username" v-if="i===2">{{userinfo.phone}}</span>
              <input class="content" :disabled="disabled[i]" :maxlength="maxlength[i]" :type="type[i]"
               :placeholder="placeholders[i]" v-model="model[i]" @focus="focus()" @blur="blur()">
              <img v-if="i===1" class="avatar" :src="imgUrl" :onerror="errorurl" alt="avatar">
@@ -30,6 +30,7 @@ import List from '../../components/My/List/List.vue'
 import tip from '../../components/Tip/tip'
 import routerMain from '../../router/main.js'
 import { mapState } from 'vuex'
+import { baseUrl } from '../../api/ajax'
 
 export default {
   data () {
@@ -50,7 +51,7 @@ export default {
     tip
   },
   computed: {
-    ...mapState(['userInfo', 'pwdInfo', 'isToken']),
+    ...mapState(['userInfo', 'pwdInfo', 'isToken', 'userAvatar']),
     userinfo () {
       return JSON.parse(window.localStorage.getItem('UserInfo'))
     },
@@ -61,37 +62,54 @@ export default {
       return [this.info.oldpwd, this.info.newpwd, this.info.surepwd]
     },
     imgUrl () {
-      return JSON.parse(window.localStorage.getItem('UserInfo')).avatar || require('../../../public/imgs/avatar.png')
+      let imgUrl = ''
+      const UserInfo = JSON.parse(window.localStorage.getItem('UserInfo'))
+      if (this.userAvatar) {
+        imgUrl = baseUrl + this.userAvatar
+      } else if (UserInfo.avatar) {
+        imgUrl = UserInfo.avatar
+      } else {
+        imgUrl = require('../../../public/imgs/avatar.png')
+      }
+      UserInfo.avatar = imgUrl
+      window.localStorage.setItem('UserInfo', JSON.stringify(UserInfo))
+      return imgUrl
     }
   },
   methods: {
     ...routerMain,
     submit () {
       const info = {
-        username: this.token.result.userInfo.phone,
-        oldpwd: this.model[3] && this.model[3].trim(),
-        newpwd: this.model[4] && this.model[4].trim(),
-        surepwd: this.model[5] && this.model[5].trim()
+        username: this.userinfo.phone,
+        phone: this.userinfo.phone,
+        oldPassword: this.model[3] && this.model[3].trim(),
+        password: this.model[4] && this.model[4].trim(),
+        password2: this.model[5] && this.model[5].trim()
       }
-      if (info.oldpwd && info.oldpwd !== this.oldUserpwd) {
+      if (info.oldPassword && info.oldPassword !== this.oldUserpwd) {
         this.$store.dispatch('tipMsg', {
           tips: { type: 5, msg: '旧密码输入错误' }
         }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
         return
       }
-      if (info.oldpwd && info.newpwd && info.surepwd && info.newpwd === info.surepwd && info.newpwd === this.oldUserpwd) {
+      if (info.oldPassword && info.password && info.password2 && info.password2 === info.password && info.password === this.oldUserpwd) {
         this.$store.dispatch('tipMsg', {
           tips: { type: 5, msg: '新密码与旧密码一样' }
         }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
         return
       }
-      if (info.oldpwd && info.newpwd && info.surepwd && info.newpwd !== info.surepwd) {
+      if (info.oldPassword && info.password && info.password2 && info.password !== info.password2) {
         this.$store.dispatch('tipMsg', {
           tips: { type: 5, msg: '两次密码不一致' }
         }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
         return
       }
-      if (info.oldpwd && info.newpwd && info.surepwd) {
+
+      info.oldPassword = window.hex_md5(info.oldPassword)
+      info.password = window.hex_md5(info.password)
+      info.password2 = info.password
+
+      if (info.oldPassword && info.password && info.password2) {
         const paramets = {
           info,
           cb: () => {
@@ -101,7 +119,8 @@ export default {
               }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
             }
             if (this.pwdInfo && this.pwdInfo.success) {
-              this.go('My')
+              window.localStorage.setItem('UserPwd', this.model[4].trim())
+              this.to('My')
             }
           }
         }
@@ -139,9 +158,15 @@ export default {
       //   // alert(JSON.stringify(ret))
       // })
       const file = this.$refs.uploadAvatarImg[0].files[0]
-      const path = this.$refs.uploadAvatarImg[0].value
-      file.type.startsWith('image') && this.$store.dispatch('UploadAvatar', path, () => {
-        this.imgUrl = path
+      const formData = new FormData()
+      formData.append('file', file)
+      file.type.startsWith('image') && this.$store.dispatch('UploadAvatar', {
+        data: formData,
+        cb: () => {
+          this.$store.dispatch('tipMsg', {
+            tips: { type: 5, msg: '头像上传成功' }
+          }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+        }
       })
     }
   },

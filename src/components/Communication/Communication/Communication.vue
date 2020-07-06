@@ -99,10 +99,14 @@ export default {
       })
     },
     cb () {
-      this.isPull = false
-      this.pageUp = false
-      this.pageDown = false
-      this.bscroll && this.bscroll.scrollTo(0, 0)
+      if (this.evaluatelist.length === 0) {
+        this.page -= 1
+        this.getEvaluate()
+      }
+      // this.isPull = false
+      // this.pageUp = false
+      // this.pageDown = false
+      // this.bscroll && this.bscroll.scrollTo(0, 0)
     },
     course (type) {
       this.topicType = type
@@ -125,27 +129,36 @@ export default {
         }
       })
       this.bscroll.on('pullingDown', () => {
-        if (!this.isPull) {
-          this.isPull = true
-          if (this.page < 2) {
-            return
-          }
-          this.page -= 1
-          this.pageUp = true
-          this.getEvaluate()
+        if (this.page === 1) {
+          return
         }
+        this.page -= 1
+        this.getEvaluate()
+
+        // if (!this.isPull) {
+        //   this.isPull = true
+        //   if (this.page < 2) {
+        //     return
+        //   }
+        //   this.page -= 1
+        //   this.pageUp = true
+        //   this.getEvaluate()
+        // }
       })
       this.bscroll.on('pullingUp', () => {
-        if (!this.isPull) {
-          this.isPull = true
-          if (this.activitys) {
-            this.page -= 1
-            return
-          }
-          this.page += 1
-          this.pageDown = true
-          this.getEvaluate()
-        }
+        this.page += 1
+        this.getEvaluate()
+
+        // if (!this.isPull) {
+        //   this.isPull = true
+        //   if (this.activitys) {
+        //     this.page -= 1
+        //     return
+        //   }
+        //   this.page += 1
+        //   this.pageDown = true
+        //   this.getEvaluate()
+        // }
       })
     }
   },

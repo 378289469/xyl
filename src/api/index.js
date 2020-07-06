@@ -46,7 +46,7 @@ export const getUserGroup = () => ajax('group/zblGroup/users')
 export const checkToken = (token) => ajax('front/login/checkToken', token, 'check')
 
 // 16上传头像
-export const uploadAvatar = (url) => ajax('sys/common/upload', url, 'post')
+export const uploadAvatar = (data) => ajax('sys/common/upload', data, 'post')
 
 // 17修改头像
-export const editAvatar = (url) => ajax('back/zblUser/edit', url, 'put')
+export const editAvatar = (data) => ajax('back/zblUser/edit', data, 'put')

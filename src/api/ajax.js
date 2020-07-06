@@ -15,10 +15,17 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
   response => {
     if (response.data.code === 0 || response.data.code === 500) {
-      modules.actions.tipMsg(
-        { commit: store.commit },
-        { tips: { type: 5, msg: response.data.message } }
-      )
+      if (response.data.message === '权限不足') {
+        modules.actions.tipMsg(
+          { commit: store.commit },
+          { tips: { type: 5, msg: '暂无小组' } }
+        )
+      } else {
+        modules.actions.tipMsg(
+          { commit: store.commit },
+          { tips: { type: 5, msg: response.data.message } }
+        )
+      }
     }
     return response
   },

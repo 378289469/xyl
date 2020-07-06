@@ -68,31 +68,38 @@ export default {
         }
       })
       this.bscroll.on('pullingDown', () => {
-        console.log('pullingDown')
-        if (!this.isPull) {
-          this.isPull = true
-          if (this.page < 2) {
-            return
-          }
-          this.page -= 1
-          this.pageUp = true
-          this.$store.dispatch('reqActivitys', { page: this.page, cb: this.cb })
-          console.log('pullingDown')
+        if (this.page === 1) {
+          return
         }
+        this.page -= 1
+        this.$store.dispatch('reqActivitys', { page: this.page, cb: this.cb })
+        // console.log('pullingDown')
+        // if (!this.isPull) {
+        //   this.isPull = true
+        //   if (this.page < 2) {
+        //     return
+        //   }
+        //   this.page -= 1
+        //   this.pageUp = true
+        //   this.$store.dispatch('reqActivitys', { page: this.page, cb: this.cb })
+        //   console.log('pullingDown')
+        // }
       })
       this.bscroll.on('pullingUp', () => {
-        console.log('pullingUp')
-        if (!this.isPull) {
-          this.isPull = true
-          if (this.activitys) {
-            this.page -= 1
-            return
-          }
-          this.page += 1
-          this.pageDown = true
-          this.$store.dispatch('reqActivitys', { page: this.page, cb: this.cb })
-          console.log('pullingUp')
-        }
+        this.page += 1
+        this.$store.dispatch('reqActivitys', { page: this.page, cb: this.cb })
+        // console.log('pullingUp')
+        // if (!this.isPull) {
+        //   this.isPull = true
+        //   if (this.activitys) {
+        //     this.page -= 1
+        //     return
+        //   }
+        //   this.page += 1
+        //   this.pageDown = true
+        //   this.$store.dispatch('reqActivitys', { page: this.page, cb: this.cb })
+        //   console.log('pullingUp')
+        // }
       })
     },
     hand (path, pram) {

@@ -238,7 +238,6 @@ export default new Vuex.Store({
       if (result.code === 200 || result.code === 0 || result.code === 500) {
         window.localStorage.setItem('Authorization', result.result.token)
         window.localStorage.setItem('UserInfo', JSON.stringify(result.result.userInfo))
-        window.localStorage.setItem('UserPwd', info.password)
         const userInfo = result
         commit(RECEIVE_USER_LOGIN, { userInfo })
         cb && cb()
@@ -247,7 +246,7 @@ export default new Vuex.Store({
     async changPassword ({ commit, state }, { info, cb }) {
       const result = await setUserPassword(info)
       if (result.code === 200 || result.code === 0 || result.code === 500) {
-        const pwdInfo = result.result
+        const pwdInfo = result
         commit(RECEIVE_SET_PWD, { pwdInfo })
         cb && cb()
       }
@@ -268,14 +267,16 @@ export default new Vuex.Store({
         cb && cb()
       }
     },
-    async UploadAvatar ({ commit, state }, { url, cb }) {
-      const result = await uploadAvatar(url)
+    async UploadAvatar ({ commit, state }, { data, cb }) {
+      const result = await uploadAvatar(data)
       if (result.code === 0 || result.code === 600) {
-        const AvatarUrl = result.message
-        const resultAvatar = await editAvatar(AvatarUrl)
+        const userAvatar = result.message
+        commit(RECEIVE_USER_AVATAR, { userAvatar })
+        const data = {
+          avatar: result.message
+        }
+        const resultAvatar = await editAvatar(data)
         if (resultAvatar.code === 200 || resultAvatar.code === 600) {
-          const userAvatar = resultAvatar.message
-          commit(RECEIVE_USER_AVATAR, { userAvatar })
           cb && cb()
         }
       }
