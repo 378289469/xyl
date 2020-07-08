@@ -23,8 +23,7 @@ export default {
   data () {
     return {
       dirClass: ['', 'one=dir', 'two-dir', 'three-dir', 'resource-dir'],
-      id: 0,
-      pdf: false
+      id: 0
     }
   },
   components: {
@@ -63,20 +62,19 @@ export default {
           cc.isShow = !cc.isShow
         }
         if (cc.id === this.id && cc.chapterLevel === 3) {
+          if (cc.isPDF) {
+            return
+          }
           this.$store.dispatch('getPdfFile', {
             mainId: cc.id,
             id: 1,
             cb: () => {
+              cc.isPDF = true
               const PdfFile = this.PdfFile[0]
               if (PdfFile) {
-                this.pdf = !this.pdf
-                if (this.pdf) {
-                  PdfFile.isShow = true
-                  this.CourseChapter.splice(key + 1, 0, PdfFile)
-                } else {
-                  PdfFile.isShow = false
-                  this.CourseChapter.splice(key + 1, 1)
-                }
+                PdfFile.parentId = this.chapter[index].id
+                PdfFile.isShow = true
+                this.CourseChapter.splice(key + 1, 0, PdfFile)
               } else {
                 this.$store.dispatch('tipMsg', {
                   tips: { type: 5, msg: '当前目录暂无内容' }
