@@ -11,6 +11,7 @@
           <span class="iconfont icon-right" slot="right"></span>
       </List>
     </div>
+    <button @click="to('UserLogin')">重新登录</button>
     <FooterGuide/>
   </div>
 </template>
@@ -61,4 +62,15 @@ export default {
     transform translateX(-50%)
     width 90%
     text-align center
+  button
+    position absolute
+    top 460px
+    left 0
+    right 0
+    margin 0 auto
+    color #FFF6C1
+    width 85%
+    height 45px
+    border-radius 22px
+    background-color #6C0B0D
 </style>

@@ -24,9 +24,6 @@ export default {
     return {
       dirClass: ['', 'one=dir', 'two-dir', 'three-dir', 'resource-dir'],
       id: 0,
-      parentId: 0,
-      index: 0,
-      noteId: 0,
       pdf: false
     }
   },
@@ -35,18 +32,11 @@ export default {
   },
   computed: {
     ...mapState(['CourseChapter', 'PdfFile', 'isToken']),
-    // token () {
-    //   return this.$api.getStorage('userinfo')
-    // },
     chapter () {
-      const { CourseChapter, id, index, parentId } = this
+      const { CourseChapter } = this
       let chapter = []
       if (CourseChapter.length > 0) {
-        if (CourseChapter[index].isShow) {
-          chapter = CourseChapter.filter(cc => cc.parentId === '0' || cc.id === id || cc.parentId === id || cc.id === parentId || cc.oldName)
-        } else {
-          chapter = CourseChapter.filter(cc => cc.parentId === '0' || cc.id === id || cc.id === parentId || cc.oldName)
-        }
+        chapter = CourseChapter.filter(cc => cc.parentId === '0' || cc.isShow)
       }
       return chapter
     }
@@ -54,6 +44,7 @@ export default {
   methods: {
     ...routerMain,
     show (index) {
+      this.id = this.chapter[index].id
       if (this.chapter[index] && this.chapter[index].oldName) {
         let pdf = {
           url: this.chapter[index].path,
@@ -62,85 +53,40 @@ export default {
         pdf = JSON.stringify(pdf)
         window.localStorage.setItem('pdf', pdf)
         this.to('PDF')
-        // this.$page.push({
-        //   name: 'PDF',
-        //   pageParam: {
-        //     url: this.chapter[index].path,
-        //     id: this.noteId
-        //   }
-        // })
         return
       }
-      const id = this.id = this.chapter[index].id
-      let CourseChapterId = 0
       this.CourseChapter.forEach((cc, key) => {
-        if (cc.id === id) {
-          cc.isShow = !cc.isShow
-          CourseChapterId = key
-          this.parentId = cc.parentId
-        } else {
-          cc.isShow = false
-          if (cc.oldName) {
-            this.CourseChapter.splice(key, 0)
-          }
+        if (cc.id === this.id) {
+          cc.isShow = true
         }
-        if (cc.oldName) {
-          this.CourseChapter.splice(key, 1)
+        if ((cc.parentId * 1) === (this.id * 1)) {
+          cc.isShow = !cc.isShow
+        }
+        if (cc.id === this.id && cc.chapterLevel === 3) {
+          this.$store.dispatch('getPdfFile', {
+            mainId: cc.id,
+            id: 1,
+            cb: () => {
+              const PdfFile = this.PdfFile[0]
+              if (PdfFile) {
+                this.pdf = !this.pdf
+                if (this.pdf) {
+                  PdfFile.isShow = true
+                  this.CourseChapter.splice(key + 1, 0, PdfFile)
+                } else {
+                  PdfFile.isShow = false
+                  this.CourseChapter.splice(key + 1, 1)
+                }
+              } else {
+                this.$store.dispatch('tipMsg', {
+                  tips: { type: 5, msg: '当前目录暂无内容' }
+                }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+              }
+            }
+          })
         }
       })
-      this.index = CourseChapterId
-      if (this.CourseChapter[CourseChapterId].chapterLevel === 3) {
-        this.$store.dispatch('getPdfFile', {
-          mainId: id,
-          id: 1,
-          cb: () => {
-            const PdfFile = this.PdfFile[0]
-            if (PdfFile) {
-              PdfFile.parentId = null
-              this.pdf = !this.pdf
-              if (this.pdf) {
-                this.CourseChapter.splice(CourseChapterId + 1, 0, PdfFile)
-              } else {
-                this.CourseChapter.splice(CourseChapterId + 1, 1)
-              }
-            } else {
-              this.$store.dispatch('tipMsg', {
-                tips: { type: 5, msg: '当前目录暂无内容' }
-              }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
-            }
-          }
-        })
-        // this.$store.dispatch('checkToken', {
-        //   token: this.token,
-        //   cb: () => {
-        //     if (this.isToken) {
-        //       this.$store.dispatch('getPdfFile', {
-        //         mainId: id,
-        //         id: 1,
-        //         cb: () => {
-        //           const PdfFile = this.PdfFile[0]
-        //           if (PdfFile) {
-        //             PdfFile.parentId = null
-        //             this.pdf = !this.pdf
-        //             if (this.pdf) {
-        //               this.CourseChapter.splice(CourseChapterId + 1, 0, PdfFile)
-        //             } else {
-        //               this.CourseChapter.splice(CourseChapterId + 1, 1)
-        //             }
-        //           } else {
-        //             this.$store.dispatch('tipMsg', {
-        //               tips: { type: 5, msg: '当前目录暂无内容' }
-        //             }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
-        //           }
-        //         }
-        //       })
-        //     } else {
-        //       this.to('UserLogin', {}, '')
-        //     }
-        //   }
-        // })
-        this.noteId = id
-      }
+      this.CourseChapter.splice(0, 0)
     }
   }
 }

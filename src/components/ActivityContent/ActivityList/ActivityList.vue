@@ -3,15 +3,14 @@
     <slot name="top" class="top"></slot>
     <div class="activitys" ref="bsWrapper" >
       <ul class="list" >
-        <p class="page" v-show="pageUp">上一页加载中...</p>
         <li v-for="(activity ,index) in searchActivitys" :key="index" @click="hand('ActivityDetail', { activity })">
           <h3 class="ellipsis">{{activity.activityName}}</h3>
           <span class="iconfont icon-date btn icon3"></span>
           <span class="time">{{activity.activityStart}}---{{activity.activityEnd}}</span>
         </li>
-        <p class="page" v-show="pageDown">下一页加载中...</p>
       </ul>
     </div>
+    <tip/>
   </div>
 </template>
 
@@ -21,6 +20,7 @@ import PullDown from '@better-scroll/pull-down'
 import Pullup from '@better-scroll/pull-up'
 import { mapState } from 'vuex'
 import routerMain from '../../../router/main.js'
+import tip from '../../Tip/tip'
 
 BScroll.use(Pullup)
 BScroll.use(PullDown)
@@ -29,77 +29,60 @@ export default {
   data () {
     return {
       page: 1,
-      isPull: false,
-      pageUp: false,
-      pageDown: false
+      count: 0
     }
   },
-  computed: {
-    ...mapState(['searchActivitys', 'activitys'])
-    // token () {
-    //   return this.$api.getStorage('userinfo')
-    // }
+  components: {
+    tip
   },
-  created () {
-    this.bscroll = null
+  computed: {
+    ...mapState(['searchActivitys'])
   },
   mounted () {
     this.$store.dispatch('reqActivitys', { page: this.page, cb: this.cb })
-  },
-  updated () {
     this.initBscroll()
   },
   methods: {
     ...routerMain,
     cb () {
-      this.isPull = false
-      this.pageUp = false
-      this.pageDown = false
+      if (this.searchActivitys.length < 9) {
+        this.$store.dispatch('tipMsg', {
+          tips: { type: 5, msg: '当前是最后一页' }
+        }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+        this.count = this.page - 1
+        this.page = this.count
+      }
       this.bscroll && this.bscroll.scrollTo(0, 0)
+      this.bscroll.finishPullDown()
+      this.bscroll.finishPullUp()
     },
     initBscroll () {
       this.bscroll = new BScroll(this.$refs.bsWrapper, {
         scrollY: true,
-        pullUpLoad: true,
+        pullUpLoad: {
+          threshold: 30, // 下拉距离
+          stop: 30 // 停止距离
+        },
         click: true,
         pullDownRefresh: {
-          threshold: 80, // 下拉距离
+          threshold: 30, // 下拉距离
           stop: 30 // 停止距离
         }
       })
       this.bscroll.on('pullingDown', () => {
         if (this.page === 1) {
+          this.$store.dispatch('tipMsg', {
+            tips: { type: 5, msg: '当前是第一页' }
+          }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+          this.page = 1
           return
         }
         this.page -= 1
         this.$store.dispatch('reqActivitys', { page: this.page, cb: this.cb })
-        // console.log('pullingDown')
-        // if (!this.isPull) {
-        //   this.isPull = true
-        //   if (this.page < 2) {
-        //     return
-        //   }
-        //   this.page -= 1
-        //   this.pageUp = true
-        //   this.$store.dispatch('reqActivitys', { page: this.page, cb: this.cb })
-        //   console.log('pullingDown')
-        // }
       })
       this.bscroll.on('pullingUp', () => {
         this.page += 1
         this.$store.dispatch('reqActivitys', { page: this.page, cb: this.cb })
-        // console.log('pullingUp')
-        // if (!this.isPull) {
-        //   this.isPull = true
-        //   if (this.activitys) {
-        //     this.page -= 1
-        //     return
-        //   }
-        //   this.page += 1
-        //   this.pageDown = true
-        //   this.$store.dispatch('reqActivitys', { page: this.page, cb: this.cb })
-        //   console.log('pullingUp')
-        // }
       })
     },
     hand (path, pram) {

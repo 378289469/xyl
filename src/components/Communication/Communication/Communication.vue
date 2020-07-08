@@ -51,9 +51,7 @@ export default {
       btn: true,
       sourse: ['', '打卡', '提问'],
       page: 1,
-      isPull: false,
-      pageUp: false,
-      pageDown: false
+      count: 0
     }
   },
   components: {
@@ -99,14 +97,16 @@ export default {
       })
     },
     cb () {
-      if (this.evaluatelist.length === 0) {
-        this.page -= 1
-        this.getEvaluate()
+      if (this.evaluatelist.length < 10) {
+        this.$store.dispatch('tipMsg', {
+          tips: { type: 5, msg: '当前是最后一页' }
+        }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+        this.count = this.page - 1
+        this.page = this.count
+        this.bscroll && this.bscroll.scrollTo(0, 0)
+        this.bscroll.finishPullDown()
+        this.bscroll.finishPullUp()
       }
-      // this.isPull = false
-      // this.pageUp = false
-      // this.pageDown = false
-      // this.bscroll && this.bscroll.scrollTo(0, 0)
     },
     course (type) {
       this.topicType = type
@@ -121,54 +121,35 @@ export default {
     initBscroll () {
       this.bscroll = new BScroll(this.$refs.bsWrapper, {
         scrollY: true,
-        pullUpLoad: true,
+        pullUpLoad: {
+          threshold: 30, // 下拉距离
+          stop: 30 // 停止距离
+        },
         click: true,
         pullDownRefresh: {
-          threshold: 80, // 下拉距离
+          threshold: 30, // 下拉距离
           stop: 30 // 停止距离
         }
       })
       this.bscroll.on('pullingDown', () => {
         if (this.page === 1) {
+          this.$store.dispatch('tipMsg', {
+            tips: { type: 5, msg: '当前是第一页' }
+          }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+          this.page = 1
           return
         }
         this.page -= 1
         this.getEvaluate()
-
-        // if (!this.isPull) {
-        //   this.isPull = true
-        //   if (this.page < 2) {
-        //     return
-        //   }
-        //   this.page -= 1
-        //   this.pageUp = true
-        //   this.getEvaluate()
-        // }
       })
       this.bscroll.on('pullingUp', () => {
         this.page += 1
         this.getEvaluate()
-
-        // if (!this.isPull) {
-        //   this.isPull = true
-        //   if (this.activitys) {
-        //     this.page -= 1
-        //     return
-        //   }
-        //   this.page += 1
-        //   this.pageDown = true
-        //   this.getEvaluate()
-        // }
       })
     }
   },
-  created () {
-    this.bscroll = null
-  },
   mounted () {
     this.getEvaluate()
-  },
-  updated () {
     this.initBscroll()
   }
 }
