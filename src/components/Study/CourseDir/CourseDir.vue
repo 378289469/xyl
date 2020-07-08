@@ -1,22 +1,25 @@
 <template>
   <div id="course">
     <h2>课程目录</h2>
-    <ul >
-      <li v-for="(chapters,index) in chapter " :key="index">
-        <div  class="dir" :class="chapters.chapterLevel? dirClass[chapters.chapterLevel] : dirClass[4]" @click="show(index)">
-          <span v-show="chapters.oldName" class="iconfont" :class="{'icon-pdf':chapters.oldName}" ></span>
-          <span v-show="chapters.chapterName" class="title ellipsis">{{chapters.chapterName}}</span>
-          <span v-show="chapters.oldName" class="title ellipsis">{{chapters.oldName}}</span>
-          <span v-show="chapters.chapterName" class="iconfont" :class="chapters.isShow? 'icon-up' : 'icon-down'"></span>
-        </div>
-      </li>
-    </ul>
+    <div class="courseDir">
+      <ul>
+        <li v-for="(chapters,index) in chapter " :key="index">
+          <div  class="dir" :class="chapters.chapterLevel? dirClass[chapters.chapterLevel] : dirClass[4]" @click="show(index)">
+            <span v-show="chapters.oldName" class="iconfont" :class="{'icon-pdf':chapters.oldName}" ></span>
+            <span v-show="chapters.chapterName" class="title ellipsis">{{chapters.chapterName}}</span>
+            <span v-show="chapters.oldName" class="title ellipsis">{{chapters.oldName}}</span>
+            <span v-show="chapters.chapterName" class="iconfont" :class="chapters.isShow? 'icon-up' : 'icon-down'"></span>
+          </div>
+        </li>
+      </ul>
+    </div>
     <tip/>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import BScroll from 'better-scroll'
 import routerMain from '../../../router/main.js'
 import tip from '../../Tip/tip'
 export default {
@@ -32,6 +35,12 @@ export default {
   components: {
     tip
   },
+  mounted () {
+    new BScroll('.courseDir') // eslint-disable-line
+  },
+  updated () {
+    new BScroll('.courseDir') // eslint-disable-line
+  },
   computed: {
     ...mapState(['CourseChapter', 'PdfFile', 'isToken']),
     chapter () {
@@ -46,6 +55,7 @@ export default {
   methods: {
     ...routerMain,
     show (index) {
+      console.log(999)
       this.id = this.chapter[index].id
       if (this.chapter[index] && this.chapter[index].oldName) {
         let pdf = {
@@ -151,6 +161,10 @@ export default {
     font-size: 20px;
     line-height: 52px;
     text-align center
+  }
+  .courseDir{
+    height 90vh
+    overflow hidden
   }
   .dir {
     display flex

@@ -49,6 +49,7 @@ export default {
     }
   },
   mounted () {
+    window.localStorage.setItem('navGuide', 0)
     this.$store.state.searchActivitys = this.$store.state.activitys
     this.$store.dispatch('getCourseIntroduce')
     this.$store.dispatch('getTeachers')
