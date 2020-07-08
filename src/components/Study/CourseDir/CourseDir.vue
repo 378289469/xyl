@@ -23,7 +23,10 @@ export default {
   data () {
     return {
       dirClass: ['', 'one=dir', 'two-dir', 'three-dir', 'resource-dir'],
-      id: 0
+      id: 0,
+      one: false,
+      two: false,
+      three: false
     }
   },
   components: {
@@ -59,7 +62,17 @@ export default {
           cc.isShow = true
         }
         if ((cc.parentId * 1) === (this.id * 1)) {
-          cc.isShow = !cc.isShow
+          if (cc.isShow) {
+            this.chapter[index].chapterLevel === 1 && (this.one = false)
+            this.chapter[index].chapterLevel === 2 && (this.two = false)
+            this.chapter[index].chapterLevel === 3 && (this.three = false)
+            cc.isShow = false
+          } else {
+            this.chapter[index].chapterLevel === 1 && (this.one = true)
+            this.chapter[index].chapterLevel === 2 && (this.two = true)
+            this.chapter[index].chapterLevel === 3 && (this.three = true)
+            cc.isShow = true
+          }
         }
         if (cc.id === this.id && cc.chapterLevel === 3) {
           if (cc.isPDF) {
@@ -84,6 +97,27 @@ export default {
           })
         }
       })
+      if (!this.one) {
+        this.CourseChapter.forEach((cc, key) => {
+          if (cc.chapterLevel === 2 || cc.chapterLevel === 3 || cc.oldName) {
+            cc.isShow = false
+          }
+        })
+      }
+      if (!this.two) {
+        this.CourseChapter.forEach((cc, key) => {
+          if (cc.chapterLevel === 3 || cc.oldName) {
+            cc.isShow = false
+          }
+        })
+      }
+      if (!this.three) {
+        this.CourseChapter.forEach((cc, key) => {
+          if (cc.oldName) {
+            cc.isShow = false
+          }
+        })
+      }
       this.CourseChapter.splice(0, 0)
     }
   }
