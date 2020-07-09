@@ -36,10 +36,7 @@ export default {
     tip
   },
   mounted () {
-    new BScroll('.courseDir') // eslint-disable-line
-  },
-  updated () {
-    new BScroll('.courseDir') // eslint-disable-line
+    new BScroll('.courseDir', {click: true}) // eslint-disable-line
   },
   computed: {
     ...mapState(['CourseChapter', 'PdfFile', 'isToken']),

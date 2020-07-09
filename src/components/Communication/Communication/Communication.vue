@@ -3,9 +3,8 @@
     <h2 class="course" :class="{on: btn}" @click="course(1)">课程学习</h2>
     <h2 class="activity" :class="{on: !btn}" @click="activity(2)">活动</h2>
     <Search class="search" @Search="getEvaluate"/>
-    <div class="wrap" ref="bsWrapper">
+    <div class="wrap" ref="ComWrapper">
       <ul>
-        <p class="page" v-show="pageUp">上一页加载中...</p>
         <li v-for="(list, index) in evaluatelist" :key="index" @click="toCommunicationDetail(index)">
           <div class="info">
             <div class="avatar">
@@ -23,7 +22,6 @@
             <div class="source">来源：<span class="sourse-type">{{sourse[list.topicType]}}</span><span class="count">{{list.list.length}}</span>回复</div>
           </div>
         </li>
-        <p class="page" v-show="pageDown">下一页加载中...</p>
       </ul>
     </div>
     <tip/>
@@ -60,9 +58,6 @@ export default {
   },
   computed: {
     ...mapState(['evaluatelist', 'isToken'])
-    // token () {
-    //   return this.$api.getStorage('userinfo')
-    // }
   },
   methods: {
     ...routerMain,
@@ -101,7 +96,7 @@ export default {
         this.$store.dispatch('tipMsg', {
           tips: { type: 5, msg: '当前是最后一页' }
         }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
-        this.count = this.page - 1
+        this.count = this.page
         this.page = this.count
         this.bscroll && this.bscroll.scrollTo(0, 0)
         this.bscroll.finishPullDown()
@@ -110,16 +105,32 @@ export default {
     },
     course (type) {
       this.topicType = type
-      this.getEvaluate()
+      const userId = JSON.parse(window.localStorage.getItem('UserInfo')).id
+      const Evaluate = {
+        isActiorchapter: this.topicType,
+        userId,
+        page: 1
+      }
+      this.$store.dispatch('getEvaluate', {
+        ...Evaluate
+      })
       this.btn = true
     },
     activity (type) {
       this.topicType = type
-      this.getEvaluate()
+      const userId = JSON.parse(window.localStorage.getItem('UserInfo')).id
+      const Evaluate = {
+        isActiorchapter: this.topicType,
+        userId,
+        page: 1
+      }
+      this.$store.dispatch('getEvaluate', {
+        ...Evaluate
+      })
       this.btn = false
     },
     initBscroll () {
-      this.bscroll = new BScroll(this.$refs.bsWrapper, {
+      this.bscroll = new BScroll(this.$refs.ComWrapper, {
         scrollY: true,
         pullUpLoad: {
           threshold: 30, // 下拉距离
@@ -149,7 +160,17 @@ export default {
     }
   },
   mounted () {
-    this.getEvaluate()
+    const userId = JSON.parse(window.localStorage.getItem('UserInfo')).id
+    const Evaluate = {
+      isActiorchapter: this.topicType,
+      userId,
+      page: 1
+    }
+    this.$store.dispatch('getEvaluate', {
+      ...Evaluate
+    })
+  },
+  updated () {
     this.initBscroll()
   }
 }

@@ -68,9 +68,6 @@ export default {
   },
   computed: {
     ...mapState(['evaluatelist', 'componentslist', 'isToken', 'msg']),
-    // token () {
-    //   return this.$api.getStorage('userinfo')
-    // },
     index () {
       return JSON.parse(window.localStorage.getItem('Communication')).index
     },
@@ -105,20 +102,22 @@ export default {
     },
     getEvaluateComponents () {
       this.$store.dispatch('getEvaluateComponents', {
-        parentId: this.evaluatelist[this.index].id,
-        cb: () => {
-          try {
-            new BScroll('.wrap') // eslint-disable-line
-            new BScroll('.context', {// eslint-disable-line
-              stopPropagation: true
-            })
-          } catch (error) {}
-        }
+        parentId: this.evaluatelist[this.index].id
       })
     }
   },
   mounted () {
     this.getEvaluate()
+  },
+  updated () {
+    if (this.evaluatelist.length > 0) {
+      new BScroll('.context', {// eslint-disable-line
+        stopPropagation: true
+      })
+    }
+    if (this.componentslist.length > 0) {
+      new BScroll('.wrap') // eslint-disable-line
+    }
   }
 }
 </script>
