@@ -96,14 +96,18 @@ export default {
         this.$store.dispatch('tipMsg', {
           tips: { type: 5, msg: '当前是最后一页' }
         }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
-        this.count = this.page
-        this.page = this.count
+        if (this.count === 0) {
+          this.count = this.page
+          this.page = this.count
+        }
         this.bscroll && this.bscroll.scrollTo(0, 0)
         this.bscroll.finishPullDown()
         this.bscroll.finishPullUp()
       }
     },
     course (type) {
+      this.count = 0
+      this.bscroll && this.bscroll.scrollTo(0, 0)
       this.topicType = type
       const userId = JSON.parse(window.localStorage.getItem('UserInfo')).id
       const Evaluate = {
@@ -117,6 +121,8 @@ export default {
       this.btn = true
     },
     activity (type) {
+      this.count = 0
+      this.bscroll && this.bscroll.scrollTo(0, 0)
       this.topicType = type
       const userId = JSON.parse(window.localStorage.getItem('UserInfo')).id
       const Evaluate = {
@@ -155,6 +161,9 @@ export default {
       })
       this.bscroll.on('pullingUp', () => {
         this.page += 1
+        if (this.count !== 0) {
+          this.page = this.count
+        }
         this.getEvaluate()
       })
     }

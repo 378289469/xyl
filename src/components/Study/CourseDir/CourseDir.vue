@@ -36,7 +36,18 @@ export default {
     tip
   },
   mounted () {
-    new BScroll('.courseDir', {click: true}) // eslint-disable-line
+    this.bscroll = new BScroll('.courseDir', { // eslint-disable-line
+      scrollY: true,
+      click: true,
+      pullDownRefresh: {
+        threshold: 30, // 下拉距离
+        stop: 30 // 停止距离
+      }
+    })
+    this.bscroll.on('pullingDown', () => {
+      this.$store.dispatch('getCourseChapter')
+      this.bscroll.finishPullDown()
+    })
   },
   computed: {
     ...mapState(['CourseChapter', 'PdfFile', 'isToken']),
@@ -160,7 +171,7 @@ export default {
     text-align center
   }
   .courseDir{
-    height 90vh
+    height 70vh
     overflow hidden
   }
   .dir {

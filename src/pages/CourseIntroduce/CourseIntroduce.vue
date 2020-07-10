@@ -1,7 +1,7 @@
 <template>
   <div id = "CourseIntroduce">
     <Header>
-      <span class="iconfont icon-left back" slot="back" @click="back"/>
+      <span class="iconfont icon-left back" slot="back" @click="back()"/>
       <img src="../../../public/imgs/index.png" alt="title" class="title" slot="title">
     </Header>
     <div class="introduce">

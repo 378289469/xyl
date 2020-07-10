@@ -1,7 +1,7 @@
 <template>
   <div>
     <Header>
-      <span class="iconfont icon-left back" slot="back" @click="to('Activity')"/>
+      <span class="iconfont icon-left back" slot="back" @click="back('Activity')"/>
       <img src="../../../public/imgs/Activity.png" alt="title" class="title" slot="title">
     </Header>
     <div id="ActivityDetail" v-if="ActivityDetail.length > 0">
@@ -11,7 +11,7 @@
           <h3 class="ellipsis" v-if="ad.title">{{ad.title}}</h3>
         </div>
         <div class="detail" v-if="ad.content === 0" >
-            <p>{{activity.activity.activityContext}}</p>
+            <p>{{activity.activityContext}}</p>
         </div>
         <div class="task" v-if="ad.content === 1" >
             <div>
@@ -48,18 +48,26 @@ export default {
     Viewer
   },
   computed: {
-    ...mapState(['PdfFile', 'CourseChapter', 'modules']),
+    ...mapState(['PdfFile', 'CourseChapter', 'modules', 'searchActivitys']),
     // token () {
     //   return this.$api.getStorage('userinfo')
     // },
     activity () {
-      // return this.$page.pageParam && this.$page.pageParam().activity
+      // return this.$page.pageParam && this.$page.pageParam()
+      // const id = window.localStorage.getItem('activityID')
+      // let activity = ''
+      // this.searchActivitys.forEach((ac, index) => {
+      //   if (ac.id === id) {
+      //     activity = ac
+      //   }
+      // })
+      // return activity
       return JSON.parse(window.localStorage.getItem('activity'))
     },
     ActivityDetail () {
       let ActivityDetail = []
       if (this.activity) {
-        const activity = this.activity.activity
+        const activity = this.activity
         ActivityDetail = [
           { title: activity.activityName, tag: '名称：' },
           { content: 0, tag: '内容：' },
@@ -71,7 +79,7 @@ export default {
       return ActivityDetail
     },
     tasks () {
-      return this.activity.activity.activityTask.split('-')
+      return this.activity.activityTask.split('-')
     },
     taskDir () {
       const taskDir = []
@@ -102,7 +110,7 @@ export default {
   methods: {
     ...routerMain,
     wheel (title) {
-      this.$refs.wheel.wheel(title, this.activity.activity.id)
+      this.$refs.wheel.wheel(title, this.activity.id)
     },
     hand (index) {
       const { pdfFiles } = this
@@ -121,8 +129,10 @@ export default {
     }
   },
   mounted () {
+    const page = window.localStorage.getItem('activityPage')
+    this.$store.dispatch('reqActivitys', { page })
     this.$store.dispatch('getPdfFile', {
-      mainId: this.activity.activity.id,
+      mainId: this.activity.id,
       id: 2,
       cb: () => {
         new BScroll('.media', {// eslint-disable-line

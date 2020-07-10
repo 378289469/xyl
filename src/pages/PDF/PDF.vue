@@ -1,7 +1,7 @@
 <template>
   <div id = "PDF">
     <Header>
-      <span class="iconfont icon-left back" slot="back" @click="to('Study')"/>
+      <span class="iconfont icon-left back" slot="back" @click="back('Study')"/>
       <img src="../../../public/imgs/Study.png" alt="title" class="title" slot="title"/>
     </Header>
     <div class="PDFwrap">

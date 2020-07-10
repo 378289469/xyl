@@ -3,7 +3,7 @@
     <slot name="top" class="top"></slot>
     <div class="activitys" ref="bsWrapper" >
       <ul class="list" >
-        <li v-for="(activity ,index) in searchActivitys" :key="index" @click="hand('ActivityDetail', { activity })">
+        <li v-for="(activity ,index) in searchActivitys" :key="index" @click="hand('ActivityDetail', activity)">
           <h3 class="ellipsis">{{activity.activityName}}</h3>
           <span class="iconfont icon-date btn icon3"></span>
           <span class="time">{{activity.activityStart}}---{{activity.activityEnd}}</span>
@@ -86,6 +86,9 @@ export default {
       })
     },
     hand (path, pram) {
+      // window.localStorage.setItem('activityPage', this.page)
+      // console.log(pram)
+      // window.localStorage.setItem('activityID', pram.id)
       window.localStorage.setItem('navGuide', 2)
       const activity = JSON.stringify(pram)
       window.localStorage.setItem('activity', activity)
