@@ -1,6 +1,7 @@
 <template>
   <div id="activitylist">
     <slot name="top" class="top"></slot>
+    <Search class="search" @Search="getActivity"/>
     <div class="activitys" ref="bsWrapper" >
       <ul class="list" >
         <li v-for="(activity ,index) in searchActivitys" :key="index" @click="hand('ActivityDetail', activity)">
@@ -21,6 +22,7 @@ import Pullup from '@better-scroll/pull-up'
 import { mapState } from 'vuex'
 import routerMain from '../../../router/main.js'
 import tip from '../../Tip/tip'
+import Search from '../../Search/Search'
 
 BScroll.use(Pullup)
 BScroll.use(PullDown)
@@ -33,7 +35,8 @@ export default {
     }
   },
   components: {
-    tip
+    tip,
+    Search
   },
   computed: {
     ...mapState(['searchActivitys'])
@@ -45,7 +48,12 @@ export default {
   methods: {
     ...routerMain,
     cb () {
-      if (this.searchActivitys.length < 9) {
+      if (this.searchActivitys.length === 0) {
+        this.count = this.page - 1
+        this.page = this.count
+        this.$store.dispatch('reqActivitys', { page: this.page, cb: this.cb })
+      }
+      if (this.searchActivitys.length < 9 && this.searchActivitys.length !== 0 && this.page !== 1) {
         this.$store.dispatch('tipMsg', {
           tips: { type: 5, msg: '当前是最后一页' }
         }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
@@ -58,15 +66,14 @@ export default {
     },
     initBscroll () {
       this.bscroll = new BScroll(this.$refs.bsWrapper, {
-        scrollY: true,
         pullUpLoad: {
-          threshold: 30, // 下拉距离
-          stop: 30 // 停止距离
+          threshold: 50, // 下拉距离
+          stop: 50 // 停止距离
         },
         click: true,
         pullDownRefresh: {
-          threshold: 30, // 下拉距离
-          stop: 30 // 停止距离
+          threshold: 50, // 下拉距离
+          stop: 50 // 停止距离
         }
       })
       this.bscroll.on('pullingDown', () => {
@@ -84,6 +91,9 @@ export default {
         this.page += 1
         this.$store.dispatch('reqActivitys', { page: this.page, cb: this.cb })
       })
+    },
+    getActivity (text) {
+      this.$store.dispatch('reqActivitys', { activityName: text })
     },
     hand (path, pram) {
       // window.localStorage.setItem('activityPage', this.page)
@@ -106,7 +116,7 @@ export default {
   height 236px
   display flex
   flex-direction column
-  top 60px
+  top 10px
   left 50%
   transform translateX(-50%)
   border-radius 5px
@@ -142,6 +152,7 @@ export default {
     .btn
       margin-left 6px
   .activitys
+    margin-top 10px
     height 90%
     overflow hidden
     ul

@@ -3,6 +3,7 @@ const TIP_MSG = 'tip_msg'
 const ACTIVITY_ONE = 'activity_one'
 const PDF_ONE = 'pdf_one'
 const PDF_FILE_URL = 'pdf_file_url'
+const NAV_FOOT_GUIDE = 'nav_foot_guide'
 
 export default {
   state: {
@@ -12,7 +13,8 @@ export default {
     },
     activity: {},
     pdfFiles: {},
-    pdfFileUrl: ''
+    pdfFileUrl: '',
+    navFootGuide: 1
   },
   mutations: {
     [TIP_MSG] (state, { tips }) {
@@ -26,6 +28,9 @@ export default {
     },
     [PDF_FILE_URL] (state, { url }) {
       state.pdfFileUrl = url
+    },
+    [NAV_FOOT_GUIDE] (state, { navFootGuide }) {
+      state.navFootGuide = navFootGuide
     }
   },
   actions: {
@@ -44,6 +49,10 @@ export default {
     },
     pdfFileUrl ({ commit, state }, { url, cb }) {
       commit(PDF_FILE_URL, { url })
+      cb && cb()
+    },
+    navFootGuide ({ commit, state }, { navFootGuide, cb }) {
+      commit(NAV_FOOT_GUIDE, { navFootGuide })
       cb && cb()
     }
   },

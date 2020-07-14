@@ -94,7 +94,7 @@ export default {
       this.playerOptions.sources[0].src = url
     },
     hand () {
-      this.to('ActivityDetail', { activity: this.videos.activity })
+      this.back('ActivityDetail', { activity: this.videos.activity })
     },
     onPlayerPlay (player) { // 监听播放
       // console.log(player)

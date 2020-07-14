@@ -108,8 +108,6 @@ export default {
   },
   mounted () {
     this.getEvaluate()
-  },
-  updated () {
     if (this.evaluatelist.length > 0) {
       new BScroll('.context', {// eslint-disable-line
         stopPropagation: true

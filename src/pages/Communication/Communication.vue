@@ -4,11 +4,12 @@
       <img src="../../../public/imgs/Communication.png" alt="title" class="title" slot="title">
     </Header>
     <Communication/>
-    <FooterGuide/>
+    <FooterGuide v-show="navFootGuide"/>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import Header from '../../components/Header/Header'
 import Communication from '../../components/Communication/Communication/Communication'
 import FooterGuide from '../../components/FooterGuide/FooterGuide'
@@ -18,6 +19,12 @@ export default {
     Header,
     Communication,
     FooterGuide
+  },
+  computed: {
+    ...mapState(['modules']),
+    navFootGuide () {
+      return this.modules.navFootGuide
+    }
   }
 }
 </script>

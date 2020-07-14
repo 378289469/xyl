@@ -1,6 +1,5 @@
 <template>
   <div id="activity">
-    <Search/>
     <div class="content">
       <ActivityList  class="context"/>
     </div>
@@ -9,12 +8,10 @@
 
 <script>
 import ActivityList from '../ActivityList/ActivityList'
-import Search from '../../Search/Search'
 
 export default {
   components: {
-    ActivityList,
-    Search
+    ActivityList
   }
 }
 </script>
@@ -29,9 +26,10 @@ export default {
   transform: translateX(-50%)
   height: 80%;
   .content {
-    width 100%
-    height 80%
+    width 10%
+    height 8%
     margin-top 10px
+    margin-left 10px
     background: url('../../../../public/imgs/homeCourse.png') no-repeat;
     .context{
       box-shadow none

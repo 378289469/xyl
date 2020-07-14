@@ -5,7 +5,7 @@
     </Header>
     <Info/>
     <div class="item">
-      <List v-for="i in 2" :key="i" @click.native="to(paths[i], {}, token)">
+      <List v-for="i in 2" :key="i" @click.native="hand(paths[i])">
           <span :class="leftClass[i]" slot="left"></span>
           <span class="title" slot="title">{{titles[i]}}</span>
           <span class="iconfont icon-right" slot="right"></span>
@@ -13,6 +13,7 @@
     </div>
     <button @click="to('UserLogin')">重新登录</button>
     <FooterGuide/>
+    <MySecurity v-show="MySecurity" @Security="Security"/>
   </div>
 </template>
 
@@ -23,28 +24,36 @@ import Info from '../../components/My/Info/Info.vue'
 import List from '../../components/My/List/List.vue'
 import routerMain from '../../router/main.js'
 import FooterGuide from '../../components/FooterGuide/FooterGuide'
+import MySecurity from '../../pages/MySecurity/MySecurity'
 
 export default {
   data () {
     return {
       titles: ['', '小组成员', '账户安全'],
       leftClass: ['', 'member', 'security'],
-      paths: ['', 'MyMember', 'MySecurity']
+      paths: ['', 'MyMember', 'MySecurity'],
+      MySecurity: false
     }
   },
   components: {
     Header,
     Info,
     List,
-    FooterGuide
-  },
-  computed: {
-    token () {
-      return JSON.parse(window.localStorage.getItem('UserInfo'))
-    }
+    FooterGuide,
+    MySecurity
   },
   methods: {
-    ...routerMain
+    ...routerMain,
+    hand (path) {
+      if (path === 'MyMember') {
+        this.to(path)
+      } else {
+        this.MySecurity = true
+      }
+    },
+    Security () {
+      this.MySecurity = false
+    }
   }
 }
 </script>

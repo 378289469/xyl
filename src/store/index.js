@@ -36,6 +36,7 @@ const RECEIVE_GET_EVALUATE = 'receive_get_evaluate'
 const RECEIVE_GET_EVALUATE_COMPONENTS = 'receive_get_evaluate_components'
 const RECEIVE_USER_REGISTER = 'receive_user_register'
 const RECEIVE_USER_LOGIN = 'receive_user_login'
+const RECEIVE_USER_LOGIN_MSG = 'receive_user_login_msg'
 const RECEIVE_SET_PWD = 'receive_set_pwd'
 const RECEIVE_GET_USER_GROUP = 'receive_get_user_group'
 const RECEIVE_CHECK_TOKEN = 'receive_check_token'
@@ -58,6 +59,7 @@ export default new Vuex.Store({
     componentslist: [],
     register: {},
     userInfo: {},
+    loginMsg: '',
     pwdInfo: {},
     UserGroup: [],
     isToken: false,
@@ -73,6 +75,7 @@ export default new Vuex.Store({
     [RECEIVE_ACTIVITYS] (state, { activitys }) {
       if (activitys.length === 0) {
         state.activitys = true
+        state.searchActivitys = activitys
       } else {
         state.activitys = false
         state.searchActivitys = activitys
@@ -104,6 +107,9 @@ export default new Vuex.Store({
     },
     [RECEIVE_USER_LOGIN] (state, { userInfo }) {
       state.userInfo = userInfo
+    },
+    [RECEIVE_USER_LOGIN_MSG] (state, { msg }) {
+      state.loginMsg = msg
     },
     [RECEIVE_SET_PWD] (state, { pwdInfo }) {
       state.pwdInfo = pwdInfo
@@ -236,11 +242,19 @@ export default new Vuex.Store({
     async userLogin ({ commit, state }, { info, cb }) {
       const result = await reqUserLogin(info)
       if (result.code === 200 || result.code === 0 || result.code === 500) {
-        window.localStorage.setItem('Authorization', result.result.token)
-        window.localStorage.setItem('UserInfo', JSON.stringify(result.result.userInfo))
-        const userInfo = result
-        commit(RECEIVE_USER_LOGIN, { userInfo })
-        cb && cb()
+        if (result.result) {
+          window.localStorage.setItem('Authorization', result.result.token)
+          window.localStorage.setItem('UserInfo', JSON.stringify(result.result.userInfo))
+          const userInfo = result
+          commit(RECEIVE_USER_LOGIN, { userInfo })
+          const msg = result.message
+          commit(RECEIVE_USER_LOGIN_MSG, { msg })
+          cb && cb()
+        } else {
+          const msg = result.message
+          commit(RECEIVE_USER_LOGIN_MSG, { msg })
+          cb && cb()
+        }
       }
     },
     async changPassword ({ commit, state }, { info, cb }) {

@@ -18,28 +18,25 @@ export default {
       return window.localStorage.getItem('search')
     }
   },
-  // watch: {
-  //   text (value) {
-  //     let activitys = this.$store.state.activitys
-  //     if (value.trim().length === 0) {
-  //       this.$store.state.searchActivitys = activitys
-  //       return
-  //     }
-  //     activitys = activitys.filter(at => at.activityContext.indexOf(value) !== -1 || at.activityName.indexOf(value) !== -1)
-  //     this.$store.state.searchActivitys = activitys
-  //   }
-  // },
+  watch: {
+    text () {
+      this.Search()
+    }
+  },
   methods: {
     onSearch () {
       this.text = ''
     },
     onFocus () {
       this.text = ''
+      this.$store.dispatch('navFootGuide', { navFootGuide: 0 }) // 0 隐藏 1 显示
+    },
+    Search () {
+      const { text } = this
+      this.$emit('Search', text)
     },
     onblur () {
-      const { text, search } = this
-      search === 'activity' && this.$store.dispatch('reqActivitys', { activityName: text })
-      search === 'communication' && this.$emit('Search', text)
+      this.$store.dispatch('navFootGuide', { navFootGuide: 1 }) // 0 隐藏 1 显示
     }
   }
 }

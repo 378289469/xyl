@@ -42,7 +42,7 @@ export default {
     tip
   },
   computed: {
-    ...mapState(['userInfo']),
+    ...mapState(['userInfo', 'loginMsg']),
     model () {
       return ['', this.info.name, this.info.password, this.info.key]
     },
@@ -70,9 +70,13 @@ export default {
         const paramets = {
           info,
           cb: () => {
+            if (this.loginMsg && this.loginMsg === '验证码错误') {
+              this.keyUrl = `${baseUrl}/front/login/getCheckCode?${Date.now()}`
+              return
+            }
             let { userInfo } = this
             userInfo = JSON.parse(userInfo)
-            if (userInfo) {
+            if (this.loginMsg && this.loginMsg === '登录成功' && userInfo) {
               const msg = userInfo.roleItemId * 1 === 1 ? '教师用户不能登陆' : '登陆成功'
               this.$store.dispatch('tipMsg', {
                 tips: { type: 5, msg }
@@ -80,27 +84,6 @@ export default {
               userInfo.roleItemId * 1 !== 1 && window.localStorage.setItem('navGuide', 4)
               userInfo.roleItemId * 1 !== 1 && this.to('My', { pageParam: userInfo })
             }
-            // if (this.userInfo) {
-            //   this.$store.dispatch('tipMsg', {
-            //     tips: { type: 5, msg: this.userInfo.message }
-            //   }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
-            // }
-            // if (this.userInfo.result && this.userInfo.result.userInfo) {
-            //   const userInfo = this.userInfo.result.userInfo
-            //   var intervalID = setTimeout(() => {
-            //     clearInterval(intervalID)
-            //     if (userInfo.roleItemId === 1) {
-            //       this.$store.dispatch('tipMsg', {
-            //         tips: { type: 5, msg: '教师账户不能登录' }
-            //       }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
-            //     } else {
-            //       // .$api.setStorage('userinfo', this.userInfo)
-            //       // .$api.setStorage('userpwd', this.model[2] && this.model[2].trim())
-            //       window.localStorage.setItem('navGuide', 4)
-            //       this.to('My', { pageParam: userInfo })
-            //     }
-            //   }, 3000)
-            // }
           }
         }
         this.$store.dispatch('userLogin', paramets)

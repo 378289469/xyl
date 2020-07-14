@@ -1,6 +1,6 @@
 <template>
 	<div id="info">
-		<img :src="UserInfo.avatar || imgUrl" :onerror="errorurl" alt="student" />
+		<UserAvatar />
     <h2>{{UserInfo.realname}}</h2>
     <h3>{{UserInfo.factions}}</h3>
     <span class="iconfont icon-school">资本论课程平台</span>
@@ -8,17 +8,17 @@
 </template>
 
 <script>
+import UserAvatar from '../../UserAvatar/UserAvatar'
 export default {
   data () {
     return {
       errorurl: 'this.src="' + require('../../../../public/imgs/avatar.png') + '"',
-      imgUrl: require('../../../../public/imgs/avatar.png')
+      imgUrl: require('../../../../public/imgs/avatar.png'),
+      UserInfo: JSON.parse(window.localStorage.getItem('UserInfo'))
     }
   },
-  computed: {
-    UserInfo () {
-      return JSON.parse(window.localStorage.getItem('UserInfo'))
-    }
+  components: {
+    UserAvatar
   }
 }
 </script>

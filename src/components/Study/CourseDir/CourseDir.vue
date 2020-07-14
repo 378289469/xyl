@@ -63,12 +63,11 @@ export default {
   methods: {
     ...routerMain,
     show (index) {
-      console.log(999)
       this.id = this.chapter[index].id
       if (this.chapter[index] && this.chapter[index].oldName) {
         let pdf = {
           url: this.chapter[index].path,
-          id: this.noteId
+          id: this.chapter[index].id
         }
         pdf = JSON.stringify(pdf)
         window.localStorage.setItem('pdf', pdf)

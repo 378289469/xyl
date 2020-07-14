@@ -1,7 +1,7 @@
 <template>
   <div id="MySecurity">
     <Header>
-      <span class="iconfont icon-left back" slot="back" @click="to('My')"/>
+      <span class="iconfont icon-left back" slot="back" @click="Security"/>
       <img src="../../../public/imgs/MySecurity.png" alt="title" class="title" slot="title">
     </Header>
     <div class="item">
@@ -12,7 +12,7 @@
              <span class="username" v-if="i===2">{{userinfo.username}}</span>
              <input class="content" :disabled="disabled[i]" :maxlength="maxlength[i]" :type="type[i]"
               :placeholder="placeholders[i]" v-model="model[i]" @focus="focus()" @blur="blur()">
-             <img v-if="i===1" class="avatar" :src="imgUrl" :onerror="errorurl" alt="avatar">
+             <UserAvatar v-if="i===1" />
              <input type="file" ref="uploadAvatarImg" class="uploadAvatar" accept="image/*" @change="upload" v-if="i===1">
           </div>
         </List>
@@ -28,6 +28,7 @@
 import Header from '../../components/Header/Header'
 import List from '../../components/My/List/List.vue'
 import tip from '../../components/Tip/tip'
+import UserAvatar from '../../components/UserAvatar/UserAvatar'
 import routerMain from '../../router/main.js'
 import { mapState } from 'vuex'
 import { baseUrl } from '../../api/ajax'
@@ -48,7 +49,8 @@ export default {
   components: {
     Header,
     List,
-    tip
+    tip,
+    UserAvatar
   },
   computed: {
     ...mapState(['userInfo', 'pwdInfo', 'isToken', 'userAvatar']),
@@ -78,6 +80,9 @@ export default {
   },
   methods: {
     ...routerMain,
+    Security () {
+      this.$emit('Security')
+    },
     submit () {
       const info = {
         username: this.userinfo.username,
@@ -85,6 +90,30 @@ export default {
         oldPassword: this.model[3] && this.model[3].trim(),
         password: this.model[4] && this.model[4].trim(),
         password2: this.model[5] && this.model[5].trim()
+      }
+      if (!info.oldPassword) {
+        this.$store.dispatch('tipMsg', {
+          tips: { type: 5, msg: '请输入旧密码' }
+        }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+        return
+      }
+      if (!info.password) {
+        this.$store.dispatch('tipMsg', {
+          tips: { type: 5, msg: '请输入新密码' }
+        }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+        return
+      }
+      if (info.password && info.password.length < 5) {
+        this.$store.dispatch('tipMsg', {
+          tips: { type: 5, msg: '密码必须大于6位' }
+        }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+        return
+      }
+      if (!info.password2) {
+        this.$store.dispatch('tipMsg', {
+          tips: { type: 5, msg: '请输入确认密码' }
+        }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+        return
       }
       if (info.oldPassword && info.oldPassword !== this.oldUserpwd) {
         this.$store.dispatch('tipMsg', {
@@ -146,17 +175,6 @@ export default {
       }
     },
     upload () {
-      // const photoPicker = this.api.require('photoPicker')
-      // photoPicker.addPhoto({
-      //   photoMaxNum: 1,
-      //   rowCount: 3,
-      //   selectedType: 0,
-      //   lookGifPhoto: true,
-      //   lookLivePhoto: true
-      // }, function (ret, err) {
-      //   this.imgUrl = JSON.parse(ret)[0].previewPhotoPath || this.token.result.userInfo.avatar || require('./imgs/avatar.png')
-      //   // alert(JSON.stringify(ret))
-      // })
       const file = this.$refs.uploadAvatarImg[0].files[0]
       const formData = new FormData()
       formData.append('file', file)
