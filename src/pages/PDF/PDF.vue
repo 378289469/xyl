@@ -22,7 +22,7 @@
         </div>
       </div>
     </div>
-    <ul class="footers">
+    <ul class="footers" v-show="btns">
       <li :class="{select:idx==0}" @touchstart="idx=0" @touchend="idx=-1" @click="scaleD">
         <p>放大</p>
       </li>
@@ -68,7 +68,8 @@ export default {
       scale: 100, // 放大系数
       idx: -1,
       clauseTitle: '',
-      loadedRatio: 0
+      loadedRatio: 0,
+      btns: true
     }
   },
   components: {
@@ -115,9 +116,6 @@ export default {
         this.currentPage++
       }
     },
-    goBack () {
-      this.$router.go(-1)
-    },
     // pdf加载时
     loadPdfHandler (e) {
       this.currentPage = 1 // 加载的时候先加载第一页
@@ -134,8 +132,7 @@ export default {
       }
       this.scale += -5
       this.$refs.wrapper.$el.style.width = parseInt(this.scale) + '%'
-    },
-    mounted () {}
+    }
   },
   mounted () {
     this.getNumPages(this.url)
@@ -164,13 +161,14 @@ export default {
   width 100%
   height 100%
   .PDFwrap
+    padding-top: 50px
     position absolute
     top 110px
     left 0
     right 0
     margin 0 auto
     width 345px
-    height 75%
+    height 80%
     background url('../../../public/imgs/bg.png') no-repeat
     overflow hidden
     .PDFconternt
@@ -214,7 +212,7 @@ export default {
       color #FFEBC0
  .footers
     position: fixed
-    bottom: 65px
+    top: 130px
     width: 92%
     height: 20px
     display: flex
@@ -222,13 +220,9 @@ export default {
     transform translateX(-50%)
     z-index: 100
     color: #6c0b0d
-    border-top: 1px solid #f0f0f0
-    line-height: rem(80)
-    background-color: #fff
     li
       text-align: center
       flex: 1
-      padding: rem(10) 0
       p
         border-right: 1px solid #f0f0f0
     li:last-child

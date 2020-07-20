@@ -66,6 +66,31 @@ export default {
     ...routerMain,
     show (index) {
       this.id = this.chapter[index].id
+      if (this.chapter[index].chapterLevel === 3) {
+        this.$store.dispatch('getPdfFile', {
+          mainId: this.chapter[index].id,
+          id: 1,
+          cb: () => {
+            const PdfFile = this.PdfFile[0]
+            if (PdfFile) {
+              let pdf = {
+                url: PdfFile.path,
+                id: PdfFile.id
+              }
+              pdf = JSON.stringify(pdf)
+              window.localStorage.setItem('pdf', pdf)
+              this.to('PDF')
+              // PdfFile.parentId = this.chapter[index].id
+              // PdfFile.isShow = true
+              // this.CourseChapter.splice(key + 1, 0, PdfFile)
+            } else {
+              this.$store.dispatch('tipMsg', {
+                tips: { type: 5, msg: '当前目录暂无内容' }
+              }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+            }
+          }
+        })
+      }
       // if (this.chapter[index] && this.chapter[index].oldName) {
       //   let pdf = {
       //     url: this.chapter[index].path,
@@ -92,35 +117,6 @@ export default {
             this.chapter[index].chapterLevel === 3 && (this.three = true)
             cc.isShow = true
           }
-        }
-        if (cc.id === this.id && cc.chapterLevel === 3) {
-          if (cc.isPDF) {
-            return
-          }
-          this.$store.dispatch('getPdfFile', {
-            mainId: cc.id,
-            id: 1,
-            cb: () => {
-              cc.isPDF = true
-              const PdfFile = this.PdfFile[0]
-              if (PdfFile) {
-                let pdf = {
-                  url: PdfFile.path,
-                  id: PdfFile.id
-                }
-                pdf = JSON.stringify(pdf)
-                window.localStorage.setItem('pdf', pdf)
-                this.to('PDF')
-                // PdfFile.parentId = this.chapter[index].id
-                // PdfFile.isShow = true
-                // this.CourseChapter.splice(key + 1, 0, PdfFile)
-              } else {
-                this.$store.dispatch('tipMsg', {
-                  tips: { type: 5, msg: '当前目录暂无内容' }
-                }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
-              }
-            }
-          })
         }
       })
       if (!this.one) {
