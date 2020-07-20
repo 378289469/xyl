@@ -8,9 +8,7 @@
       <div class="PDFconternt">
         <div class="pages">
           <div class="pdf">
-            <div class="main">
-              <pdf :src="url" :page="currentPage" @progress="loadedRatio = $event" @num-pages="pageCount=$event" @page-loaded="currentPage=$event" @loaded="loadPdfHandler" ref="wrapper" class="pdf"></pdf>
-            </div>
+            <pdf  v-for="i in numPages" :key="i" :src="url" :page="i"></pdf>
           </div>
         </div>
         <div class="tips">
@@ -22,20 +20,6 @@
         </div>
       </div>
     </div>
-    <ul class="footers">
-      <li :class="{select:idx==0}" @touchstart="idx=0" @touchend="idx=-1" @click="scaleD">
-        <p>放大</p>
-      </li>
-      <li :class="{select:idx==1}" @touchstart="idx=1" @touchend="idx=-1" @click="scaleX">
-        <p>缩小</p>
-      </li>
-      <li :class="{select:idx==2}" @touchstart="idx=2" @touchend="idx=-1" @click="changePdfPage(0)">
-        <p>上一页</p>
-      </li>
-      <li :class="{select:idx==3}" @touchstart="idx=3" @touchend="idx=-1" @click="changePdfPage(1)">
-        <p>下一页</p>
-      </li>
-    </ul>
     <div class="btns">
       <span class="btn"  :class="{on:ansIsOn}" @click="wheel(1)">提问</span>
       <span class="btn" :class="{on:signIsOn}" @click="wheel(2)">打卡</span>
@@ -62,13 +46,7 @@ export default {
       // url: 'http://storage.xuetangx.com/public_assets/xuetangx/PDF/PlayerAPI_v1.0.6.pdf',
       ansIsOn: false,
       signIsOn: false,
-      numPages: [],
-      currentPage: 1,
-      pageCount: 0,
-      scale: 100, // 放大系数
-      idx: -1,
-      clauseTitle: '',
-      loadedRatio: 0
+      numPages: []
     }
   },
   components: {
@@ -87,7 +65,6 @@ export default {
     },
     url () {
       return this.pdfFile.url
-      // return 'http://storage.xuetangx.com/public_assets/xuetangx/PDF/PlayerAPI_v1.0.6.pdf'
     }
   },
   methods: {
@@ -100,45 +77,40 @@ export default {
       }).catch(err => {
         console.log(err, 'pdf加载失败')
       })
+    //   // const pdfReader = this.api.require('androidPdfReader')
+    //   // pdfReader.openView({
+    //   //   rect: {
+    //   //     x: 0,
+    //   //     y: 0,
+    //   //     w: 'auto',
+    //   //     h: 'auto'
+    //   //   },
+    //   //   path: url,
+    //   //   fixedOn: this.api.frameName,
+    //   //   fixed: true
+    //   // }, ret => {
+    //   //   alert(JSON.stringify(ret))
+    //   // })
     },
     wheel (id) {
       this.ansIsOn = id === 1
       this.signIsOn = id === 2
       const title = id === 1 ? '提问' : '打卡'
       this.$refs.wheel.wheel(title, this.pdfFile.id)
-    },
-    changePdfPage (val) {
-      if (val === 0 && this.currentPage > 1) {
-        this.currentPage--
-      }
-      if (val === 1 && this.currentPage < this.pageCount) {
-        this.currentPage++
-      }
-    },
-    goBack () {
-      this.$router.go(-1)
-    },
-    // pdf加载时
-    loadPdfHandler (e) {
-      this.currentPage = 1 // 加载的时候先加载第一页
-    },
-    // 放大
-    scaleD () {
-      this.scale += 5
-      this.$refs.wrapper.$el.style.width = parseInt(this.scale) + '%'
-    },
-    // 缩小
-    scaleX () {
-      if (this.scale === 100) {
-        return
-      }
-      this.scale += -5
-      this.$refs.wrapper.$el.style.width = parseInt(this.scale) + '%'
-    },
-    mounted () {}
+    }
   },
   mounted () {
     this.getNumPages(this.url)
+    // this.$store.dispatch('checkToken', {
+    //   token: this.token,
+    //   cb: () => {
+    //     if (this.isToken) {
+    //       this.$store.dispatch('getNote', { mainId: this.$page.pageParam && this.$page.pageParam().id })
+    //     } else {
+    //       this.to('UserLogin', {}, '')
+    //     }
+    //   }
+    // })
     new BScroll('.PDFwrap', {// eslint-disable-line
       scrollX: true,
       scrollY: false
@@ -170,7 +142,7 @@ export default {
     right 0
     margin 0 auto
     width 345px
-    height 75%
+    height 85%
     background url('../../../public/imgs/bg.png') no-repeat
     overflow hidden
     .PDFconternt
@@ -212,26 +184,4 @@ export default {
     .on
       background #6C0B0D
       color #FFEBC0
- .footers
-    position: fixed
-    bottom: 65px
-    width: 92%
-    height: 20px
-    display: flex
-    left 50%
-    transform translateX(-50%)
-    z-index: 100
-    color: #6c0b0d
-    border-top: 1px solid #f0f0f0
-    line-height: rem(80)
-    background-color: #fff
-    li
-      text-align: center
-      flex: 1
-      padding: rem(10) 0
-      p
-        border-right: 1px solid #f0f0f0
-    li:last-child
-      p
-        border-right: 0 none
 </style>

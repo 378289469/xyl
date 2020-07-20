@@ -105,8 +105,8 @@ export default {
               const PdfFile = this.PdfFile[0]
               if (PdfFile) {
                 let pdf = {
-                  url: this.chapter[index].path,
-                  id: this.chapter[index].id
+                  url: PdfFile.path,
+                  id: PdfFile.id
                 }
                 pdf = JSON.stringify(pdf)
                 window.localStorage.setItem('pdf', pdf)

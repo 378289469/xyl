@@ -220,6 +220,8 @@ export default {
         min-height 100px
     .task
       height 50px
+      p
+        min-height 0
     .media
       display flex
       height 80px
