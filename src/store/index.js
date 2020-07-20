@@ -55,6 +55,7 @@ export default new Vuex.Store({
     PdfFile: [],
     notes: '',
     msg: '',
+    time: '',
     evaluatelist: [],
     componentslist: [],
     register: {},
@@ -95,6 +96,7 @@ export default new Vuex.Store({
     },
     [RECEIVE_ADD_EVALUATE] (state, { msg }) {
       state.msg = msg
+      state.time = Date.now()
     },
     [RECEIVE_GET_EVALUATE] (state, { evaluatelist }) {
       state.evaluatelist = evaluatelist
@@ -217,8 +219,8 @@ export default new Vuex.Store({
     async getEvaluate ({ commit, state }, { context, isActiorchapter, userId, page, cb }) {
       const result = await reqEvaluateList(context, isActiorchapter, userId, page)
       if (result.code === 200 || result.code === 0 || result.code === 500) {
-        let evaluatelist = result.result
-        evaluatelist = evaluatelist.filter(el => el.parentId === '0')
+        const evaluatelist = result.result
+        // evaluatelist = evaluatelist.filter(el => el.parentId === '0')
         commit(RECEIVE_GET_EVALUATE, { evaluatelist })
         cb && cb()
       }

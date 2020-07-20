@@ -3,16 +3,16 @@
     <Header>
       <img src="../../../public/imgs/index.png" alt="title" class="title" slot="title">
     </Header>
-    <Info/>
-    <div class="item">
+    <Info v-show="!MySecurity"/>
+    <div class="item" v-show="!MySecurity">
       <List v-for="i in 2" :key="i" @click.native="hand(paths[i])">
           <span :class="leftClass[i]" slot="left"></span>
           <span class="title" slot="title">{{titles[i]}}</span>
           <span class="iconfont icon-right" slot="right"></span>
       </List>
     </div>
-    <button @click="to('UserLogin')">重新登录</button>
-    <FooterGuide/>
+    <button @click="to('UserLogin')" v-show="!MySecurity">重新登录</button>
+    <FooterGuide v-show="!MySecurity"/>
     <MySecurity v-show="MySecurity" @Security="Security"/>
   </div>
 </template>

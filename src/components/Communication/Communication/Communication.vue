@@ -70,7 +70,8 @@ export default {
       }
       let Communication = {
         index,
-        page: this.page
+        page: this.page,
+        topicType: this.topicType
       }
       Communication = JSON.stringify(Communication)
       window.localStorage.setItem('Communication', Communication)
@@ -100,15 +101,23 @@ export default {
           this.count = this.page
           this.page = this.count
         }
+        this.bscroll && this.bscroll.scrollTo(0, 0)
+        this.bscroll.finishPullDown()
+        this.bscroll.finishPullUp()
+        return
       }
       if (this.evaluatelist && this.evaluatelist.length === 0) {
         this.count = this.page - 1
         this.page = this.count
-        this.$store.dispatch('reqActivitys', { page: this.page })
+        this.topicType === 1 && this.course(1)
+        this.topicType === 2 && this.activity(2)
+        return
       }
-      this.bscroll && this.bscroll.scrollTo(0, 0)
-      this.bscroll.finishPullDown()
-      this.bscroll.finishPullUp()
+      if (this.evaluatelist && this.evaluatelist.length < 4 && this.evaluatelist.length !== 0 && this.page === 1) {
+        this.bscroll && this.bscroll.scrollTo(0, 0)
+        this.bscroll.finishPullDown()
+        this.bscroll.finishPullUp()
+      }
     },
     course (type) {
       this.count = 0
@@ -229,7 +238,7 @@ export default {
     margin-left 16px
   }
   .wrap{
-    height 85%
+    height 80%
     margin-top 14px
     overflow hidden
   }

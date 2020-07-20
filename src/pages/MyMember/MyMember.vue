@@ -6,7 +6,7 @@
     </Header>
     <div class="item">
       <div class="wrap">
-        <List v-for="(person, index) in UserGroup" :key="index" class='list'>
+        <List v-for="(person, index) in UserGroups" :key="index" class='list'>
           <div class="title" slot="title">
              <img :src="person.avatar || imgUrl" :onerror="errorurl" class="avatar">
              <h3>{{person.realname}}</h3>
@@ -28,6 +28,7 @@ import List from '../../components/My/List/List.vue'
 import tip from '../../components/Tip/tip'
 import BScroll from 'better-scroll'
 import routerMain from '../../router/main.js'
+import { imgUrl } from '../../api/ajax.js'
 import { mapState } from 'vuex'
 
 export default {
@@ -44,6 +45,15 @@ export default {
   },
   computed: {
     ...mapState(['UserGroup', 'userInfo', 'isToken']),
+    UserGroups () {
+      const UserGroups = this.UserGroup
+      UserGroups.forEach(ug => {
+        if (ug.avatar) {
+          ug.avatar = imgUrl + ug.avatar
+        }
+      })
+      return UserGroups
+    },
     token () {
       return JSON.parse(window.localStorage.getItem('UserInfo'))
     }

@@ -122,6 +122,12 @@ export default {
   border-radius 5px
   box-shadow 0 0 5px #802529
   background white
+  .search
+    background-color #f3efe8;
+    width 90%;
+    margin-left 16px
+    margin-top 10px
+    margin-bottom 10px
   .top
     display flex
     align-items center

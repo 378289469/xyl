@@ -3,7 +3,11 @@ import store from '../store/index'
 import modules from '../store/modules'
 // import router from '../router/index'
 
-export const baseUrl = 'http://192.168.5.210:8085/jeecg-boot/'
+// export const baseUrl = 'http://192.168.5.210:8085/jeecg-boot/'
+// export const imgUrl = 'http://192.168.5.210:8096/'
+
+export const baseUrl = 'http://221.204.251.61:8027/jeecg-boot/'
+export const imgUrl = 'http://221.204.251.61:8030/'
 
 axios.interceptors.request.use(
   config => {

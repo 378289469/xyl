@@ -3,7 +3,7 @@
     <slot name="top" class="top"></slot>
     <div class="activitys" >
       <ul class="list" >
-        <li v-for="(activity ,index) in Activitys" :key="index" @click="hand('ActivityDetail', { activity })">
+        <li v-for="(activity ,index) in Activitys" :key="index">
           <h3 class="ellipsis">{{activity.activityName}}</h3>
           <span class="iconfont icon-date btn icon3"></span>
           <span class="time">{{activity.activityStart}}---{{activity.activityEnd}}</span>
@@ -47,33 +47,6 @@ export default {
       window.localStorage.setItem('activity', activity)
       this.to(path, pram)
     }
-    // toActivity (activity) {
-    //   if (!this.token) {
-    //     this.to('UserLogin')
-    //     return
-    //   }
-    //   this.$store.dispatch('checkToken', {
-    //     token: this.token,
-    //     cb: () => {
-    //       if (this.isToken) {
-    //         this.$store.dispatch('getPdfFile', {
-    //           mainId: activity.id,
-    //           id: 2,
-    //           cb: () => {
-    //             this.$store.dispatch('activity', {
-    //               activity,
-    //               cb: () => {
-    //                 this.to('ActivityDetail', { activity })
-    //               }
-    //             })
-    //           }
-    //         })
-    //       } else {
-    //         this.to('UserLogin')
-    //       }
-    //     }
-    //   })
-    // }
   }
 }
 </script>

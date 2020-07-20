@@ -17,7 +17,7 @@
         <div class="source">来源：<span class="sourse-type">{{sourse[evaluatelist[index].topicType]}}</span><span class="count">{{evaluatelist[index].list.length}}</span>回复</div>
       </div>
     </dir>
-    <div class="wrap" v-if="componentslist.length > 0">
+    <div class="wrap" ref="cpWrapper" v-if="componentslist.length > 0">
       <ul >
         <li v-for="(list, index) in componentslist" :key="index" @click="wheel(list)">
           <div class="info">
@@ -41,14 +41,14 @@
       </ul>
     </div>
     <p class="footbar">点击教师回复可以进行追问</p>
-    <wheel ref="wheel"/>
+    <wheel ref="wheel" @evaluate="evaluate"/>
     <tip/>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import BScroll from 'better-scroll'
+import BScroll from '@better-scroll/core'
 import routerMain from '../../../router/main.js'
 import wheel from '../../Wheel/wheel'
 import tip from '../../Tip/tip'
@@ -70,17 +70,6 @@ export default {
     ...mapState(['evaluatelist', 'componentslist', 'isToken', 'msg']),
     index () {
       return JSON.parse(window.localStorage.getItem('Communication')).index
-    },
-    page () {
-      return this.msg === '添加成功！'
-    }
-  },
-  watch: {
-    page () {
-      if (this.page) {
-        this.getEvaluate()
-        this.page = !this.page
-      }
     }
   },
   methods: {
@@ -89,10 +78,13 @@ export default {
       const title = '回复'
       this.$refs.wheel.wheel(title, '', list)
     },
+    evaluate () {
+      this.getEvaluate()
+    },
     getEvaluate () {
       const userId = JSON.parse(window.localStorage.getItem('UserInfo')).id
       this.$store.dispatch('getEvaluate', {
-        isActiorchapter: this.topicType,
+        isActiorchapter: JSON.parse(window.localStorage.getItem('Communication')).topicType,
         userId,
         page: JSON.parse(window.localStorage.getItem('Communication')).page,
         cb: () => {
@@ -104,18 +96,19 @@ export default {
       this.$store.dispatch('getEvaluateComponents', {
         parentId: this.evaluatelist[this.index].id
       })
+    },
+    initBscroll () {
+      this.bscroll = new BScroll(this.$refs.cpWrapper, {
+        click: true
+      })
     }
   },
   mounted () {
     this.getEvaluate()
-    if (this.evaluatelist.length > 0) {
-      new BScroll('.context', {// eslint-disable-line
-        stopPropagation: true
-      })
-    }
-    if (this.componentslist.length > 0) {
-      new BScroll('.wrap') // eslint-disable-line
-    }
+    this.initBscroll()
+  },
+  updated () {
+    this.initBscroll()
   }
 }
 </script>

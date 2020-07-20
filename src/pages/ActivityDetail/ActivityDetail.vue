@@ -19,6 +19,7 @@
             </div>
         </div>
         <div class="media" v-if="ad.content === 2" >
+          <p v-if="pdfFiles.length === 0 || PdfFile.length === 0">暂无附件内容</p>
           <viewer class="imgWrap" :images="PdfFile">
             <img v-for="(pdf, index) in pdfFiles" :src="pdf.url" :key="index" @click="hand(index)">
           </viewer>
@@ -135,6 +136,7 @@ export default {
       mainId: this.activity.id,
       id: 2,
       cb: () => {
+        new BScroll('.detail') // eslint-disable-line
         new BScroll('.media', {// eslint-disable-line
           scrollX: true,
           scrollY: false,
@@ -167,6 +169,7 @@ export default {
     new BScroll('.task') // eslint-disable-line
   },
   updated () {
+    new BScroll('.detail') // eslint-disable-line
     new BScroll('.media', {// eslint-disable-line
       scrollX: true,
       scrollY: false,
@@ -214,6 +217,7 @@ export default {
         font-size 14px
         color #333333
         line-height 25px
+        min-height 100px
     .task
       height 50px
     .media

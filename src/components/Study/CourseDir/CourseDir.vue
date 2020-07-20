@@ -8,6 +8,7 @@
             <span v-show="chapters.oldName" class="iconfont" :class="{'icon-pdf':chapters.oldName}" ></span>
             <span v-show="chapters.chapterName" class="title ellipsis">{{chapters.chapterName}}</span>
             <span v-show="chapters.oldName" class="title ellipsis">{{chapters.oldName}}</span>
+            <!-- <img :src="imgUrl" alt="" v-if="chapters.chapterLevel === 3"> -->
             <span v-show="chapters.chapterName" class="iconfont" :class="chapters.isShow? 'icon-up' : 'icon-down'"></span>
           </div>
         </li>
@@ -29,7 +30,8 @@ export default {
       id: 0,
       one: false,
       two: false,
-      three: false
+      three: false,
+      imgUrl: require('../../../../public/imgs/eye.png')
     }
   },
   components: {
@@ -64,16 +66,16 @@ export default {
     ...routerMain,
     show (index) {
       this.id = this.chapter[index].id
-      if (this.chapter[index] && this.chapter[index].oldName) {
-        let pdf = {
-          url: this.chapter[index].path,
-          id: this.chapter[index].id
-        }
-        pdf = JSON.stringify(pdf)
-        window.localStorage.setItem('pdf', pdf)
-        this.to('PDF')
-        return
-      }
+      // if (this.chapter[index] && this.chapter[index].oldName) {
+      //   let pdf = {
+      //     url: this.chapter[index].path,
+      //     id: this.chapter[index].id
+      //   }
+      //   pdf = JSON.stringify(pdf)
+      //   window.localStorage.setItem('pdf', pdf)
+      //   this.to('PDF')
+      //   return
+      // }
       this.CourseChapter.forEach((cc, key) => {
         if (cc.id === this.id) {
           cc.isShow = true
@@ -102,9 +104,16 @@ export default {
               cc.isPDF = true
               const PdfFile = this.PdfFile[0]
               if (PdfFile) {
-                PdfFile.parentId = this.chapter[index].id
-                PdfFile.isShow = true
-                this.CourseChapter.splice(key + 1, 0, PdfFile)
+                let pdf = {
+                  url: this.chapter[index].path,
+                  id: this.chapter[index].id
+                }
+                pdf = JSON.stringify(pdf)
+                window.localStorage.setItem('pdf', pdf)
+                this.to('PDF')
+                // PdfFile.parentId = this.chapter[index].id
+                // PdfFile.isShow = true
+                // this.CourseChapter.splice(key + 1, 0, PdfFile)
               } else {
                 this.$store.dispatch('tipMsg', {
                   tips: { type: 5, msg: '当前目录暂无内容' }
@@ -188,7 +197,7 @@ export default {
     }
     .title {
       display block
-      width 80%
+      width 85%
       margin-left 16px
       font-weight bolder!important
     }
@@ -213,8 +222,15 @@ export default {
     color: #333333;
     border-radius: 0!important
     text-indent : 2em
-    .iconfont{
+    .icon-up, icon-down{
       margin-left -30px
+      margin-top -30px
+      transform rotate(90deg)
+    }
+    img{
+      width 15px
+      height 15px
+      margin-top 15px
     }
   }
 

@@ -148,6 +148,9 @@ export default {
               }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
             }
             if (this.pwdInfo && this.pwdInfo.success) {
+              this.model[3] = ''
+              this.model[4] = ''
+              this.model[5] = ''
               window.localStorage.setItem('UserPwd', this.model[4].trim())
               this.to('My')
             }

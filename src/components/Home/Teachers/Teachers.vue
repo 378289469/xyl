@@ -86,7 +86,7 @@ export default {
       li
         list-style none
         width 43px
-        margin-right 25px
+        margin-right 23px
         .avatar
           width 43px
           height 43px

@@ -45,7 +45,7 @@ export default {
         return
       }
       const topicType = title === '打卡' ? 1 : 2
-      const Evaluate = {
+      let Evaluate = {
         context: content, // 内容
         isActiorchapter: '1', // 1章节 2活动
         topicId: topicId, // 章节id
@@ -55,12 +55,12 @@ export default {
       }
       const { list } = this
       if (this.list) {
+        Evaluate = {}
         Evaluate.parentId = list.parentId
         Evaluate.topicId = list.topicId
-        Evaluate.topicType = list.topicType
         Evaluate.targetUserId = list.userId
         Evaluate.id = list.id
-        Evaluate.isActiorchapter = list.isActiorchapter
+        Evaluate.context = content
       }
       if (title === '活动提问') {
         Evaluate.isActiorchapter = 2
@@ -72,6 +72,7 @@ export default {
           this.$store.dispatch('tipMsg', {
             tips: { type: 5, msg: msg, page: true }
           }) // type 1加载中  2成功  3失败 4不能为空 5自定义消息
+          this.list && this.$emit('evaluate')
         }
       })
     },
